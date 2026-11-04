@@ -1,0 +1,225 @@
+[
+  {
+    "name": "GE",
+    "count": 59,
+    "group": "Turbines & Power Generation",
+    "categories": [
+      "Turbine Parts",
+      "Compressors & Pumps",
+      "Valves & Actuators",
+      "Automation & Controls",
+      "Instrumentation",
+      "Electrical & Motors",
+      "Seals, Filters & Consumables"
+    ]
+  },
+  {
+    "name": "Metso",
+    "count": 23,
+    "group": "Valves & Flow Control",
+    "categories": [
+      "Valves & Actuators",
+      "Instrumentation"
+    ]
+  },
+  {
+    "name": "Siemens",
+    "count": 22,
+    "group": "Turbines & Power Generation",
+    "categories": [
+      "Turbine Parts",
+      "Compressors & Pumps",
+      "Valves & Actuators",
+      "Automation & Controls",
+      "Instrumentation",
+      "Electrical & Motors",
+      "Mechanical Power Transmission"
+    ]
+  },
+  {
+    "name": "ABB",
+    "count": 20,
+    "group": "Automation & Controls",
+    "categories": [
+      "Valves & Actuators",
+      "Automation & Controls",
+      "Instrumentation",
+      "Electrical & Motors"
+    ]
+  },
+  {
+    "name": "Atlas Copco",
+    "count": 20,
+    "group": "Rotating Equipment",
+    "categories": [
+      "Compressors & Pumps",
+      "Valves & Actuators",
+      "Automation & Controls",
+      "Instrumentation",
+      "Seals, Filters & Consumables"
+    ]
+  },
+  {
+    "name": "Gutor",
+    "count": 20,
+    "group": "Automation & Controls",
+    "categories": [
+      "Automation & Controls",
+      "Electrical & Motors"
+    ]
+  },
+  {
+    "name": "Qualitrol",
+    "count": 19,
+    "group": "Instrumentation & Monitoring",
+    "categories": [
+      "Valves & Actuators",
+      "Automation & Controls",
+      "Instrumentation"
+    ]
+  },
+  {
+    "name": "Allen-Bradley",
+    "count": 18,
+    "group": "Automation & Controls",
+    "categories": [
+      "Automation & Controls",
+      "Instrumentation",
+      "Electrical & Motors"
+    ]
+  },
+  {
+    "name": "Swagelok",
+    "count": 18,
+    "group": "Valves & Flow Control",
+    "categories": [
+      "Valves & Actuators",
+      "Piping & Fittings"
+    ]
+  },
+  {
+    "name": "Bently Nevada",
+    "count": 17,
+    "group": "Instrumentation & Monitoring",
+    "categories": [
+      "Automation & Controls",
+      "Instrumentation",
+      "Electrical & Motors"
+    ]
+  },
+  {
+    "name": "Woodward",
+    "count": 17,
+    "group": "Automation & Controls",
+    "categories": [
+      "Valves & Actuators",
+      "Automation & Controls",
+      "Instrumentation",
+      "Electrical & Motors"
+    ]
+  },
+  {
+    "name": "Honeywell",
+    "count": 16,
+    "group": "Instrumentation & Monitoring",
+    "categories": [
+      "Automation & Controls",
+      "Instrumentation",
+      "Electrical & Motors"
+    ]
+  },
+  {
+    "name": "ITT Goulds",
+    "count": 15,
+    "group": "Rotating Equipment",
+    "categories": [
+      "Compressors & Pumps",
+      "Mechanical Power Transmission",
+      "Seals, Filters & Consumables"
+    ]
+  },
+  {
+    "name": "Panametrics",
+    "count": 15,
+    "group": "Instrumentation & Monitoring",
+    "categories": [
+      "Instrumentation",
+      "Piping & Fittings"
+    ]
+  },
+  {
+    "name": "Flender",
+    "count": 14,
+    "group": "Rotating Equipment",
+    "categories": [
+      "Mechanical Power Transmission"
+    ]
+  },
+  {
+    "name": "GE Fanuc",
+    "count": 13,
+    "group": "Automation & Controls",
+    "categories": [
+      "Automation & Controls"
+    ]
+  },
+  {
+    "name": "Chint",
+    "count": 9,
+    "group": "Electrical & Motors",
+    "categories": [
+      "Automation & Controls",
+      "Instrumentation",
+      "Electrical & Motors"
+    ]
+  },
+  {
+    "name": "Milton Roy",
+    "count": 7,
+    "group": "Rotating Equipment",
+    "categories": [
+      "Compressors & Pumps",
+      "Valves & Actuators"
+    ]
+  },
+  {
+    "name": "Leslie Controls",
+    "count": 6,
+    "group": "Valves & Flow Control",
+    "categories": [
+      "Valves & Actuators"
+    ]
+  },
+  {
+    "name": "Baldor",
+    "count": 4,
+    "group": "Electrical & Motors",
+    "categories": [
+      "Electrical & Motors"
+    ]
+  },
+  {
+    "name": "Jamesbury",
+    "count": 2,
+    "group": "Valves & Flow Control",
+    "categories": [
+      "Valves & Actuators"
+    ]
+  },
+  {
+    "name": "AAF",
+    "count": 1,
+    "group": "Rotating Equipment",
+    "categories": [
+      "Seals, Filters & Consumables"
+    ]
+  },
+  {
+    "name": "Zenith Pumps",
+    "count": 1,
+    "group": "Rotating Equipment",
+    "categories": [
+      "Compressors & Pumps"
+    ]
+  }
+]
