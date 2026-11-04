@@ -110,7 +110,7 @@ export default async function ContactPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
                   href={`tel:+${siteConfig.phoneRaw}`}
-                  className="inline-flex items-center justify-center gap-2 bg-primary text-secondary font-semibold uppercase text-[16px] px-[55px] py-[13px] rounded-[20px_0px] hover:bg-secondary hover:text-primary transition-all duration-500"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-white font-semibold hover:bg-primary-dark transition-colors"
                 >
                   <i className="fa-solid fa-phone"></i>
                   <span>+91 7011123269</span>
@@ -159,7 +159,7 @@ export default async function ContactPage() {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="rounded-lg border border-line bg-white p-6 shadow-sm">
+                  <div className="rounded-lg border border-line bg-white p-6 shadow">
                     <div className="flex items-start gap-3">
                       <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i className="fa-solid fa-phone"></i>
@@ -178,7 +178,7 @@ export default async function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-line bg-white p-6 shadow-sm">
+                  <div className="rounded-lg border border-line bg-white p-6 shadow">
                     <div className="flex items-start gap-3">
                       <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i className="fa-solid fa-envelope"></i>
@@ -197,7 +197,7 @@ export default async function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-line bg-white p-6 shadow-sm">
+                  <div className="rounded-lg border border-line bg-white p-6 shadow">
                     <div className="flex items-start gap-3">
                       <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i className="fa-solid fa-envelope"></i>
@@ -216,7 +216,7 @@ export default async function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-line bg-white p-6 shadow-sm">
+                  <div className="rounded-lg border border-line bg-white p-6 shadow">
                     <div className="flex items-start gap-3">
                       <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i className="fa-solid fa-location-dot"></i>
@@ -232,7 +232,7 @@ export default async function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-line bg-white p-6 shadow-sm">
+                  <div className="rounded-lg border border-line bg-white p-6 shadow">
                     <div className="flex items-start gap-3">
                       <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <i className="fa-solid fa-clock"></i>
@@ -254,13 +254,13 @@ export default async function ContactPage() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-primary text-secondary font-semibold uppercase text-[16px] px-[55px] py-[13px] rounded-[20px_0px] hover:bg-secondary hover:text-primary transition-all duration-500"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-3 text-ink font-semibold hover:bg-[#ffc46b]/10 transition-colors"
                 >
                   <i className="fa-brands fa-whatsapp"></i>
                   <span>Enquire on WhatsApp</span>
                 </Link>
 
-                <div className="rounded-lg border border-line bg-white p-6 shadow-sm">
+                <div className="rounded-lg border border-line bg-white p-6 shadow">
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-primary mb-3">
                     Find us on the map
                   </h3>

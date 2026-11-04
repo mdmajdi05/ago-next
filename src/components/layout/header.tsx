@@ -12,11 +12,82 @@ import { getAll as getAllBrands } from '@/services/brandService';
 
 const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}`;
 
+const headerStyle: React.CSSProperties = {
+  position: 'sticky',
+  top: '10px',
+  zIndex: 1000,
+  width: 'min(100% - 36px, 1440px)',
+  margin: '10px auto',
+  overflow: 'visible',
+  border: '1px solid rgba(255, 255, 255, 0.09)',
+  borderRadius: '22px',
+  background: 'rgba(255, 255, 255, 0.97)',
+  boxShadow: '0 12px 34px rgba(4, 12, 22, 0.24)',
+  WebkitBackdropFilter: 'blur(14px)',
+  backdropFilter: 'blur(14px)',
+  height: 'auto',
+  minHeight: '68px',
+};
+
+const gridStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'minmax(170px, 170px) minmax(0, 1fr) minmax(170px, 230px)',
+  alignItems: 'center',
+  gap: '16px',
+  margin: 0,
+  minHeight: '68px',
+};
+
+const megaMenuStyle: React.CSSProperties = {
+  width: 'min(540px, calc(100vw - 40px))',
+  padding: '14px',
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '4px 14px',
+};
+
+const searchFormStyle: React.CSSProperties = {
+  borderColor: 'rgba(55, 123, 146, 0.2)',
+  backgroundColor: 'rgba(255, 255, 255, 0.86)',
+};
+
+const mobileMenuStyle: React.CSSProperties = {
+  top: 'calc(100% + 10px)',
+  right: 0,
+  left: 0,
+  width: 'auto',
+  maxHeight: 'min(75vh, 620px)',
+  overflowY: 'auto',
+  padding: '12px',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  borderRadius: '18px',
+  background: 'rgba(255, 255, 255, 0.98)',
+  backdropFilter: 'blur(14px) saturate(160%)',
+  boxShadow: '0 24px 54px rgba(13, 38, 64, 0.18)',
+  textAlign: 'left',
+  opacity: 1,
+  visibility: 'visible',
+  transform: 'translateY(0)',
+};
+
+const mobileListStyle: React.CSSProperties = {
+  marginTop: 0,
+  paddingLeft: '12px',
+  paddingTop: '4px',
+  paddingRight: 0,
+  paddingBottom: '8px',
+  border: 0,
+  background: 'transparent',
+  display: 'block',
+};
+
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const handleScroll = () => setScrolled(window.scrollY > 0);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -24,101 +95,88 @@ export function Header() {
 
   const categories = getAllCategories();
   const brands = getAllBrands();
-  const headerHeight = scrolled ? 56 : 68;
-
   const closeMenu = useCallback(() => setMobileOpen(false), []);
 
-  const headerStyle: React.CSSProperties = {
-    position: 'sticky',
-    top: '10px',
-    background: `rgba(255, 255, 255, ${scrolled ? 0.94 : 0.86})`,
-    backdropFilter: 'blur(18px) saturate(180%)',
-    WebkitBackdropFilter: 'blur(18px) saturate(180%)',
-    border: '1px solid rgba(255, 255, 255, 0.4)',
-    borderRadius: '22px',
-    width: 'min(1360px, calc(100% - 24px))',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    height: `${headerHeight}px`,
-    boxShadow: scrolled
-      ? '0 12px 40px rgba(10,28,48,0.16), 0 0 0 1px rgba(1,74,142,0.12)'
-      : '0 4px 20px rgba(10,28,48,0.08), 0 0 0 1px rgba(1,74,142,0.08)',
-  };
+  if (scrolled) {
+    headerStyle.background = 'rgba(237, 247, 249, 0.98)';
+    headerStyle.boxShadow = '0 15px 42px rgba(13, 38, 64, 0.16)';
+  } else {
+    headerStyle.background = 'rgba(255, 255, 255, 0.97)';
+    headerStyle.boxShadow = '0 12px 34px rgba(4, 12, 22, 0.24)';
+  }
 
   return (
     <>
       <TopBar />
 
       <header id="ago-site-header" style={headerStyle} aria-label="Primary navigation">
-        <div className="mx-auto max-w-[1320px] px-12 w-full">
-          <div className="flex items-center justify-between gap-4 h-full">
+        <div className="mx-auto max-w-[1440px] w-full p-0">
+          <div style={gridStyle} className="relative">
             {/* Logo */}
-            <div className="shrink-0">
+            <div className="flex items-center">
               <Link href="/" className="flex items-center" aria-label="AGO Aviation home">
                 <Image
                   src={siteConfig.logo}
                   alt={siteConfig.logoAlt}
-                  width={125}
-                  height={80}
+                  width={150}
+                  height={66}
                   priority
-                  className={`w-auto filter:[grayscale(0.05)_brightness(1.05)] ${scrolled ? 'h-[56px]' : 'h-[80px]'}`}
+                  className="block w-auto h-[44px] object-contain"
+                  style={{ height: '44px', width: 'auto', objectFit: 'contain', filter: 'none' }}
                 />
               </Link>
             </div>
 
             {/* Desktop navigation */}
-            <nav className="hidden lg:flex flex-1 items-center justify-center gap-x-1">
-              <ul className="flex items-center gap-0 flex-wrap">
+            <nav className="hidden lg:flex text-center" aria-label="Primary navigation">
+              <ul
+                className="flex flex-wrap items-center justify-center gap-0 m-0 p-0 list-none"
+                style={{
+                  display: 'flex',
+                  flexWrap: 'nowrap',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 0,
+                  margin: 0,
+                  padding: 0,
+                  listStyle: 'none',
+                }}
+              >
                 {mainNavLinks.map((link) => {
-                  const hasDropdown =
-                    link.title === 'Products' || link.title === 'Turbine Parts';
+                  const hasDropdown = link.title === 'Products' || link.title === 'Turbine Parts';
                   return (
-                    <li key={link.href} className="relative">
+                    <li key={link.href} className="relative m-0" style={{ flex: '0 0 auto', margin: 0 }}>
                       {hasDropdown ? (
                         <MegaMenu trigger={<Link href={link.href}>{link.title}</Link>}>
-                          <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-[460px]">
+                          <div style={megaMenuStyle} className="p-[14px] grid grid-cols-[repeat(2,minmax(0,1fr))] gap-[4px_14px]">
                             <div>
-                              <h3 className="text-[10px] font-semibold uppercase tracking-wider text-primary mb-3 block">
-                                Product Categories
-                              </h3>
-                              <ul className="space-y-0">
-                                {categories.map((category) => (
-                                  <li key={category.slug}>
-                                    <Link
-                                      href={`/categories/${category.slug}`}
-                                      className="flex items-start gap-2 px-3 py-2 rounded-lg text-[12.5px] font-semibold tracking-wider text-[#44586e] leading-[1.35] hover:bg-soft hover:text-primary transition-colors duration-200"
-                                    >
-                                      <span className="flex shrink-0 mt-[3px] text-[7px] font-black text-secondary">
-                                        ›
-                                      </span>
-                                      {category.name}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
+                              {categories.map((category) => (
+                                <Link
+                                  key={category.slug}
+                                  href={`/categories/${category.slug}`}
+                                  className="flex items-center gap-[12px] px-[12px] py-[9px] rounded-[9px] text-[12px] font-semibold leading-[1.35] text-[#44586e] block whitespace-normal transition-all duration-220 hover:bg-soft hover:text-primary"
+                                >
+                                  {category.name}
+                                </Link>
+                              ))}
                             </div>
                             <div>
-                              <h3 className="text-[10px] font-semibold uppercase tracking-wider text-primary mb-3 block">
-                                Shop by Brand
-                              </h3>
-                              <div className="flex flex-wrap gap-2">
-                                {brands.slice(0, 12).map((brand) => (
-                                  <Link
-                                    key={brand.slug}
-                                    href={`/brands/${brand.slug}`}
-                                    className="px-3 py-2 rounded-lg border border-transparent text-[12.5px] font-semibold tracking-wider text-[#44586e] leading-[1.35] hover:bg-soft hover:text-primary transition-colors duration-200 whitespace-nowrap"
-                                  >
-                                    {brand.name}
-                                  </Link>
-                                ))}
-                              </div>
+                              {brands.slice(0, 12).map((brand) => (
+                                <Link
+                                  key={brand.slug}
+                                  href={`/brands/${brand.slug}`}
+                                  className="px-[12px] py-[9px] rounded-[9px] text-[12px] font-semibold leading-[1.35] text-[#44586e] block whitespace-normal transition-all duration-220 hover:bg-soft hover:text-primary"
+                                >
+                                  {brand.name}
+                                </Link>
+                              ))}
                             </div>
                           </div>
                         </MegaMenu>
                       ) : (
                         <Link
                           href={link.href}
-                          className="relative inline-flex items-center gap-1.5 min-h-[60px] px-4 py-2 text-[13.5px] font-semibold tracking-wider uppercase text-ink transition-colors hover:text-primary hover:underline"
+                          className="inline-flex items-center gap-[5px] min-h-[44px] h-auto px-[7px] py-0 rounded-[999px] bg-transparent text-[#29445c] font-[600] text-[12.5px] leading-none whitespace-nowrap transition-colors duration-200 hover:text-[#0b3b66] hover:bg-[#f9f1de]"
                         >
                           {link.title}
                         </Link>
@@ -129,58 +187,104 @@ export function Header() {
               </ul>
             </nav>
 
-            {/* Search + WhatsApp CTA */}
-            <div className="hidden lg:flex items-center gap-3 shrink-0">
-              <div className="relative flex items-center w-[min(420px,100%)]">
-                <form
-                  role="search"
-                  className="flex items-center w-full bg-soft rounded-full border border-line px-3 py-2 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary transition-colors duration-200"
-                >
-                  <i className="fa-solid fa-magnifying-glass text-muted shrink-0" />
+            {/* Search + WhatsApp */}
+            <div className="hidden lg:flex items-center gap-[22px] shrink-0 min-w-0">
+              <div className="relative flex items-center w-full min-w-[280px]">
+                <form role="search" style={searchFormStyle} className="flex items-center w-full gap-[4px] p-[4px] rounded-[999px] border border-[rgba(55,123,146,0.2)] bg-white/86">
                   <input
                     type="search"
-                    placeholder="Search spare parts"
-                    className="bg-transparent w-full text-sm placeholder:text-muted outline-none"
+                    placeholder="Search here"
+                    className="w-full h-[42px] pl-[14px] pr-[45px] border-0 rounded-[999px] bg-transparent text-[#17394c] text-[12px] outline-none font-inherit"
                     aria-label="Search spare parts"
                   />
                   <button
                     type="submit"
-                    className="ml-2 flex h-8 w-8 items-center justify-center rounded-full text-white transition-all duration-200 bg-gradient-to-r from-[#061a30] via-[#014a8e] to-[#0a63bd]"
+                    className="absolute right-[5px] top-[50%] -translate-y-[50%] w-[34px] h-[34px] rounded-full border-0 bg-[#267d98] flex items-center justify-center cursor-pointer transition-colors duration-250"
                     aria-label="Search"
                   >
-                    <i className="fa-solid fa-magnifying-glass" />
+                    <i className="fa-solid fa-magnifying-glass text-[13px] text-white" />
                   </button>
                 </form>
               </div>
               <Link
                 href={whatsappUrl}
-                className="inline-flex items-center justify-center gap-2 bg-primary text-secondary font-semibold uppercase text-[13px] px-[55px] py-[13px] rounded-[20px_0px] hover:bg-secondary hover:text-ink whitespace-nowrap transition-all duration-250"
-                aria-label="Enquire on WhatsApp"
+                className="inline-flex items-center gap-[12px] min-h-[43px] px-[17px] rounded-[10px] bg-linear-gradient-to-r from-[#ffd18a] to-[#f0a843] text-[#10243a] font-[800] text-[12px] uppercase shadow-[0_8px_20px_rgba(240,168,67,0.22)] hover:filter-[brightness(1.04)] transition-transform duration-200 whitespace-nowrap"
               >
-                <i className="fa-brands fa-whatsapp" />
-                WhatsApp
+                Enquire
+                <i className="fa-solid fa-paper-plane" />
               </Link>
             </div>
 
-            {/* Mobile hamburger toggle */}
+            {/* Mobile toggle */}
             <button
               type="button"
-              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg text-white transition-all duration-200 bg-gradient-to-r from-primary via-[#0a63bd] to-[#0a63bd] shadow-[0_10px_22px_rgba(1,74,142,0.25)]"
+              className="lg:hidden inline-flex items-center justify-center w-[40px] h-[40px] rounded-[12px] border border-white/14 text-[#17191c] bg-[#f0a843] font-[17px] shadow-none"
+              style={{
+                borderColor: 'rgba(255, 255, 255, 0.14)',
+                background: '#f0a843',
+                color: '#17191c',
+                fontSize: '17px',
+                width: '40px',
+                height: '40px',
+                borderRadius: '12px',
+              }}
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-expanded={mobileOpen}
               aria-label="Toggle navigation menu"
             >
               {mobileOpen ? (
-                <i className="fa-solid fa-xmark text-[19px]"></i>
+                <i className="fa-solid fa-xmark text-[19px]" />
               ) : (
-                <i className="fa-solid fa-bars text-[19px]"></i>
+                <i className="fa-solid fa-bars text-[19px]" />
               )}
             </button>
           </div>
         </div>
       </header>
 
-      <MobileMenu open={mobileOpen} onClose={closeMenu} />
+      {isMounted && mobileOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-[9997] bg-black/45 backdrop-blur-sm transition-opacity duration-300"
+            onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
+          />
+          <div style={mobileMenuStyle} className="fixed right-0 left-0 z-[9998] w-auto max-h-[min(75vh,620px)] overflow-y-auto p-[12px] border border-white/1 border-radius-[18px] bg-white/98 backdrop-blur-[14px] saturate-[160%] shadow-[0_24px_54px_rgba(13,38,64,0.18)] text-left opacity-100 visibility-visible">
+            <nav className="space-y-0" aria-label="Mobile navigation">
+              {mainNavLinks.map((link) => {
+                const hasDropdown = link.title === 'Products' || link.title === 'Turbine Parts';
+                return (
+                  <li key={link.href} className="mb-[4px] border-0 w-full block" style={{ marginBottom: '4px', border: 0, width: '100%', display: 'block' }}>
+                    <Link
+                      href={link.href}
+                      onClick={closeMenu}
+                      className="flex justify-between items-center min-h-[42px] px-0 py-[9px] rounded-[10px] bg-transparent text-[#16324d] font-[600] text-[12px] leading-none whitespace-normal w-full text-left transition-colors duration-200 hover:text-[#0b3b66] hover:bg-[#f9f1de]"
+                    >
+                      {link.title}
+                      <i className="fa-solid fa-chevron-right text-xs opacity-60 ml-[6px]" />
+                    </Link>
+                    {hasDropdown && (
+                      <ul style={mobileListStyle} className="mt-0 pl-[12px] space-y-0 border-0 bg-transparent block">
+                        {categories.map((category) => (
+                          <li key={category.slug}>
+                            <Link
+                              href={`/categories/${category.slug}`}
+                              onClick={closeMenu}
+                              className="flex items-center gap-[12px] px-[12px] py-[9px] rounded-[9px] text-[12px] font-semibold leading-[1.35] text-[#44586e] block whitespace-normal transition-all duration-220 hover:bg-soft hover:text-primary"
+                            >
+                              {category.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                );
+              })}
+            </nav>
+          </div>
+        </>
+      )}
     </>
   );
 }

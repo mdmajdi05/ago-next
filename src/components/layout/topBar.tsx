@@ -13,48 +13,87 @@ export function TopBar() {
   return (
     <div
       id="ago-site-topbar"
-      className="text-white"
+      className="relative z-1001"
       style={{
-        background: 'linear-gradient(90deg, #061a30 0%, #014a8e 58%, #0a63bd 100%)',
+        background: '#071a2d',
+        padding: '5px 0',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.09)',
+        color: 'rgba(239, 246, 252, 0.78)',
       }}
     >
-      <div className="mx-auto max-w-[1320px] px-12 w-full">
-        <div className="flex min-h-[44px] gap-6 flex-col md:flex-row justify-between">
-          {/* Left: contact (email + phone) */}
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
-            <Link
-              href={`mailto:${siteConfig.email.sales}`}
-              className="flex items-center gap-1.5 text-[12px] font-medium text-white/90 hover:text-white transition-colors"
+      <div className="ago-container">
+        <div
+          className="flex flex-wrap items-center gap-0"
+          style={{
+            minHeight: '34px',
+            display: 'flex',
+            flexWrap: 'nowrap',
+          }}
+        >
+          {/* Left: contact (50%) */}
+          <div className="flex-0 w-1/2 max-w-1/2">
+            <ul className="flex flex-wrap align-center gap-8px-22px list-none m-0 p-0"
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                gap: '8px 22px',
+                margin: 0,
+                padding: 0,
+                listStyle: 'none',
+              }}
             >
-              <i className="fa-solid fa-envelope text-[12px]"></i>
-              {siteConfig.email.sales}
-            </Link>
-            <Link
-              href={`tel:${siteConfig.phoneRaw}`}
-              className="flex items-center gap-1.5 text-[12px] font-medium text-white/90 hover:text-white transition-colors"
-            >
-              <i className="fa-solid fa-phone text-[12px]"></i>
-              {siteConfig.phone}
-            </Link>
+              <li>
+                <Link
+                  href={`mailto:${siteConfig.email.sales}`}
+                  className="text-[12px] transition-colors duration-200"
+                  style={{ color: 'rgba(255, 255, 255, 0.82)', fontSize: '12px' }}
+                >
+                  <i className="fa-solid fa-envelope text-secondary" style={{ marginRight: '7px', color: '#f0a843' }} />
+                  {siteConfig.email.sales}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`tel:${siteConfig.phoneRaw}`}
+                  className="text-[12px] transition-colors duration-200"
+                  style={{ color: 'rgba(255, 255, 255, 0.82)', fontSize: '12px' }}
+                >
+                  <i className="fa-solid fa-phone text-secondary" style={{ marginRight: '7px', color: '#f0a843' }} />
+                  {siteConfig.phone}
+                </Link>
+              </li>
+            </ul>
           </div>
 
-          {/* Right: follow us + social icons */}
-          <div className="mt-4 md:mt-0 flex items-center gap-2">
-            <span className="text-[13px] font-medium text-white/70 whitespace-nowrap">
-              Follow Us:
-            </span>
-            {SOCIALS.map((social) => (
-              <Link
-                key={social.name}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full border border-white/20 bg-white/10 text-white text-[12px] flex items-center justify-center hover:bg-secondary hover:text-ink hover:-translate-y-1 transition-all duration-200"
-                aria-label={social.name}
-              >
-                <i className={social.icon} />
-              </Link>
-            ))}
+          {/* Right: social (50%) */}
+          <div className="flex-0 w-1/2 max-w-1/2 text-right">
+            <ul className="flex flex-wrap items-center justify-end gap-10px-22px list-none m-0 p-0"
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                gap: '10px 22px',
+                margin: 0,
+                padding: 0,
+                listStyle: 'none',
+              }}
+            >
+              {SOCIALS.map((social) => (
+                <li key={social.name} style={{ margin: 0, color: 'rgba(239, 246, 252, 0.7)', fontSize: '11px' }}>
+                  <Link
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-[27px] h-[27px] rounded-full border border-white/13 bg-white/7 flex items-center justify-center text-white/86 text-[12px] hover:bg-secondary hover:text-[#071a2d] hover:border-secondary transition-all duration-200"
+                    aria-label={social.name}
+                  >
+                    <i className={social.icon} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
