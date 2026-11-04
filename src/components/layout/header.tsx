@@ -1,262 +1,186 @@
-import React from 'react';
+'use client';
+
+import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  Cpu,
-  Flame,
-  Gauge,
-  MessageCircle,
-  Pipette,
-  RotateCw,
-  ShieldCheck,
-  Sliders,
-  Zap,
-  Cog,
-  Package,
-} from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { TopBar } from './topBar';
-import { MobileMenu } from './mobileMenu';
 import { MegaMenu } from './megaMenu';
-
-export const mainNavLinks = [
-  { title: 'Home', href: '/' },
-  { title: 'Products', href: '/products' },
-  { title: 'Brands', href: '/brands' },
-  { title: 'Categories', href: '/categories' },
-  { title: 'Blog', href: '/blog' },
-  { title: 'Contact', href: '/contact' },
-];
+import { MobileMenu, mainNavLinks } from './mobileMenu';
 import { getAll as getAllCategories } from '@/services/categoryService';
 import { getAll as getAllBrands } from '@/services/brandService';
-import { getFeatured as getFeaturedProducts } from '@/services/productService';
-
-const CATEGORY_ICONS: Record<string, React.ComponentType> = {
-  'turbine-parts': Flame,
-  'compressor-parts': Cog,
-  'valves-actuators': Sliders,
-  'automation-controls': Cpu,
-  'instrumentation': Gauge,
-  'electrical-motors': Zap,
-  'mechanical-transmission-bearings': RotateCw,
-  'seals-filters': ShieldCheck,
-  'piping-fittings': Pipette,
-};
 
 const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}`;
 
 export function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 0);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const categories = getAllCategories();
   const brands = getAllBrands();
-  const featuredProducts = getFeaturedProducts(6);
+  const headerHeight = scrolled ? 56 : 68;
+
+  const closeMenu = useCallback(() => setMobileOpen(false), []);
+
+  const headerStyle: React.CSSProperties = {
+    position: 'sticky',
+    top: '10px',
+    background: `rgba(255, 255, 255, ${scrolled ? 0.94 : 0.86})`,
+    backdropFilter: 'blur(18px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(18px) saturate(180%)',
+    border: '1px solid rgba(255, 255, 255, 0.4)',
+    borderRadius: '22px',
+    width: 'min(1360px, calc(100% - 24px))',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    height: `${headerHeight}px`,
+    boxShadow: scrolled
+      ? '0 12px 40px rgba(10,28,48,0.16), 0 0 0 1px rgba(1,74,142,0.12)'
+      : '0 4px 20px rgba(10,28,48,0.08), 0 0 0 1px rgba(1,74,142,0.08)',
+  };
 
   return (
     <>
       <TopBar />
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-border">
-        <div className="ago-container">
-          <div className="flex items-center gap-6 py-3 md:py-4">
-            <Link href="/" className="shrink-0" aria-label="AGO Aviation home">
-              <Image
-                src={siteConfig.logo}
-                alt={siteConfig.logoAlt}
-                width={200}
-                height={56}
-                className="h-10 w-auto"
-                priority
-              />
-            </Link>
 
-            <nav className="flex-1 hidden md:flex justify-center items-center gap-6" aria-label="Main navigation">
-              {mainNavLinks.map((link) => {
-                if (link.title === 'Products') {
+      <header id="ago-site-header" style={headerStyle} aria-label="Primary navigation">
+        <div className="mx-auto max-w-[1320px] px-12 w-full">
+          <div className="flex items-center justify-between gap-4 h-full">
+            {/* Logo */}
+            <div className="shrink-0">
+              <Link href="/" className="flex items-center" aria-label="AGO Aviation home">
+                <Image
+                  src={siteConfig.logo}
+                  alt={siteConfig.logoAlt}
+                  width={125}
+                  height={80}
+                  priority
+                  className={`w-auto filter:[grayscale(0.05)_brightness(1.05)] ${scrolled ? 'h-[56px]' : 'h-[80px]'}`}
+                />
+              </Link>
+            </div>
+
+            {/* Desktop navigation */}
+            <nav className="hidden lg:flex flex-1 items-center justify-center gap-x-1">
+              <ul className="flex items-center gap-0 flex-wrap">
+                {mainNavLinks.map((link) => {
+                  const hasDropdown =
+                    link.title === 'Products' || link.title === 'Turbine Parts';
                   return (
-                    <MegaMenu key={link.href} trigger={<Link href={link.href}>{link.title}</Link>}>
-                      <div className="p-6 md:p-8 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
-                        <div>
-                          <h3 className="font-bold text-primary text-sm uppercase tracking-wider mb-4">
-                            Product Categories
-                          </h3>
-                          <ul className="space-y-2">
-                            {categories.map((category) => {
-                              const Icon = CATEGORY_ICONS[category.slug] || Package;
-                              return (
-                                <li key={category.slug}>
-                                  <Link
-                                    href={`/categories/${category.slug}`}
-                                    className="flex items-center justify-between gap-2 text-text-muted hover:text-primary transition-colors"
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <span className="w-3.5 h-3.5 shrink-0 text-primary-light">
-  <Icon />
-</span>
+                    <li key={link.href} className="relative">
+                      {hasDropdown ? (
+                        <MegaMenu trigger={<Link href={link.href}>{link.title}</Link>}>
+                          <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-[460px]">
+                            <div>
+                              <h3 className="text-[10px] font-semibold uppercase tracking-wider text-primary mb-3 block">
+                                Product Categories
+                              </h3>
+                              <ul className="space-y-0">
+                                {categories.map((category) => (
+                                  <li key={category.slug}>
+                                    <Link
+                                      href={`/categories/${category.slug}`}
+                                      className="flex items-start gap-2 px-3 py-2 rounded-lg text-[12.5px] font-semibold tracking-wider text-[#44586e] leading-[1.35] hover:bg-soft hover:text-primary transition-colors duration-200"
+                                    >
+                                      <span className="flex shrink-0 mt-[3px] text-[7px] font-black text-secondary">
+                                        ›
+                                      </span>
                                       {category.name}
-                                    </div>
-                                    {category.count && <span className="text-xs text-text-muted">{category.count}</span>}
-                                  </Link>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-
-                        <div>
-                          <h3 className="font-bold text-primary text-sm uppercase tracking-wider mb-2">
-                            Trusted Brands
-                          </h3>
-                          <p className="text-xs text-text-muted mb-4">
-                            OEM and aftermarket brands supported worldwide.
-                          </p>
-                          <div className="flex flex-wrap gap-3">
-                            {brands.slice(0, 12).map((brand) => (
-                              <Link
-                                key={brand.slug}
-                                href={`/brands/${brand.slug}`}
-                                className="brand-chip"
-                              >
-                                {brand.name}
-                              </Link>
-                            ))}
-                          </div>
-                          <Link
-                            href="/brands"
-                            className="mt-4 block text-sm font-medium text-primary hover:underline transition-colors"
-                          >
-                            View all brands &rarr;
-                          </Link>
-                        </div>
-
-                        <div>
-                          <h3 className="font-bold text-primary text-sm uppercase tracking-wider mb-3">
-                            Featured Parts
-                          </h3>
-                          <ul className="space-y-2">
-                            {featuredProducts.map((product) => (
-                              <li key={product.slug}>
-                                <Link
-                                  href={`/products/${product.slug}`}
-                                  className="text-text-muted hover:text-primary transition-colors"
-                                >
-                                  {product.title}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                          <Link
-                            href="/products"
-                            className="mt-4 block text-sm font-medium text-primary hover:underline transition-colors"
-                          >
-                            View all products &rarr;
-                          </Link>
-                        </div>
-                      </div>
-                    </MegaMenu>
-                  );
-                }
-
-                if (link.title === 'Categories') {
-                  return (
-                    <MegaMenu key={link.href} trigger={<Link href={link.href}>{link.title}</Link>}>
-                      <div className="p-6 md:p-8 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
-                        <div>
-                          <h3 className="font-bold text-primary text-sm uppercase tracking-wider mb-4">
-                            All Categories
-                          </h3>
-                          <ul className="space-y-2">
-                            {categories.map((category) => {
-                              const Icon = CATEGORY_ICONS[category.slug] || Package;
-                              return (
-                                <li key={category.slug}>
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div>
+                              <h3 className="text-[10px] font-semibold uppercase tracking-wider text-primary mb-3 block">
+                                Shop by Brand
+                              </h3>
+                              <div className="flex flex-wrap gap-2">
+                                {brands.slice(0, 12).map((brand) => (
                                   <Link
-                                    href={`/categories/${category.slug}`}
-                                    className="flex items-center justify-between gap-2 text-text-muted hover:text-primary transition-colors"
+                                    key={brand.slug}
+                                    href={`/brands/${brand.slug}`}
+                                    className="px-3 py-2 rounded-lg border border-transparent text-[12.5px] font-semibold tracking-wider text-[#44586e] leading-[1.35] hover:bg-soft hover:text-primary transition-colors duration-200 whitespace-nowrap"
                                   >
-                                    <div className="flex items-center gap-2">
-                                      <span className="w-3.5 h-3.5 shrink-0 text-primary-light">
-  <Icon />
-</span>
-                                      {category.name}
-                                    </div>
-                                    {category.count && <span className="text-xs text-text-muted">{category.count}</span>}
+                                    {brand.name}
                                   </Link>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-
-                        <div>
-                          <h3 className="font-bold text-primary text-sm uppercase tracking-wider mb-2">
-                            Shop by Brand
-                          </h3>
-                          <p className="text-xs text-text-muted mb-4">
-                            Browse parts by supported OEM brand.
-                          </p>
-                          <div className="flex flex-wrap gap-3">
-                            {brands.slice(0, 12).map((brand) => (
-                              <Link
-                                key={brand.slug}
-                                href={`/brands/${brand.slug}`}
-                                className="brand-chip"
-                              >
-                                {brand.name}
-                              </Link>
-                            ))}
+                                ))}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-
-                        <div>
-                          <h3 className="font-bold text-primary text-sm uppercase tracking-wider mb-3">
-                            Quick Links
-                          </h3>
-                          <ul className="space-y-2">
-                            <li>
-                              <Link href="/products" className="text-text-muted hover:text-primary transition-colors">
-                                Products Catalog
-                              </Link>
-                            </li>
-                            <li>
-                              <Link href="/brands" className="text-text-muted hover:text-primary transition-colors">
-                                Supported Brands
-                              </Link>
-                            </li>
-                            <li>
-                              <Link href="/contact" className="text-text-muted hover:text-primary transition-colors">
-                                Request a Quote
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </MegaMenu>
+                        </MegaMenu>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className="relative inline-flex items-center gap-1.5 min-h-[60px] px-4 py-2 text-[13.5px] font-semibold tracking-wider uppercase text-ink transition-colors hover:text-primary hover:underline"
+                        >
+                          {link.title}
+                        </Link>
+                      )}
+                    </li>
                   );
-                }
-
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-sm font-medium text-text-muted hover:text-primary transition-colors"
-                  >
-                    {link.title}
-                  </Link>
-                );
-              })}
+                })}
+              </ul>
             </nav>
 
-            <div className="flex items-center gap-3 shrink-0">
+            {/* Search + WhatsApp CTA */}
+            <div className="hidden lg:flex items-center gap-3 shrink-0">
+              <div className="relative flex items-center w-[min(420px,100%)]">
+                <form
+                  role="search"
+                  className="flex items-center w-full bg-soft rounded-full border border-line px-3 py-2 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary transition-colors duration-200"
+                >
+                  <i className="fa-solid fa-magnifying-glass text-muted shrink-0" />
+                  <input
+                    type="search"
+                    placeholder="Search spare parts"
+                    className="bg-transparent w-full text-sm placeholder:text-muted outline-none"
+                    aria-label="Search spare parts"
+                  />
+                  <button
+                    type="submit"
+                    className="ml-2 flex h-8 w-8 items-center justify-center rounded-full text-white transition-all duration-200 bg-gradient-to-r from-[#061a30] via-[#014a8e] to-[#0a63bd]"
+                    aria-label="Search"
+                  >
+                    <i className="fa-solid fa-magnifying-glass" />
+                  </button>
+                </form>
+              </div>
               <Link
                 href={whatsappUrl}
-                className="hidden md:inline-flex primary-btn items-center gap-2"
+                className="inline-flex items-center justify-center gap-2 bg-primary text-secondary font-semibold uppercase text-[13px] px-[55px] py-[13px] rounded-[20px_0px] hover:bg-secondary hover:text-ink whitespace-nowrap transition-all duration-250"
+                aria-label="Enquire on WhatsApp"
               >
-                <MessageCircle width={16} height={16} className="shrink-0" />
-                Enquire on WhatsApp
+                <i className="fa-brands fa-whatsapp" />
+                WhatsApp
               </Link>
-              <MobileMenu />
             </div>
+
+            {/* Mobile hamburger toggle */}
+            <button
+              type="button"
+              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg text-white transition-all duration-200 bg-gradient-to-r from-primary via-[#0a63bd] to-[#0a63bd] shadow-[0_10px_22px_rgba(1,74,142,0.25)]"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-expanded={mobileOpen}
+              aria-label="Toggle navigation menu"
+            >
+              {mobileOpen ? (
+                <i className="fa-solid fa-xmark text-[19px]"></i>
+              ) : (
+                <i className="fa-solid fa-bars text-[19px]"></i>
+              )}
+            </button>
           </div>
         </div>
       </header>
+
+      <MobileMenu open={mobileOpen} onClose={closeMenu} />
     </>
   );
 }

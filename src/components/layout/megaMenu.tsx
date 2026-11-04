@@ -1,12 +1,9 @@
 'use client';
 
-import React from 'react';
-import { useState } from 'react';
-import type { ReactElement, ReactNode } from 'react';
-
-type MegaMenuTrigger = ReactElement<{ className?: string; [key: string]: unknown }, typeof Link>;
-import Link from 'next/link';
+import React, { ReactElement, ReactNode, useCallback, useState } from 'react';
 import { cn } from '@/lib/utils';
+
+type MegaMenuTrigger = ReactElement<{ className?: string; [key: string]: unknown }>;
 
 interface MegaMenuProps {
   trigger: MegaMenuTrigger;
@@ -15,15 +12,19 @@ interface MegaMenuProps {
 
 export function MegaMenu({ trigger, children }: MegaMenuProps) {
   const [open, setOpen] = useState(false);
-
-  const handleEnter = () => setOpen(true);
   let closeTimer: ReturnType<typeof setTimeout>;
-  const handleLeave = () => {
+
+  const handleEnter = useCallback(() => {
+    if (closeTimer) clearTimeout(closeTimer);
+    setOpen(true);
+  }, []);
+
+  const handleLeave = useCallback(() => {
     closeTimer = setTimeout(() => setOpen(false), 150);
-  };
+  }, []);
 
   const triggerElement = React.cloneElement(trigger, {
-    className: cn(trigger.props.className, open ? 'font-bold text-primary' : ''),
+    className: cn(trigger.props.className, open && 'text-primary'),
     'aria-expanded': open,
     'aria-haspopup': 'menu',
   });
@@ -35,8 +36,9 @@ export function MegaMenu({ trigger, children }: MegaMenuProps) {
         <div
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
+          role="menu"
           aria-label="Mega menu"
-          className="absolute z-[70] left-1/2 -translate-x-1/2 top-full min-w-[720px] max-w-[1280px] w-[92vw] rounded-2xl border border-border bg-white shadow-2xl ring-1 ring-black/5 p-6 md:p-8"
+          className="absolute top-full left-0 right-0 mx-auto mt-0 w-full max-w-[calc(100vw-40px)] bg-white border border-[rgba(1,74,142,0.20)] border-r rounded-2xl shadow-[0_20px_50px_rgba(10,28,48,0.14)] p-4 md:p-6"
         >
           {children}
         </div>

@@ -1,64 +1,59 @@
-import React from 'react';
 import Link from 'next/link';
-import {
-  Facebook,
-  Instagram,
-  Linkedin,
-  Mail,
-  Phone,
-  X,
-} from 'lucide-react';
 import { siteConfig } from '@/config/site';
-import type { ComponentType } from 'react';
 
-type SocialLink = {
-  name: string;
-  url: string;
-  Icon: ComponentType;
-};
-
-const SOCIAL_LINKS: SocialLink[] = [
-  { name: 'Facebook', url: siteConfig.socials.facebook.url, Icon: Facebook },
-  { name: 'Instagram', url: siteConfig.socials.instagram.url, Icon: Instagram },
-  { name: 'LinkedIn', url: siteConfig.socials.linkedin.url, Icon: Linkedin },
-  { name: 'X', url: siteConfig.socials.x.url, Icon: X },
-];
+const SOCIALS = [
+  { name: 'Facebook', url: siteConfig.socials.facebook.url, icon: 'fa-brands fa-facebook-f' },
+  { name: 'X', url: siteConfig.socials.x.url, icon: 'fa-brands fa-x-twitter' },
+  { name: 'LinkedIn', url: siteConfig.socials.linkedin.url, icon: 'fa-brands fa-linkedin-in' },
+  { name: 'Instagram', url: siteConfig.socials.instagram.url, icon: 'fa-brands fa-instagram' },
+  { name: 'Pinterest', url: siteConfig.socials.pinterest.url, icon: 'fa-brands fa-pinterest-p' },
+] as const;
 
 export function TopBar() {
   return (
-    <div className="border-y border-border bg-ago-mist">
-      <div className="ago-container px-3 md:px-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4 py-2">
-          <div className="flex items-center gap-4 text-xs md:text-sm text-text-muted">
-            <a
+    <div
+      id="ago-site-topbar"
+      className="text-white"
+      style={{
+        background: 'linear-gradient(90deg, #061a30 0%, #014a8e 58%, #0a63bd 100%)',
+      }}
+    >
+      <div className="mx-auto max-w-[1320px] px-12 w-full">
+        <div className="flex min-h-[44px] gap-6 flex-col md:flex-row justify-between">
+          {/* Left: contact (email + phone) */}
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+            <Link
               href={`mailto:${siteConfig.email.sales}`}
-              className="flex items-center gap-1.5 hover:text-primary hover:underline transition-colors"
+              className="flex items-center gap-1.5 text-[12px] font-medium text-white/90 hover:text-white transition-colors"
             >
-              <Mail className="w-3 h-3 shrink-0" />
+              <i className="fa-solid fa-envelope text-[12px]"></i>
               {siteConfig.email.sales}
-            </a>
-            <a
-              href={`tel:+${siteConfig.phoneRaw}`}
-              className="flex items-center gap-1.5 hover:text-primary hover:underline transition-colors"
+            </Link>
+            <Link
+              href={`tel:${siteConfig.phoneRaw}`}
+              className="flex items-center gap-1.5 text-[12px] font-medium text-white/90 hover:text-white transition-colors"
             >
-              <Phone className="w-3 h-3 shrink-0" />
+              <i className="fa-solid fa-phone text-[12px]"></i>
               {siteConfig.phone}
-            </a>
+            </Link>
           </div>
-          <div className="flex items-center gap-2">
-            {SOCIAL_LINKS.map((social) => (
-              <a
+
+          {/* Right: follow us + social icons */}
+          <div className="mt-4 md:mt-0 flex items-center gap-2">
+            <span className="text-[13px] font-medium text-white/70 whitespace-nowrap">
+              Follow Us:
+            </span>
+            {SOCIALS.map((social) => (
+              <Link
                 key={social.name}
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full border border-white/20 bg-white/10 text-white text-[12px] flex items-center justify-center hover:bg-secondary hover:text-ink hover:-translate-y-1 transition-all duration-200"
                 aria-label={social.name}
-                className="p-1.5 rounded-md text-text-muted hover:bg-primary hover:text-white transition-colors"
               >
-                <span className="w-3 h-3 shrink-0">
-  <social.Icon />
-</span>
-              </a>
+                <i className={social.icon} />
+              </Link>
             ))}
           </div>
         </div>

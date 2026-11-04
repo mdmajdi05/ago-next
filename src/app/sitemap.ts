@@ -9,12 +9,21 @@ const baseUrl = siteConfig.url;
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
-  const staticRoutes: MetadataRoute.Sitemap = ['', '/contact', '/products', '/brands', '/blog'].map(
-    (path) => ({
-      url: `${baseUrl}${path}`,
-      lastModified,
-    }),
-  );
+  const staticRoutes: MetadataRoute.Sitemap = [
+    '',
+    '/contact',
+    '/products',
+    '/brands',
+    '/blog',
+    '/about',
+    '/services',
+    '/disclaimer',
+    '/privacy',
+    '/terms',
+  ].map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified,
+  }));
 
   const productRoutes: MetadataRoute.Sitemap = getProductSlugs().map((slug) => ({
     url: `${baseUrl}/products/${slug}`,

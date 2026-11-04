@@ -7,40 +7,54 @@ export interface BrandMarqueeProps {
   subtitle?: string;
 }
 
-export function BrandMarquee({ brands, title, subtitle }: BrandMarqueeProps) {
+export function BrandMarquee({ brands, title }: BrandMarqueeProps) {
   if (brands.length === 0) {
     return null;
   }
 
   return (
-    <section className="section-padding bg-bg-light">
-      <div className="ago-container">
-        {title || subtitle ? (
-          <div className="section-title mb-10">
-            {title && <h2 className="text-2xl lg:text-3xl font-bold text-primary mb-2">{title}</h2>}
-            {subtitle && <p className="text-text-muted max-w-xl mx-auto">{subtitle}</p>}
-          </div>
-        ) : null}
-        <div className="marquee-viewport">
-          <div className="marquee-track">
-            {brands.map((brand) => (
-              <Link
-                key={brand.slug}
-                href={`/brands/${brand.slug}`}
-                className="brand-chip"
-              >
-                {brand.name}
-              </Link>
-            ))}
-            {brands.map((brand) => (
-              <Link
-                key={`marquee-duplicate-${brand.slug}`}
-                href={`/brands/${brand.slug}`}
-                className="brand-chip"
-              >
-                {brand.name}
-              </Link>
-            ))}
+    <section className="py-10 lg:py-16 border-y border-line bg-white">
+      <style>
+        {`
+          @keyframes marquee-move {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}
+      </style>
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-[1320px]">
+        {title && (
+          <p className="brands-title text-center text-sm font-semibold text-primary tracking-wider uppercase mb-8">
+            {title}
+          </p>
+        )}
+        <div className="brands-marquee overflow-hidden">
+          <div
+            className="brands-track inline-flex animate-[marquee-move_40s_linear_infinite]"
+            aria-hidden="false"
+          >
+            <div className="brand-group shrink-0 flex items-center gap-6">
+              {brands.map((brand) => (
+                <Link
+                  key={brand.slug}
+                  href={`/brands/${brand.slug}`}
+                  className="whitespace-nowrap px-3 py-1.5 text-sm font-medium text-ink hover:text-primary transition-colors"
+                >
+                  {brand.name}
+                </Link>
+              ))}
+            </div>
+            <div className="brand-group shrink-0 flex items-center gap-6" aria-hidden="true">
+              {brands.map((brand) => (
+                <Link
+                  key={`dup-${brand.slug}`}
+                  href={`/brands/${brand.slug}`}
+                  className="whitespace-nowrap px-3 py-1.5 text-sm font-medium text-ink hover:text-primary transition-colors"
+                >
+                  {brand.name}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>

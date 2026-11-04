@@ -1,27 +1,25 @@
-import React from 'react';
 import Link from 'next/link';
-import { ArrowUp, MessageCircle } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 
 const WHATSAPP_URL = `https://wa.me/${siteConfig.whatsappNumber}`;
 
 export function FloatBar() {
   return (
-    <div className="fixed bottom-8 right-8 z-[60] flex flex-col gap-3">
-      <a
+    <div className="fixed bottom-4 right-4 z-[60] flex flex-col gap-3">
+      <Link
         href="#top"
-        className="w-11 h-11 rounded-full border border-border bg-white shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all"
+        className="w-12 h-12 rounded-full border border-[rgba(1,74,142,0.20)] bg-white shadow-[0_10px_25px_rgba(10,28,48,0.12)] flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-250"
         aria-label="Back to top"
       >
-        <ArrowUp className="w-[18px] h-[18px]" />
-      </a>
-      <a
+        <i className="fa-solid fa-arrow-up text-[15px]" />
+      </Link>
+      <Link
         href={WHATSAPP_URL}
-        className="w-11 h-11 rounded-full border border-border bg-white shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all"
+        className="w-12 h-12 rounded-full border border-[rgba(1,74,142,0.20)] bg-white shadow-[0_10px_25px_rgba(10,28,48,0.12)] flex items-center justify-center text-secondary hover:bg-secondary hover:text-white transition-all duration-250"
         aria-label="WhatsApp us"
       >
-        <MessageCircle className="w-[18px] h-[18px]" />
-      </a>
+        <i className="fa-brands fa-whatsapp text-[15px]" />
+      </Link>
     </div>
   );
 }

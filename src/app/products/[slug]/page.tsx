@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import productService from '@/services/productService';
-import brandService from '@/services/brandService';
+import { productService, brandService } from '@/services';
 import { siteConfig } from '@/config/site';
+import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { slugify } from '@/lib/utils';
 import EnquiryForm from './EnquiryForm';
+import { Product } from '@/types/product';
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -17,7 +18,11 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const product = productService.getBySlug(slug);
   if (!product) {
@@ -28,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: `${product.title} - AGO Aviation`,
+    title: product.title,
     description:
       product.keywords ||
       product.description ||
@@ -44,7 +49,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage({
+  params,
+}: ProductPageProps) {
   const { slug } = await params;
   const product = productService.getBySlug(slug);
   if (!product) notFound();
@@ -58,6 +65,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         ['Brand', product.brand],
         ['Category', product.category],
       ];
+
+  const breadcrumbs = [
+    { label: 'Products', href: '/products' },
+    { label: product.title, href: `/products/${product.slug}` },
+  ];
 
   return (
     <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -86,16 +98,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }}
       />
 
-      <nav className="mb-6 text-sm text-slate-500">
-        <Link href="/products" className="text-[#0b3d6b] hover:underline">
-          Products
-        </Link>{' / '}
-        <span className="text-slate-900">{product.title}</span>
-      </nav>
+      <Breadcrumbs items={breadcrumbs} />
 
       <div className="lg:flex lg:gap-10">
-        <aside className="lg:w-1/3">
-          <div className="relative rounded-xl border border-slate-200 bg-slate-50 aspect-video overflow-hidden">
+        <aside className="lg:w-1/3 shrink-0">
+          <div className="relative rounded-xl border border-line bg-slate-50 aspect-video overflow-hidden">
             <Image
               src={imageUrl}
               alt={product.title}
@@ -108,33 +115,43 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         <section className="flex-1 space-y-6">
           <div>
-            <h1 className="text-3xl font-bold text-[#0b3d6b] tracking-tight">{product.title}</h1>
-            <p className="mt-1 text-sm text-slate-600">
-              <span className="font-mono text-xs bg-[#0b3d6b]/10 text-[#0b3d6b] px-2 py-0.5 rounded">
+            <h1 className="text-3xl font-bold text-primary tracking-tight">
+              {product.title}
+            </h1>
+            <p className="mt-3 flex items-center gap-3 text-sm">
+              <span className="font-mono text-xs bg-primary/10 text-primary px-2.5 py-0.5 rounded">
                 {product.part}
-              </span>{' '}
-              by{' '}
-              <Link href={`/brands/${brandService.slugifyBrand(product.brand)}`} className="font-semibold text-[#0b3d6b] hover:underline">
+              </span>
+              <span className="text-muted text-xs">by</span>{' '}
+              <Link
+                href={`/brands/${brandService.slugifyBrand(product.brand)}`}
+                className="font-semibold text-primary hover:underline"
+              >
                 {product.brand}
               </Link>{' &middot; '}
-              <Link href={`/categories/${slugify(product.category)}`} className="font-semibold text-[#0b3d6b] hover:underline">
+              <Link
+                href={`/categories/${slugify(product.category)}`}
+                className="font-semibold text-primary hover:underline"
+              >
                 {product.category}
               </Link>
             </p>
           </div>
 
           {(product.description || product.keywords) && (
-            <div className="prose prose-slate max-w-none text-slate-700">
+            <div className="text-ink leading-relaxed">
               {product.description || product.keywords}
             </div>
           )}
 
-          <section className="border-t pt-6">
-            <h2 className="text-lg font-semibold text-[#0b3d6b] mb-4">Specifications</h2>
+          <section className="border-t border-line pt-8">
+            <h2 className="text-lg font-semibold text-primary uppercase tracking-wider mb-6 block">
+              Specifications
+            </h2>
             <table className="w-full text-left text-sm border-collapse">
-              <tbody className="[&_tr]:border-b [&_tr]:border-slate-200 last:[&_tr]:border-b-0">
+              <tbody className="[&_tr]:border-b [&_tr]:border-line last:[&_tr]:border-b-0">
                 {specifications.map(([key, value]) => (
-                  <tr key={key} className="[&_td]:py-3 [&_th]:w-1/4 [&_th]:font-semibold [&_th]:text-[#0b3d6b] [&_td]:text-slate-600">
+                  <tr key={key} className="[&_td]:py-3 [&_th]:w-1/4 [&_th]:font-semibold [&_th]:text-primary [&_td]:text-muted">
                     <th>{key}</th>
                     <td className="font-mono">{value}</td>
                   </tr>
@@ -144,22 +161,28 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#0b3d6b] mb-4">Request a Quote</h2>
+            <h2 className="text-lg font-semibold text-primary uppercase tracking-wider mb-6 block">
+              Request a Quote
+            </h2>
             <EnquiryForm product={product} />
           </section>
         </section>
       </div>
 
       {related.length > 0 && (
-        <section className="mt-12">
-          <h2 className="text-lg font-semibold text-[#0b3d6b] mb-4">Related Products</h2>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="mt-14">
+          <h2 className="text-lg font-semibold text-primary uppercase tracking-wider mb-6 block">
+            Related Products
+          </h2>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {related.map((p) => (
               <li key={p.slug}>
                 <Link href={`/products/${p.slug}`} className="block">
-                  <div className="rounded border border-slate-200 bg-slate-50 p-3 hover:border-[#0b3d6b] transition">
-                    <p className="text-sm font-medium text-[#0b3d6b] line-clamp-1">{p.title}</p>
-                    <p className="text-xs text-slate-500 mt-1">{p.part}</p>
+                  <div className="rounded-xl border border-line bg-slate-50 p-4 hover:border-primary transition-colors">
+                    <p className="text-sm font-semibold text-primary line-clamp-1">
+                      {p.title}
+                    </p>
+                    <p className="text-xs text-muted mt-1">{p.part}</p>
                   </div>
                 </Link>
               </li>
