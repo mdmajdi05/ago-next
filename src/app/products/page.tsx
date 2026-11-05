@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { productService, brandService, categoryService } from '@/services';
-import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { cn } from '@/lib/utils';
 import { ProductFilters } from '@/types/product';
 
@@ -38,25 +37,7 @@ interface ProductsPageProps {
   searchParams: Promise<SearchParams>;
 }
 
-function buildPageParams(
-  search: string,
-  brand: string,
-  category: string,
-  page: number,
-  limit: number,
-): Record<string, string> {
-  const params: Record<string, string> = {};
-  if (search) params.search = search;
-  if (brand) params.brand = brand;
-  if (category) params.category = category;
-  params.page = String(page);
-  params.limit = String(limit);
-  return params;
-}
-
-export default async function ProductsPage({
-  searchParams,
-}: ProductsPageProps) {
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const params = await searchParams;
   const search = Array.isArray(params.search)
     ? (params.search[0] || '').trim()
@@ -76,208 +57,186 @@ export default async function ProductsPage({
   if (category) filters.category = category;
 
   const { products, total, totalPages } = productService.search(filters);
-
   const allBrands = brandService.getAll();
   const allCategories = categoryService.getAll();
   const hasFilters = Boolean(search || brand || category);
 
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'All products', href: '/products' },
-  ];
-
   return (
-    <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <Breadcrumbs items={breadcrumbs} />
-
-      <section className="mb-12">
-        <p className="text-sm font-semibold uppercase tracking-wider text-primary block mb-3">
-          Catalogue
-        </p>
-        <h1 className="text-3xl font-bold text-primary tracking-tight mb-3">
-          All gas turbine & industrial spare parts
-        </h1>
-        <p className="text-muted">
-          Browse {total} part reference{total !== 1 ? 's' : ''} across{' '}
-          {allBrands.length} brands. Filter by category and brand or search by part number.
-        </p>
+    <main>
+      <section className="ago-page-hero">
+        <div className="ago-container">
+          <div className="ago-page-hero__inner">
+            <span className="ago-eyebrow">Catalogue</span>
+            <h1>All gas turbine &amp; industrial spare parts</h1>
+            <p>
+              Browse {total} part reference{total !== 1 ? 's' : ''} across {allBrands.length} brands.
+              Filter by category and brand or search by part number.
+            </p>
+            <div className="ago-page-hero__actions">
+              <Link href="/contact" className="ago-btn ago-btn--primary">
+                Request a quote
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <div className="lg:flex lg:gap-10">
-        <aside className="lg:w-72 flex-shrink-0">
-          <section className="mb-8">
-            <form action="" method="GET" className="space-y-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4 block">
-                Search parts
-              </h2>
-              <input
-                name="search"
-                defaultValue={search || undefined}
-                placeholder="Search part numbers, brands or descriptions…"
-                className="w-full border border-line rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
-              />
-              <button
-                type="submit"
-                className="w-full bg-primary text-secondary rounded-[20px_0px] px-4 py-3 text-sm font-medium hover:bg-primary-dark transition-colors"
-              >
-                Search
-              </button>
-            </form>
-          </section>
+      <nav className="ago-crumbs" aria-label="Breadcrumb">
+        <div className="ago-container">
+          <Link href="/">Home</Link>
+          <span className="ago-crumbs__sep">/</span>
+          <span>All products</span>
+        </div>
+      </nav>
 
-          <section className="mb-8">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4 block">
-              Brands
-            </h2>
-            <div className="space-y-2">
-              {allBrands.map((b) => (
-                <label key={b.slug} className="block cursor-pointer group">
+      <section className="ago-section ago-section--surface">
+        <div className="ago-container">
+          <div className="lg:flex lg:gap-10">
+            <aside className="lg:w-72 flex-shrink-0">
+              <section className="mb-8">
+                <form action="" method="GET" className="space-y-3">
+                  <h2 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4 block">
+                    Search parts
+                  </h2>
                   <input
-                    type="checkbox"
-                    name="brand"
-                    value={b.name}
-                    defaultChecked={brand === b.name}
-                    className="mr-2 rounded text-primary focus:ring-primary"
+                    name="search"
+                    defaultValue={search || undefined}
+                    placeholder="Search part numbers, brands or descriptions…"
+                    className="w-full border border-line rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
                   />
-                  <span className="text-ink">{b.name}</span>{' '}
-                  <span className="text-muted text-xs">({b.count})</span>
-                </label>
-              ))}
-            </div>
-          </section>
+                  <button
+                    type="submit"
+                    className="w-full bg-primary text-secondary rounded-[20px_0px] px-4 py-3 text-sm font-medium hover:bg-primary-dark transition-colors"
+                  >
+                    Search
+                  </button>
+                </form>
+              </section>
 
-          <section>
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4 block">
-              Categories
-            </h2>
-            <div className="space-y-2">
-              {allCategories.map((c) => (
-                <label key={c.slug} className="block cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    name="category"
-                    value={c.name}
-                    defaultChecked={category === c.name}
-                    className="mr-2 rounded text-primary focus:ring-primary"
-                  />
-                  <span className="text-ink">{c.name}</span>{' '}
-                  <span className="text-muted text-xs">({c.count ?? 0})</span>
-                </label>
-              ))}
-            </div>
-          </section>
-        </aside>
-
-        <section className="flex-1">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-            <div>
-              <p className="text-sm text-muted">
-                Showing <span className="font-semibold text-ink">{products.length}</span> of{' '}
-                <span className="font-semibold text-ink">{total}</span> parts
-              </p>
-            </div>
-            {hasFilters && (
-              <Link
-                href="/products"
-                className="text-sm text-primary font-medium hover:underline underline-offset-4"
-              >
-                Clear filters
-              </Link>
-            )}
-          </div>
-
-          {products.length === 0 ? (
-            <div className="rounded-xl border border-line bg-slate-50 p-16 text-center">
-              <p className="text-muted">
-                No products match your filters. Try a different search or{' '}
-                <Link href="/contact" className="text-primary hover:underline font-medium">
-                  ask our team
-                </Link>
-                .
-              </p>
-            </div>
-          ) : (
-            <>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                {products.map((product) => (
-                  <li key={product.slug}>
-                    <Link href={`/products/${product.slug}`} className="block">
-                      <div className={cn(
-                        'aspect-video rounded-xl border border-line bg-slate-50 overflow-hidden group-hover:border-primary transition-colors relative',
-                      )}>
-                        <Image
-                          src={product.image || '/images/engine-100.jpeg'}
-                          alt={product.title}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                      <h3 className="mt-3 text-base font-semibold text-primary group-hover:underline">
-                        {product.title}
-                      </h3>
-                      <p className="mt-1 text-sm font-mono text-muted">{product.part}</p>
-                      <p className="mt-1 text-xs text-muted">
-                        {product.brand} &middot; {product.category}
-                      </p>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-
-              <nav className={cn('mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm')}>
-                <div className="text-muted">
-                  Page <span className="font-semibold text-ink">{page}</span> of{' '}
-                  <span className="font-semibold text-ink">{totalPages}</span>
+              <section className="mb-8">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4 block">
+                  Brands
+                </h2>
+                <div className="space-y-2">
+                  {allBrands.map((b) => (
+                    <label key={b.slug} className="block cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        name="brand"
+                        value={b.name}
+                        defaultChecked={brand === b.name}
+                        className="mr-2 rounded text-primary focus:ring-primary"
+                      />
+                      <span className="text-ink">{b.name}</span>{' '}
+                      <span className="text-muted text-xs">({b.count})</span>
+                    </label>
+                  ))}
                 </div>
-                <div className="flex items-center gap-3">
-                  {page > 1 && (
-                    <Link
-                      href={`/products?${new URLSearchParams(buildPageParams(search, brand, category, page - 1, limit)).toString()}`}
-                      className="px-3 py-1.5 border border-line rounded-xl text-sm text-primary hover:bg-primary hover:text-white transition-colors"
-                    >
-                      &larr; Prev
-                    </Link>
-                  )}
-                  {page < totalPages && (
-                    <Link
-                      href={`/products?${new URLSearchParams(buildPageParams(search, brand, category, page + 1, limit)).toString()}`}
-                      className="px-3 py-1.5 border border-primary rounded-xl text-sm text-secondary bg-primary hover:bg-primary-dark transition-colors"
-                    >
-                      Next &rarr;
-                    </Link>
-                  )}
-                </div>
-              </nav>
-            </>
-          )}
-        </section>
-      </div>
+              </section>
 
-      <section className="mt-16">
-        <div className={cn('rounded-xl border border-line bg-soft p-8 md:p-12 text-center')}>
-          <h2 className="text-2xl font-bold text-primary uppercase tracking-wider mb-3 block">
-            Need a part number confirmed today?
-          </h2>
-          <p className="text-muted max-w-[600px] mx-auto mb-6">
-            Send us the OEM reference, equipment model or a nameplate photo. Our engineering desk replies
-            with availability, condition and lead time — usually within a few hours.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/contact"
-              className="bg-primary text-secondary rounded-[20px_0px] px-6 py-3 text-sm font-medium hover:bg-primary-dark transition-colors"
-            >
-              Request a quote
-            </Link>
-            <Link
-              href={`https://wa.me/917011123269`}
-              rel="noopener"
-              target="_blank"
-              className="border border-line rounded-xl px-6 py-3 text-sm font-medium text-ink hover:bg-primary hover:text-white transition-colors"
-            >
-              WhatsApp the desk
-            </Link>
+              <section>
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-primary mb-4 block">
+                  Categories
+                </h2>
+                <div className="space-y-2">
+                  {allCategories.map((c) => (
+                    <label key={c.slug} className="block cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        name="category"
+                        value={c.name}
+                        defaultChecked={category === c.name}
+                        className="mr-2 rounded text-primary focus:ring-primary"
+                      />
+                      <span className="text-ink">{c.name}</span>{' '}
+                      <span className="text-muted text-xs">({c.count ?? 0})</span>
+                    </label>
+                  ))}
+                </div>
+              </section>
+            </aside>
+
+            <section className="flex-1">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                  <p className="text-sm text-muted">
+                    Showing <span className="font-semibold text-ink">{products.length}</span> of{' '}
+                    <span className="font-semibold text-ink">{total}</span> parts
+                  </p>
+                </div>
+                {hasFilters && (
+                  <Link
+                    href="/products"
+                    className="text-sm text-primary font-medium hover:underline underline-offset-4"
+                  >
+                    Clear filters
+                  </Link>
+                )}
+              </div>
+
+              {products.length === 0 ? (
+                <div className="rounded-xl border border-line bg-slate-50 p-16 text-center">
+                  <p className="text-muted">
+                    No products match your filters. Try a different search or{' '}
+                    <Link href="/contact" className="text-primary hover:underline font-medium">
+                      ask our team
+                    </Link>
+                    .
+                  </p>
+                </div>
+              ) : (
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                  {products.map((product) => (
+                    <li key={product.slug}>
+                      <Link href={`/products/${product.slug}`} className="block h-full">
+                        <div
+                          className={cn(
+                            'overflow-hidden rounded-xl border border-line bg-slate-50 transition-colors hover:border-primary relative h-full',
+                          )}
+                        >
+                          <div className="relative aspect-video">
+                            <Image
+                              src={product.image || '/images/engine-100.jpeg'}
+                              alt={product.title}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="p-4">
+                            <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-primary mb-2 block">
+                              {product.brand}
+                            </span>
+                            <h3 className="text-base font-semibold text-ink leading-snug mb-2">
+                              {product.title}
+                            </h3>
+                            <p className="text-xs text-muted line-clamp-3">{product.description}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {totalPages > 1 && (
+                <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Product pagination">
+                  {Array.from({ length: totalPages }, (_, index) => index + 1).map((n) => (
+                    <Link
+                      key={n}
+                      href={{ pathname: '/products', query: { ...params, page: String(n) } }}
+                      className={cn(
+                        'inline-flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm',
+                        n === page
+                          ? 'border-primary bg-primary text-white'
+                          : 'border-line bg-white text-ink hover:border-primary hover:text-primary',
+                      )}
+                    >
+                      {n}
+                    </Link>
+                  ))}
+                </nav>
+              )}
+            </section>
           </div>
         </div>
       </section>

@@ -3,23 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { siteConfig } from '@/config/site';
 
-const agoContainer = 'max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8';
-
-const sectionHead = (eyebrow: string, title: string, description?: string) => (
-  <div className="text-center mb-14">
-    <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-3">
-      {eyebrow}
-    </p>
-    <h2 className="text-3xl lg:text-4xl font-bold text-ink tracking-tight mb-4">{title}</h2>
-    {description && (
-      <p className="text-muted text-lg leading-relaxed max-w-2xl mx-auto">{description}</p>
-    )}
-  </div>
-);
-
-const primaryBtn =
-  'inline-flex items-center justify-center gap-2 bg-primary text-secondary font-semibold px-6 py-3 rounded-[20px_0px] hover:bg-secondary hover:text-primary transition-colors duration-200 whitespace-nowrap';
-
 interface Service {
   icon: string;
   title: string;
@@ -102,95 +85,81 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <main className="bg-white">
-      <section className="py-15 bg-soft">
-        <div className={agoContainer}>
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-3">
-              Services
+    <main>
+      <section className="ago-page-hero">
+        <div className="ago-container">
+          <div className="ago-page-hero__inner">
+            <span className="ago-eyebrow">Services</span>
+            <h1>More than a parts catalogue</h1>
+            <p>
+              Sourcing, inspection, repair coordination and export logistics — delivered by people who
+              understand what a forced outage costs.
             </p>
-            <h1 className="text-3xl lg:text-4xl font-bold text-ink tracking-tight mb-4">
-              More than a parts catalogue
-            </h1>
-            <p className="text-muted text-lg leading-relaxed max-w-2xl mx-auto">
-              Sourcing, inspection, repair coordination and export logistics — delivered by people
-              who understand what a forced outage costs.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/contact" className={`${primaryBtn} text-sm`}>
-              Discuss your requirement
-              <i className="fa-solid fa-arrow-right text-[12px]"></i>
-            </a>
+            <div className="ago-page-hero__actions">
+              <Link href="/contact" className="ago-btn ago-btn--primary">
+                Discuss your requirement
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       <nav className="ago-crumbs" aria-label="Breadcrumb">
-        <div className={agoContainer}>
-          <Link href="/" className="text-muted text-sm hover:text-primary transition-colors">
-            Home
-          </Link>
-          <span className="text-muted text-sm mx-1">/</span>
-          <span className="text-ink text-sm font-medium">Services</span>
+        <div className="ago-container">
+          <Link href="/">Home</Link>
+          <span className="ago-crumbs__sep">/</span>
+          <span>Services</span>
         </div>
       </nav>
 
-      <section className="py-15">
-        <div className={agoContainer}>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="ago-section">
+        <div className="ago-container">
+          <div className="ago-grid ago-grid--3">
             {services.map((service) => (
-              <div
-                key={service.title}
-                className="border border-line rounded-lg bg-white p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200"
-              >
-                <span className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-primary">
-                  <i className={service.icon}></i>
+              <article key={service.title} className="ago-card ago-card--hover">
+                <span className="ago-card__icon">
+                  <i className={service.icon} aria-hidden="true" />
                 </span>
-                <h3 className="text-lg font-bold text-ink mb-3">{service.title}</h3>
-                <p className="text-muted leading-relaxed">{service.text}</p>
-              </div>
+                <h3>{service.title}</h3>
+                <p>{service.text}</p>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-15 bg-soft">
-        <div className={agoContainer}>
-          <div className="grid gap-8 lg:grid-cols-2 items-center">
+      <section className="ago-section ago-section--surface">
+        <div className="ago-container">
+          <div className="ago-grid ago-grid--2" style={{ alignItems: 'center' }}>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-3">
-                How we work
+              <span className="ago-eyebrow ago-eyebrow--navy">How we work</span>
+              <h2 className="ago-title">A documented process, every time</h2>
+              <p className="ago-lead">
+                Whether the requirement is a single filter or a full hot gas path set, the workflow is the
+                same: confirm the reference, verify the source, document the part, ship it tracked.
               </p>
-              <h2 className="text-2xl lg:text-3xl font-bold text-ink mb-4 tracking-tight">
-                A documented process, every time
-              </h2>
-              <p className="text-muted leading-relaxed mb-6">
-                Whether the requirement is a single filter or a full hot gas path set, the workflow
-                is the same: confirm the reference, verify the source, document the part, ship it
-                tracked.
-              </p>
-              <ul className="space-y-3">
+              <ul className="ago-list">
                 {[
                   'Cross-reference against OEM manuals and interchangeability lists',
                   'Supplier qualification and incoming inspection',
                   'Certificate of conformance and traceability pack',
                   'Freight booking, customs and delivery confirmation',
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-muted leading-relaxed">
-                    <i className="fa-solid fa-check mt-0.5 text-secondary shrink-0"></i>
-                    {item}
+                  <li key={item}>
+                    <i className="fa-solid fa-check" aria-hidden="true" />
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="order-first lg:order-last">
+
+            <div>
               <Image
                 src="/images/service-4.jpg"
                 alt="Inspection and documentation of a spare part"
                 width={900}
                 height={675}
-                className="rounded-xl shadow-sm object-cover h-[460px] w-full"
+                className="ago-media"
                 loading="lazy"
               />
             </div>
@@ -198,31 +167,16 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="py-15">
-        <div className={agoContainer}>
-          <div className="rounded-lg bg-white p-8 md:p-12 border border-line shadow-sm text-center">
-            <h2 className="text-2xl font-bold text-ink mb-3">
-              Have an outage window to plan for?
-            </h2>
-            <p className="text-muted text-lg leading-relaxed max-w-2xl mx-auto mb-8">
-              Share your scope and target dates. We will map availability, lead times and
-              alternatives before the window opens.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="/contact" className={`${primaryBtn} text-sm`}>
-                Request a quote
-                <i className="fa-solid fa-arrow-right text-[12px]"></i>
-              </a>
-              <a
-                href={`https://wa.me/${siteConfig.whatsappNumber}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-white text-ink border border-line font-semibold px-6 py-3 rounded-[20px_0px] hover:bg-secondary hover:text-primary transition-colors duration-200 whitespace-nowrap text-sm"
-              >
-                <i className="fa-brands fa-whatsapp text-secondary"></i>
-                WhatsApp the desk
-              </a>
-            </div>
+      <section className="ago-section">
+        <div className="ago-container">
+          <div className="ago-section__head ago-section__head--center">
+            <span className="ago-eyebrow">Call us now</span>
+            <h2 className="ago-title">Need an urgent turbine part or a planned maintenance package?</h2>
+          </div>
+          <div className="ago-page-hero__actions" style={{ justifyContent: 'center' }}>
+            <Link href="/contact" className="ago-btn ago-btn--primary">
+              Request a quote
+            </Link>
           </div>
         </div>
       </section>

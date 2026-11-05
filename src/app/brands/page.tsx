@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { brandService } from '@/services';
-import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
@@ -28,46 +27,53 @@ export default function BrandsPage() {
   const groups = brandService.getGroups();
   const totalBrands = brandService.getAll().length;
 
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Brands', href: '/brands' },
-  ];
-
   return (
-    <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <Breadcrumbs items={breadcrumbs} />
-
-      <section className="mb-12">
-        <h1 className="text-3xl font-bold text-primary tracking-tight mb-3">
-          Authorized Brands
-        </h1>
-        <p className="text-muted">
-          Genuine gas turbine parts and spares from {totalBrands} authorized brands worldwide.
-        </p>
+    <main>
+      <section className="ago-page-hero">
+        <div className="ago-container">
+          <div className="ago-page-hero__inner">
+            <span className="ago-eyebrow">Brands</span>
+            <h1>Authorized Brands</h1>
+            <p>
+              Genuine gas turbine parts and spares from {totalBrands} authorized brands worldwide.
+            </p>
+            <div className="ago-page-hero__actions">
+              <Link href="/contact" className="ago-btn ago-btn--primary">
+                Talk to our team
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {groups.map((group) => (
-        <section key={group.name} className="mb-14">
-          <h2 className="text-2xl font-bold text-primary uppercase tracking-wider mb-6 block">
-            {group.name}
-          </h2>
-          {group.description && (
-            <p className="text-muted mb-6">{group.description}</p>
-          )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {group.brands.map((brand) => (
-              <Link key={brand.slug} href={`/brands/${brand.slug}`} className="block">
-                <div className="rounded-xl border border-line bg-slate-50 p-6 hover:border-primary transition-colors">
-                  <h3 className="text-base font-semibold text-primary">{brand.name}</h3>
-                  <p className="mt-1 text-sm text-muted">
-                    {brand.count} part{brand.count !== 1 ? 's' : ''}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ))}
+      <nav className="ago-crumbs" aria-label="Breadcrumb">
+        <div className="ago-container">
+          <Link href="/">Home</Link>
+          <span className="ago-crumbs__sep">/</span>
+          <span>Brands</span>
+        </div>
+      </nav>
+
+      <section className="ago-section">
+        <div className="ago-container">
+          {groups.map((group) => (
+            <div key={group.name} className="mb-14">
+              <div className="ago-section__head" style={{ marginBottom: '18px' }}>
+                <span className="ago-eyebrow ago-eyebrow--navy">{group.name}</span>
+              </div>
+              {group.description && <p className="ago-lead" style={{ marginTop: 0, marginBottom: '24px' }}>{group.description}</p>}
+              <div className="ago-grid ago-grid--4">
+                {group.brands.map((brand) => (
+                  <Link key={brand.slug} href={`/brands/${brand.slug}`} className="ago-card ago-card--hover">
+                    <h3>{brand.name}</h3>
+                    <p>{brand.count} part{brand.count !== 1 ? 's' : ''}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }

@@ -29,27 +29,20 @@ const whyFeatures: WhyFeature[] = [
 
 export function WhyUsSection() {
   return (
-    <section id="why" className="why-us py-16 lg:py-24 bg-white">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-[1320px]">
-        <div className="product-title text-center mb-12 lg:mb-16">
-          <h3 className="text-[10px] font-semibold uppercase tracking-wider text-primary mb-2 block">
-            Why Ago Aviation
-          </h3>
-          <h2 className="text-3xl lg:text-4xl font-bold text-ink mb-0">
-            Why Operators Choose Ago Aviation
-          </h2>
+    <section id="why" className="why-us">
+      <div className="why-wrap">
+        <div className="product-title">
+          <h3>Why Ago Aviation</h3>
+          <h2>Why Operators Choose Ago Aviation</h2>
         </div>
-        <div className="why-grid is-four grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+        <div className="why-grid is-four">
           {whyFeatures.map((feature) => (
-            <article
-              key={feature.title}
-              className="why-card border border-line rounded-lg p-6 bg-white hover:border-primary/40 transition-colors"
-            >
-              <span className="why-ico inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary text-white mb-5">
+            <article key={feature.title} className="why-card">
+              <span className="why-ico">
                 <i className={`fa-solid ${feature.icon}`} />
               </span>
-              <h3 className="text-lg font-bold text-ink mb-3">{feature.title}</h3>
-              <p className="text-muted text-sm leading-relaxed">{feature.desc}</p>
+              <h3>{feature.title}</h3>
+              <p>{feature.desc}</p>
             </article>
           ))}
         </div>
