@@ -349,6 +349,140 @@ main {
   display: block;
 }
 
+.ago-float {
+  position: fixed;
+  right: 24px;
+  bottom: 94px;
+  display: grid;
+  gap: 10px;
+  z-index: 60;
+}
+
+.ago-float__contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 18px 0 12px;
+  border: 1px solid rgba(14, 49, 86, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 25px rgba(10, 28, 48, 0.12);
+  color: var(--primary-color);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.ago-float__contact:hover {
+  transform: translateY(-2px);
+  border-color: rgba(240, 168, 67, 0.7);
+  box-shadow: 0 14px 30px rgba(10, 28, 48, 0.18);
+}
+
+.ago-float__contact-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #f0a843;
+  color: #10243a;
+  font-size: 12px;
+}
+
+.ago-float__stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.ago-float__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(1, 74, 142, 0.18);
+  color: var(--primary-color);
+  box-shadow: 0 10px 25px rgba(10, 28, 48, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.ago-float__btn:hover {
+  transform: translateY(-2px);
+}
+
+.ago-float__btn--wa {
+  color: #25d366;
+}
+
+.ago-float__btn--wa:hover {
+  background: #25d366;
+  color: #fff;
+}
+
+.ago-float__btn--top {
+  color: #10243a;
+  background: linear-gradient(135deg, #ffd18a, #f0a843);
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 0 4px rgba(240, 168, 67, 0.14), 0 10px 24px rgba(7, 26, 45, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.ago-float__btn--top:hover {
+  background: linear-gradient(135deg, #f6c76e, #e7a637);
+  box-shadow: 0 0 0 4px rgba(240, 168, 67, 0.2), 0 14px 30px rgba(7, 26, 45, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.ago-float__btn i,
+.ago-float__contact-icon i {
+  font-size: 16px;
+}
+
+@media (max-width: 1200px) {
+  .ago-float {
+    right: 14px;
+    bottom: 80px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ago-float {
+    right: 14px;
+    bottom: 78px;
+  }
+
+  .ago-float__contact {
+    min-height: 42px;
+    padding: 0 14px 0 10px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  .ago-float__contact-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+  }
+
+  .ago-float__btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ago-float__btn i,
+  .ago-float__contact-icon i {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 1024px) {
   .site-header {
     width: min(100%, calc(100% - 18px));
