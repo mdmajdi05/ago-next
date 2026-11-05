@@ -1,79 +1,95 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { AgoButton } from '@/components/ui/button';
 
-interface ServiceCard {
-  image: string;
-  alt: string;
-  title: string;
-  desc: string;
-}
+const defaultCards = [
+  {
+    image: '/images/lm-100-turbine.webp',
+    alt: 'Turbine shrouds',
+    title: 'Turbine Shrouds',
+    desc: 'Shrouds control the clearance between rotating blades and the casing. Accurate dimensions and the right material help limit tip leakage and protect efficiency over long running hours.',
+  },
+  {
+    image: '/images/lm-6000-turbine.webp',
+    alt: 'Buckets and blades',
+    title: 'Buckets and Blades',
+    desc: 'Rotating blades take the highest thermal and mechanical loads in the machine. We supply replacements matched to frame and stage, with material and dimensional details confirmed before production.',
+  },
+  {
+    image: '/images/lm-5000-turbine.webp',
+    alt: 'Nozzles and vanes',
+    title: 'Nozzles and Vanes',
+    desc: 'Stationary nozzles and vanes direct hot gas onto the rotating stages. Their profile and finish directly affect flow, output and component life.',
+  },
+  {
+    image: '/images/cfm-56-turbine.webp',
+    alt: 'Combustion components',
+    title: 'Combustion Components',
+    desc: 'Liners, transition pieces and fuel nozzles operate where temperatures are highest. We help you source replacements ahead of combustion inspections.',
+  },
+  {
+    image: '/images/lm-2500-turbine.webp',
+    alt: 'Hot gas path parts',
+    title: 'Hot Gas Path Parts',
+    desc: 'Complete sets of hot section components for planned outages, so your maintenance window is not delayed by missing parts.',
+  },
+  {
+    image: '/images/solar-turbines.jpg',
+    alt: 'Spares and consumables',
+    title: 'Spares and Consumables',
+    desc: 'Seals, fasteners and other routine items that keep a turbine in service between major overhauls.',
+  },
+];
 
-export interface ServiceSectionProps {
-  cards: ServiceCard[];
-}
-
-export function ServiceSection({ cards }: ServiceSectionProps) {
+export function ServiceSection({ cards = defaultCards }: { cards?: typeof defaultCards }) {
   return (
-    <section id="parts" className="services py-16 lg:py-24 bg-white">
-      <div className="product-title text-center mb-12 lg:mb-16">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wider text-primary mb-2 block">
-          What We Supply
-        </h3>
-        <h2 className="text-3xl lg:text-4xl font-bold text-ink mb-4">
-          Gas Turbine Parts and Components We Supply
-        </h2>
-        <p className="text-muted leading-relaxed max-w-3xl mx-auto text-lg">
-          Our range covers the components that wear fastest and matter most to turbine performance. Each part is
-          quoted against your drawing, part number or OEM reference, so you know exactly what you are buying before
-          you commit.
+    <section id="parts" className="service-section">
+      <div className="service-header">
+        <h3 className="service-kicker">What We Supply</h3>
+        <h2 className="service-title">Gas Turbine Parts and Components We Supply</h2>
+        <p className="service-copy">
+          Our range covers the components that wear fastest and matter most to turbine performance. Each part is quoted
+          against your drawing, part number or OEM reference, so you know exactly what you are buying before you commit.
         </p>
       </div>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-[1320px]">
-        <div className="service-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+
+      <div className="service-grid-wrap">
+        <div className="service-grid">
           {cards.map((card) => (
-            <div
-              key={card.title}
-              className="service_card bg-white border border-line rounded-xl p-6 hover:border-primary/40 transition-colors flex flex-col h-full"
-            >
-              <div className="service-card-image h-[160px] relative overflow-hidden rounded-lg bg-soft mb-4">
+            <div key={card.title} className="service-card">
+              <div className="service-card-media">
                 <Image
                   src={card.image}
                   alt={card.alt}
-                  fill
-                  className="object-cover"
-                  sizes="200px"
+                  width={840}
+                  height={400}
+                  sizes="(min-width: 1024px) 420px, (min-width: 768px) 50vw, 366px"
+                  className="service-card-image"
                 />
               </div>
-              <div className="service-card-content flex-1 flex flex-col">
-                <h3 className="text-lg font-bold text-ink mb-2">{card.title}</h3>
-                <p className="text-muted text-sm leading-relaxed mb-6 flex-1">
-                  {card.desc}
-                </p>
-                <Link href="/contact">
-                  <button
-                    className="bg-primary text-secondary font-semibold uppercase text-[16px] px-[55px] py-[13px] rounded-[20px_0px] hover:bg-secondary hover:text-primary transition-all duration-500 w-full"
-                    type="button"
-                  >
-                    Request a Quote
-                  </button>
-                </Link>
+              <div className="service-card-content">
+                <h3>{card.title}</h3>
+                <p>{card.desc}</p>
+                <AgoButton href="/contact" variant="serve" arrow={false}>
+                  Request a Quote
+                  <span className="service-dots" aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                </AgoButton>
               </div>
             </div>
           ))}
         </div>
-        <div className="text-center mt-12 lg:mt-16">
-          <p className="max-w-[780px] mx-auto text-sm text-muted leading-[1.75]">
-            Looking for something not listed here? Send us the details. If it is a gas turbine part, we will tell
-            you plainly whether we can supply it.
+
+        <div className="service-footer">
+          <p>
+            Looking for something not listed here? Send us the details. If it is a gas turbine part, we will tell you
+            plainly whether we can supply it.
           </p>
-          <Link href="/contact" className="mt-6 inline-block">
-            <button
-              className="bg-primary text-secondary font-semibold uppercase text-[16px] px-[55px] py-[13px] rounded-[20px_0px] hover:bg-secondary hover:text-primary transition-all duration-500"
-              type="button"
-            >
-              Request a Quote
-            </button>
-          </Link>
+          <AgoButton href="/contact" variant="primary">
+            Request a Quote
+          </AgoButton>
         </div>
       </div>
     </section>

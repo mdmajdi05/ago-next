@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
-import { TopBar } from '@/components/layout/topBar';
 import { ContactForm } from './ContactForm';
 import { getAll as getAllBrands } from '@/services/brandService';
 import { siteConfig } from '@/config/site';
@@ -88,9 +85,6 @@ export default async function ContactPage() {
 
   return (
     <>
-      <TopBar />
-      <Header />
-
       <div className="bg-white">
         {/* Page hero */}
         <section className="py-14 lg:py-22 bg-soft border-b border-line">
@@ -318,8 +312,6 @@ export default async function ContactPage() {
           </div>
         </section>
       </div>
-
-      <Footer />
     </>
   );
 }

@@ -5,6 +5,7 @@ import { Yantramanav } from 'next/font/google';
 import { siteConfig } from '@/config/site';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
+import { FloatBar } from '@/components/layout/floatBar';
 import { WebVitalsMonitor } from '@/components/sections/web-vitals';
 
 import '@/styles/globals.css';
@@ -107,10 +108,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${yantramanav.variable} font-sans`}>
+      <body id="top" className={`${yantramanav.variable} font-sans home-page`}>
         <Header />
         <main>{children}</main>
         <Footer />
+        <FloatBar />
         <WebVitalsMonitor />
       </body>
     </html>

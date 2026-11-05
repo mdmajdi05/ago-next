@@ -5,21 +5,35 @@ const WHATSAPP_URL = `https://wa.me/${siteConfig.whatsappNumber}`;
 
 export function FloatBar() {
   return (
-    <div className="fixed bottom-4 right-4 z-[60] flex flex-col gap-3">
+    <div className="fixed bottom-5 right-5 z-[60] flex items-center gap-3">
       <Link
-        href="#top"
-        className="w-12 h-12 rounded-full border border-[rgba(1,74,142,0.20)] bg-white shadow-[0_10px_25px_rgba(10,28,48,0.12)] flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-250"
-        aria-label="Back to top"
+        href="/contact"
+        className="group inline-flex items-center gap-2 rounded-full border border-[rgba(14,49,86,0.18)] bg-white/90 px-4 py-2.5 text-[12px] font-bold uppercase tracking-[0.12em] text-primary shadow-[0_10px_25px_rgba(10,28,48,0.12)] backdrop-blur-sm transition-all duration-250 hover:-translate-y-0.5 hover:border-[#f0a843] hover:bg-[#fdf1de]"
+        aria-label="Contact us"
       >
-        <i className="fa-solid fa-arrow-up text-[15px]" />
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#f0a843] text-[#10243a]">
+          <i className="fa-solid fa-headset text-[12px]" />
+        </span>
+        Contact us
       </Link>
-      <Link
-        href={WHATSAPP_URL}
-        className="w-12 h-12 rounded-full border border-[rgba(1,74,142,0.20)] bg-white shadow-[0_10px_25px_rgba(10,28,48,0.12)] flex items-center justify-center text-secondary hover:bg-secondary hover:text-white transition-all duration-250"
-        aria-label="WhatsApp us"
-      >
-        <i className="fa-brands fa-whatsapp text-[15px]" />
-      </Link>
+
+      <div className="flex flex-col gap-3">
+        <Link
+          href={WHATSAPP_URL}
+          className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(1,74,142,0.20)] bg-white shadow-[0_10px_25px_rgba(10,28,48,0.12)] text-[#25D366] transition-all duration-250 hover:-translate-y-0.5 hover:bg-[#25D366] hover:text-white"
+          aria-label="WhatsApp us"
+        >
+          <i className="fa-brands fa-whatsapp text-[16px]" />
+        </Link>
+
+        <Link
+          href="#top"
+          className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(1,74,142,0.20)] bg-white shadow-[0_10px_25px_rgba(10,28,48,0.12)] text-primary transition-all duration-250 hover:-translate-y-0.5 hover:bg-primary hover:text-white"
+          aria-label="Back to top"
+        >
+          <i className="fa-solid fa-arrow-up text-[15px]" />
+        </Link>
+      </div>
     </div>
   );
 }

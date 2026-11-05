@@ -51,124 +51,64 @@ const workSteps: WorkStep[] = [
 
 export function HowWeWorkSection() {
   return (
-    <section id="ordering" className="work-section hphw-sec py-16 lg:py-24 bg-white">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-[1320px]">
-        <div className="hphw-head text-center mb-12 lg:mb-16">
-          <span className="hphw-eyebrow inline-flex items-center gap-2 text-secondary font-semibold text-sm uppercase tracking-wider mb-4 block">
-            <i className="fa-solid fa-route" /> Ordering
+    <section id="ordering" className="work-section hphw-sec">
+      <div className="ago-container">
+        <div className="hphw-head">
+          <span className="hphw-eyebrow">
+            <i className="fa-solid fa-route" aria-hidden="true" />
+            Ordering
           </span>
-          <h3 className="text-3xl lg:text-4xl font-bold text-ink">How Ordering Works</h3>
+          <h3>How Ordering Works</h3>
         </div>
 
-        <div className="hphw-timeline relative">
-          <span
-            className="hphw-spine absolute inset-y-0 left-1/2 -translate-x-1/2 w-[1px] bg-line-2 -z-10"
-            aria-hidden="true"
-          />
+        <div className="hphw-timeline">
+          <span className="hphw-spine" aria-hidden="true" />
 
-          <div className="space-y-20 lg:space-y-24">
-            {workSteps.map((step, index) => {
-              const isLeft = index % 2 === 0;
-              return (
-                <div
-                  key={step.num}
-                  className={`hphw-step relative group ${isLeft ? 'flex flex-row' : 'flex flex-row-reverse'} items-start gap-6`}
-                >
-                  {isLeft ? (
-                    <>
-                      <article
-                        className="hphw-card shrink-0 w-[380px] max-w-[calc(50%_-_80px)] bg-white border border-line rounded-xl p-6 shadow-sm"
-                      >
-                        <span className="hphw-ghost absolute -top-[8px] right-[-10px] hidden lg:block w-10 h-10 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center" aria-hidden="true">
-                          {step.num}
-                        </span>
-                        <div className="hphw-card-top flex items-center gap-2 mb-3">
-                          <span className="hphw-ico inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-white">
-                            <i className={`fa-solid ${step.icon}`} />
-                          </span>
-                          <span className="hphw-label text-[10px] font-semibold uppercase tracking-wider text-muted">
-                            {step.label}
-                          </span>
-                        </div>
-                        <h3 className="text-lg font-bold text-ink mb-3">{step.title}</h3>
-                        <p className="mb-6 text-muted text-sm leading-relaxed">{step.desc}</p>
-                        <div className="hphw-foot flex items-center gap-2 mt-auto">
-                          <span className="hphw-dots flex gap-1">
-                            {step.dots.map((on, i) => (
-                              <i
-                                key={i}
-                                className={`w-1.5 h-1.5 rounded-full ${on ? 'bg-primary is-on' : 'bg-line-2'}`}
-                                aria-hidden="true"
-                              />
-                            ))}
-                          </span>
-                          <span className="hphw-count text-xs font-bold text-primary">{step.count}</span>
-                        </div>
-                      </article>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="hphw-link h-[1px] flex-1 bg-line-2" />
-                        <span className="hphw-node flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-xs font-bold border-4 border-white shadow-sm z-10">
-                          {step.num}
-                        </span>
-                        <span className="hphw-arrow text-primary" aria-hidden="true">
-                          <i className="fa-solid fa-chevron-right" />
-                        </span>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="hphw-arrow text-primary" aria-hidden="true">
-                          <i className="fa-solid fa-chevron-left" />
-                        </span>
-                        <span className="hphw-node flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-xs font-bold border-4 border-white shadow-sm z-10">
-                          {step.num}
-                        </span>
-                        <span className="hphw-link h-[1px] flex-1 bg-line-2" />
-                      </div>
-                      <article
-                        className="hphw-card shrink-0 w-[380px] max-w-[calc(50%_-_80px)] bg-white border border-line rounded-xl p-6 shadow-sm"
-                      >
-                        <span className="hphw-ghost absolute -top-[8px] left-[-10px] hidden lg:block w-10 h-10 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center" aria-hidden="true">
-                          {step.num}
-                        </span>
-                        <div className="hphw-card-top flex items-center gap-2 mb-3">
-                          <span className="hphw-ico inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-white">
-                            <i className={`fa-solid ${step.icon}`} />
-                          </span>
-                          <span className="hphw-label text-[10px] font-semibold uppercase tracking-wider text-muted">
-                            {step.label}
-                          </span>
-                        </div>
-                        <h3 className="text-lg font-bold text-ink mb-3">{step.title}</h3>
-                        <p className="mb-6 text-muted text-sm leading-relaxed">{step.desc}</p>
-                        <div className="hphw-foot flex items-center gap-2 mt-auto">
-                          <span className="hphw-dots flex gap-1">
-                            {step.dots.map((on, i) => (
-                              <i
-                                key={i}
-                                className={`w-1.5 h-1.5 rounded-full ${on ? 'bg-primary is-on' : 'bg-line-2'}`}
-                                aria-hidden="true"
-                              />
-                            ))}
-                          </span>
-                          <span className="hphw-count text-xs font-bold text-primary">{step.count}</span>
-                        </div>
-                      </article>
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          {workSteps.map((step, index) => {
+            const isLeft = index % 2 === 0;
+
+            return (
+              <div key={step.num} className={`hphw-step ${isLeft ? 'hphw-left' : 'hphw-right'}`}>
+                <span className="hphw-link" aria-hidden="true" />
+                <span className="hphw-node" aria-hidden="true">
+                  {step.num}
+                </span>
+                <span className="hphw-arrow" aria-hidden="true">
+                  <i className={`fa-solid ${isLeft ? 'fa-chevron-right' : 'fa-chevron-left'}`} />
+                </span>
+
+                <article className="hphw-card">
+                  <span className="hphw-ghost" aria-hidden="true">
+                    {step.num}
+                  </span>
+
+                  <div className="hphw-card-top">
+                    <span className="hphw-ico">
+                      <i className={`fa-solid ${step.icon}`} aria-hidden="true" />
+                    </span>
+                    <span className="hphw-label">{step.label}</span>
+                  </div>
+
+                  <h3>{step.title}</h3>
+                  <p>{step.desc}</p>
+
+                  <div className="hphw-foot" aria-hidden="true">
+                    <span className="hphw-dots">
+                      {step.dots.map((isOn, dotIndex) => (
+                        <i key={`${step.num}-${dotIndex}`} className={isOn ? 'is-on' : ''} />
+                      ))}
+                    </span>
+                    <span className="hphw-count">{step.count}</span>
+                  </div>
+                </article>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="text-center mt-12 lg:mt-16">
+        <div className="text-center mt-5">
           <Link href="/contact">
-            <button
-              className="bg-primary text-secondary font-semibold uppercase text-[16px] px-[55px] py-[13px] rounded-[20px_0px] hover:bg-secondary hover:text-primary transition-all duration-500"
-              type="button"
-            >
+            <button type="button" className="btn-primary">
               Request a Quote
             </button>
           </Link>
