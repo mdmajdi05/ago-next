@@ -9,6 +9,8 @@ import { FloatBar } from '@/components/layout/floatBar';
 import { WebVitalsMonitor } from '@/components/sections/web-vitals';
 
 import '@/styles/globals.css';
+import '@/styles/home-sections.css';
+import '@/styles/home-sections.css';
 
 const yantramanav = Yantramanav({
   subsets: ['latin'],
