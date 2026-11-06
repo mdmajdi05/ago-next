@@ -849,13 +849,15 @@ main {
 }
 
 .nav-item:hover .nav-link {
-  color: #014a8e;
-  background: rgba(240, 168, 67, 0.1);
+  color: #0b3b66;
+  background: #fdf1de;
+  box-shadow: inset 0 0 0 1px rgba(240, 168, 67, 0.34);
 }
 
 .nav-item.active .nav-link {
-  color: #014a8e;
-  background: #eef4f9;
+  color: #0b3b66;
+  background: #fdf1de;
+  box-shadow: inset 0 0 0 1px rgba(240, 168, 67, 0.34);
 }
 
 .header-search {
