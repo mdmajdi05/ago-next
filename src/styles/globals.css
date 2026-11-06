@@ -29,6 +29,10 @@
 
   --font-sans: "Yantramanav", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
+  /* Catalogue reference breakpoints (rem so they sort after the default rem breakpoints) */
+  --breakpoint-cat: 75.0625rem; /* 1201px */
+  --breakpoint-desk: 87.5rem;   /* 1400px */
+
   --radius-xl: 30px;
   --radius-lg: 24px;
   --radius-md: 18px;
@@ -77,30 +81,32 @@
   .home-page .container { max-width: 100%; }
 }
 
-html {
-  scroll-behavior: smooth;
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-sans);
-  color: var(--color-ink);
-  font-size: 16px;
-  line-height: 1.6;
-  background: #ffffff;
-  overflow-x: clip;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    font-size: 16px;
+    line-height: 1.6;
+    background: #ffffff;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
 
-html, body {
-  min-height: 100%;
-}
+  html, body {
+    min-height: 100%;
+  }
 
-main {
-  position: relative;
-  z-index: 0;
+  main {
+    position: relative;
+    z-index: 0;
+  }
 }
 
 #ago-hero {
@@ -1506,31 +1512,33 @@ main {
   color: #58d7a4;
 }
 
-section {
-  position: relative;
-  display: block;
-}
+@layer base {
+  section {
+    position: relative;
+    display: block;
+  }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-ul, ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+  ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
-p, h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  padding: 0;
+  p, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 /* Container - exact 1320px max-width from HTML */
