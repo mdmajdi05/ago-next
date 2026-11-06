@@ -848,9 +848,13 @@ main {
   text-transform: uppercase;
 }
 
-.nav-item:hover .nav-link,
+.nav-item:hover .nav-link {
+  color: #014a8e;
+  background: rgba(240, 168, 67, 0.1);
+}
+
 .nav-item.active .nav-link {
-  color: var(--primary-color);
+  color: #014a8e;
   background: #eef4f9;
 }
 
