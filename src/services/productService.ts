@@ -1,7 +1,16 @@
 import productsData from '@/data/static/products/products.json';
-import { Product, ProductFilters, ProductSearchResult } from '@/types/product';
+import { Product, ProductFilters, ProductSearchResult, ProductTypeSummary } from '@/types/product';
 import { slugifyBrand } from '@/services/brandService';
-import { CategoryService } from '@/services/categoryService';
+import CategoryService from '@/services/categoryService';
+import { siteConfig } from '@/config/site';
+import {
+  buildCanonicalSlug,
+  normalizeLegacyUrl,
+  normalizePartNumber,
+  slugifyCatalogValue,
+} from '@/lib/catalog/normalize';
+import { classifyProduct } from '@/lib/catalog/classify';
+import { DEFAULT_TYPE, TAXONOMY_BY_CATEGORY } from '@/lib/catalog/taxonomy';
 
 interface RawProduct {
   name: string;
@@ -16,37 +25,69 @@ interface RawProduct {
   image?: string;
 }
 
-/**
- * Normalizes a product URL or part number into a clean, URL-safe slug
- */
-function deriveSlug(url?: string, part?: string): string {
-  if (url) {
-    const cleaned = url.trim().replace(/\.html$/i, '').trim();
-    if (cleaned) {
-      return cleaned;
-    }
-  }
-  if (part) {
-    return part
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-  }
-  return '';
+const rawProducts = productsData as RawProduct[];
+
+// Count duplicate titles once so quality scoring is deterministic.
+const titleCounts = new Map<string, number>();
+for (const raw of rawProducts) {
+  const key = raw.title.trim().toLowerCase();
+  titleCounts.set(key, (titleCounts.get(key) || 0) + 1);
 }
 
-// Normalize all raw products from products.json
-const normalizedProducts: Product[] = (productsData as RawProduct[]).map((raw) => {
-  const slug = deriveSlug(raw.url, raw.part);
+const normalizedProducts: Product[] = rawProducts.map((raw) => {
+  const category = CategoryService.getByName(raw.category);
+  const categorySlug =
+    category?.slug || slugifyCatalogValue(raw.category || 'uncategorized');
+  const partNumber = normalizePartNumber(raw.part);
+  const duplicateTitle = (titleCounts.get(raw.title.trim().toLowerCase()) || 0) > 1;
+
+  const classification = classifyProduct(
+    {
+      title: raw.title,
+      part: partNumber,
+      brand: raw.brand,
+      category: raw.category,
+      categorySlug,
+      url: raw.url,
+      keywords: raw.keywords,
+      description: raw.description,
+      image: raw.image,
+    },
+    duplicateTitle
+  );
+
+  const type = classification.type || DEFAULT_TYPE;
+  const slug = buildCanonicalSlug(raw.brand, raw.part);
+
+  const aliases = Array.from(
+    new Set(
+      [
+        normalizeLegacyUrl(raw.url).toLowerCase(),
+        raw.url.trim().replace(/\.html$/i, '').toLowerCase(),
+        partNumber.toLowerCase(),
+        raw.name.trim().toLowerCase(),
+      ].filter(Boolean)
+    )
+  );
+
   return {
     name: raw.name,
     title: raw.title,
     part: raw.part,
+    partNumber,
     brand: raw.brand,
     category: raw.category,
     url: raw.url,
     slug,
+    type: type.name,
+    typeSlug: type.slug,
+    categorySlug,
+    tier: classification.tier,
+    entityType: classification.entityType,
+    qualityScore: classification.qualityScore,
+    indexable: classification.indexable,
+    aliases,
+    canonicalUrl: `${siteConfig.url}/products/${slug}`,
     keywords: raw.keywords,
     description: raw.description,
     specifications: raw.specifications,
@@ -55,124 +96,145 @@ const normalizedProducts: Product[] = (productsData as RawProduct[]).map((raw) =
 });
 
 // Fast lookup indexes
-const slugMap = new Map<string, Product>();
-const slugLowerMap = new Map<string, Product>();
-const partLowerMap = new Map<string, Product>();
+const canonicalSlugMap = new Map<string, Product>();
+const legacyMap = new Map<string, Product>();
+const partMap = new Map<string, Product>();
+const brandKeyMap = new Map<string, Product[]>();
+const categoryKeyMap = new Map<string, Product[]>();
 
 for (const product of normalizedProducts) {
-  slugMap.set(product.slug, product);
-  slugLowerMap.set(product.slug.toLowerCase(), product);
-  partLowerMap.set(product.part.toLowerCase(), product);
+  canonicalSlugMap.set(product.slug, product);
+  partMap.set(product.partNumber.toLowerCase(), product);
+
+  for (const alias of product.aliases) {
+    if (!legacyMap.has(alias)) legacyMap.set(alias, product);
+  }
+
+  const brandKey = slugifyBrand(product.brand);
+  const brandList = brandKeyMap.get(brandKey) || [];
+  brandList.push(product);
+  brandKeyMap.set(brandKey, brandList);
+
+  const categoryList = categoryKeyMap.get(product.categorySlug) || [];
+  categoryList.push(product);
+  categoryKeyMap.set(product.categorySlug, categoryList);
 }
 
-/**
- * Returns all normalized products
- */
+/** Returns every normalized product (including noindex family/listing rows). */
 export function getAll(): Product[] {
   return [...normalizedProducts];
 }
 
+/** Returns only products that are allowed to be indexed. */
+export function getIndexable(): Product[] {
+  return normalizedProducts.filter((product) => product.indexable);
+}
+
 /**
- * Retrieves a product by its unique slug (case-insensitive, strips .html)
+ * Retrieves a product by canonical slug, legacy URL, alias or part number.
  */
 export function getBySlug(slug: string): Product | undefined {
   if (!slug) return undefined;
   const clean = decodeURIComponent(slug).trim().replace(/\.html$/i, '').trim();
-  const cleanLower = clean.toLowerCase();
+  const lower = clean.toLowerCase();
 
   return (
-    slugMap.get(clean) ||
-    slugLowerMap.get(cleanLower) ||
-    partLowerMap.get(cleanLower) ||
-    normalizedProducts.find(
-      (p) =>
-        p.slug.toLowerCase() === cleanLower ||
-        p.url.trim().replace(/\.html$/i, '').toLowerCase() === cleanLower ||
-        p.part.toLowerCase() === cleanLower
+    canonicalSlugMap.get(lower) ||
+    legacyMap.get(lower) ||
+    partMap.get(lower) ||
+    normalizedProducts.find((product) =>
+      product.aliases.includes(lower)
     )
   );
 }
 
-/**
- * Retrieves all products matching a brand name or slug
- * e.g., getByBrand("GE") or getByBrand("atlas-copco")
- */
+/** Retrieves all products for a brand name or slug. */
 export function getByBrand(brandNameOrSlug: string): Product[] {
   if (!brandNameOrSlug) return [];
-  const target = brandNameOrSlug.trim().toLowerCase();
-  const targetSlug = slugifyBrand(target);
-
-  return normalizedProducts.filter((p) => {
-    const pBrand = p.brand.trim().toLowerCase();
-    return pBrand === target || slugifyBrand(pBrand) === targetSlug;
-  });
+  const target = slugifyBrand(brandNameOrSlug);
+  return [...(brandKeyMap.get(target) || [])];
 }
 
-/**
- * Retrieves all products matching a category name or slug
- * e.g., getByCategory("compressor-parts") or getByCategory("Turbine Parts")
- */
+/** Retrieves all products for a category name or slug. */
 export function getByCategory(categorySlugOrName: string): Product[] {
   if (!categorySlugOrName) return [];
-  const query = categorySlugOrName.trim().toLowerCase();
-
-  // Try resolving through CategoryService first
-  const matchedCategory =
-    CategoryService.getBySlug(query) || CategoryService.getByName(query);
-
-  if (matchedCategory) {
-    const targetName = matchedCategory.name.toLowerCase();
-    return normalizedProducts.filter((p) => p.category.toLowerCase() === targetName);
-  }
-
-  // Fallback to direct name or slug matching
-  const targetSlug = query.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  return normalizedProducts.filter((p) => {
-    const pCat = p.category.trim().toLowerCase();
-    const pCatSlug = pCat.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    return pCat === query || pCatSlug === targetSlug;
-  });
+  const clean = categorySlugOrName.trim().toLowerCase();
+  const category = CategoryService.getBySlug(clean);
+  const slug = category?.slug || slugifyCatalogValue(clean);
+  return [...(categoryKeyMap.get(slug) || [])];
 }
 
-/**
- * Searches and filters products with pagination
- * Supports text search across title, part, brand, category, keywords, name
- */
-export function search(filters: ProductFilters): ProductSearchResult {
-  const { search: searchParam, brand, category, page = 1, limit = 12 } = filters;
+/** Retrieves products for a category + type pair. */
+export function getByType(categorySlug: string, typeSlug: string): Product[] {
+  return normalizedProducts.filter(
+    (product) =>
+      product.categorySlug === categorySlug && product.typeSlug === typeSlug
+  );
+}
 
-  let results = normalizedProducts;
+/** Returns type summaries (with counts) for a category. */
+export function getTypes(categorySlug: string): ProductTypeSummary[] {
+  const taxonomy = TAXONOMY_BY_CATEGORY.get(categorySlug);
+  const products = categoryKeyMap.get(categorySlug) || [];
+  const counts = new Map<string, number>();
 
-  // Filter by brand
-  if (brand && brand.trim() !== '') {
-    const targetBrand = brand.trim().toLowerCase();
-    const targetBrandSlug = slugifyBrand(targetBrand);
-    results = results.filter((p) => {
-      const pBrand = p.brand.toLowerCase();
-      return pBrand === targetBrand || slugifyBrand(pBrand) === targetBrandSlug;
+  for (const product of products) {
+    counts.set(product.typeSlug, (counts.get(product.typeSlug) || 0) + 1);
+  }
+
+  const definitions = taxonomy?.types || [];
+  const summaries: ProductTypeSummary[] = definitions.map((type) => ({
+    slug: type.slug,
+    name: type.name,
+    categorySlug,
+    count: counts.get(type.slug) || 0,
+  }));
+
+  const fallbackCount = counts.get(DEFAULT_TYPE.slug) || 0;
+  if (fallbackCount > 0) {
+    summaries.push({
+      slug: DEFAULT_TYPE.slug,
+      name: DEFAULT_TYPE.name,
+      categorySlug,
+      count: fallbackCount,
     });
   }
 
-  // Filter by category
-  if (category && category.trim() !== '') {
-    const targetCategory = category.trim().toLowerCase();
-    const matchedCategory =
-      CategoryService.getBySlug(targetCategory) || CategoryService.getByName(targetCategory);
+  return summaries.filter((summary) => summary.count > 0);
+}
 
-    if (matchedCategory) {
-      const targetName = matchedCategory.name.toLowerCase();
-      results = results.filter((p) => p.category.toLowerCase() === targetName);
-    } else {
-      const catSlug = targetCategory.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-      results = results.filter((p) => {
-        const pCat = p.category.toLowerCase();
-        const pCatSlug = pCat.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-        return pCat === targetCategory || pCatSlug === catSlug;
-      });
-    }
+/**
+ * Searches and filters products with pagination.
+ */
+export function search(filters: ProductFilters): ProductSearchResult {
+  const {
+    search: searchParam,
+    brand,
+    category,
+    type,
+    page = 1,
+    limit = 12,
+  } = filters;
+
+  let results = normalizedProducts;
+
+  if (brand && brand.trim() !== '') {
+    const target = slugifyBrand(brand);
+    results = results.filter((product) => slugifyBrand(product.brand) === target);
   }
 
-  // Text search against title, part, brand, category, keywords, name
+  if (category && category.trim() !== '') {
+    const clean = category.trim().toLowerCase();
+    const matched = CategoryService.getBySlug(clean);
+    const targetSlug = matched?.slug || slugifyCatalogValue(clean);
+    results = results.filter((product) => product.categorySlug === targetSlug);
+  }
+
+  if (type && type.trim() !== '') {
+    const targetType = slugifyCatalogValue(type);
+    results = results.filter((product) => product.typeSlug === targetType);
+  }
+
   if (searchParam && searchParam.trim() !== '') {
     const tokens = searchParam
       .trim()
@@ -180,15 +242,17 @@ export function search(filters: ProductFilters): ProductSearchResult {
       .split(/\s+/)
       .filter(Boolean);
 
-    results = results.filter((p) => {
+    results = results.filter((product) => {
       const haystack = [
-        p.title,
-        p.part,
-        p.brand,
-        p.category,
-        p.keywords || '',
-        p.name,
-        p.description || '',
+        product.title,
+        product.part,
+        product.partNumber,
+        product.brand,
+        product.category,
+        product.type,
+        product.keywords || '',
+        product.name,
+        product.description || '',
       ]
         .join(' ')
         .toLowerCase();
@@ -202,88 +266,118 @@ export function search(filters: ProductFilters): ProductSearchResult {
   const totalPages = Math.max(1, Math.ceil(total / safeLimit));
   const safePage = Math.min(Math.max(1, page), totalPages);
   const offset = (safePage - 1) * safeLimit;
-  const paginatedProducts = results.slice(offset, offset + safeLimit);
 
   return {
-    products: paginatedProducts,
+    products: results.slice(offset, offset + safeLimit),
     total,
     page: safePage,
     totalPages,
   };
 }
 
-/**
- * Returns all product slugs for static route generation (generateStaticParams)
- */
+/** Returns every canonical slug so every product route can be generated. */
 export function getAllSlugs(): string[] {
-  return normalizedProducts.map((p) => p.slug);
+  return Array.from(new Set(normalizedProducts.map((product) => product.slug)));
+}
+
+/** Returns canonical slugs for indexable products only (used by sitemaps). */
+export function getIndexableSlugs(): string[] {
+  return getIndexable().map((product) => product.slug);
 }
 
 /**
- * Returns a curated list of featured products representing key categories and brands
+ * A–Z part number index. Groups by first character.
  */
+export function getPartIndex(): { key: string; products: Product[] }[] {
+  const groups = new Map<string, Product[]>();
+
+  for (const product of getIndexable()) {
+    const first = product.partNumber.charAt(0).toUpperCase();
+    const key = /[A-Z]/.test(first) ? first : /[0-9]/.test(first) ? '0-9' : 'Other';
+    const list = groups.get(key) || [];
+    list.push(product);
+    groups.set(key, list);
+  }
+
+  return Array.from(groups.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, products]) => ({
+      key,
+      products: products.sort((a, b) =>
+        a.partNumber.localeCompare(b.partNumber)
+      ),
+    }));
+}
+
+/** Curated list of featured products (Tier A first). */
 export function getFeatured(count: number = 8): Product[] {
-  // Curated list of high-profile industrial parts
-  const priorityParts = [
-    'LM2500', // GE LM2500 Gas Turbine Parts
-    '1616543900', // Atlas Copco Air Compressor
-    '1.105.30179.11.000', // Siemens Engine Assembly
-    'PV212-22-P', // GE Druck Hydraulic Hand Pump
-    '100.1/3-S211-9002', // ITT Goulds Pump
-    'G61B06', // GE Turbine Component
-    '114A7073P006', // GE Self-Locking Nut
-    '1900071032', // Atlas Copco Regulator
-    '354A1513P131', // GE Spark Plug Lead
-    'C6434D0Z5', // GE Cylinder Assembly
-  ];
+  const priority = normalizedProducts
+    .filter((product) => product.tier === 'A')
+    .sort((a, b) => b.qualityScore - a.qualityScore);
 
-  const featured: Product[] = [];
-  const seenSlugs = new Set<string>();
+  const featured = priority.slice(0, count);
 
-  for (const partNumber of priorityParts) {
-    const found = normalizedProducts.find(
-      (p) => p.part.toLowerCase() === partNumber.toLowerCase()
-    );
-    if (found && !seenSlugs.has(found.slug)) {
-      featured.push(found);
-      seenSlugs.add(found.slug);
-    }
-  }
-
-  // Fill up if needed up to count
   if (featured.length < count) {
-    for (const p of normalizedProducts) {
-      if (!seenSlugs.has(p.slug)) {
-        featured.push(p);
-        seenSlugs.add(p.slug);
-        if (featured.length >= count) break;
-      }
+    const seen = new Set(featured.map((product) => product.slug));
+    for (const product of normalizedProducts) {
+      if (seen.has(product.slug)) continue;
+      featured.push(product);
+      seen.add(product.slug);
+      if (featured.length >= count) break;
     }
   }
 
-  return featured.slice(0, count);
+  return featured;
 }
 
-/**
- * Returns related products sharing the same category and/or brand
- */
+/** Returns related products, preferring the same type then category/brand. */
 export function getRelated(product: Product, limit: number = 4): Product[] {
-  return normalizedProducts
-    .filter(
-      (p) =>
-        p.slug !== product.slug &&
-        (p.category === product.category || p.brand === product.brand)
-    )
-    .slice(0, limit);
+  const sameType = normalizedProducts.filter(
+    (candidate) =>
+      candidate.slug !== product.slug &&
+      candidate.categorySlug === product.categorySlug &&
+      candidate.typeSlug === product.typeSlug
+  );
+
+  const sameCategory = normalizedProducts.filter(
+    (candidate) =>
+      candidate.slug !== product.slug &&
+      candidate.categorySlug === product.categorySlug &&
+      candidate.typeSlug !== product.typeSlug
+  );
+
+  const sameBrand = normalizedProducts.filter(
+    (candidate) =>
+      candidate.slug !== product.slug &&
+      slugifyBrand(candidate.brand) === slugifyBrand(product.brand) &&
+      candidate.categorySlug !== product.categorySlug
+  );
+
+  const seen = new Set<string>();
+  const related: Product[] = [];
+
+  for (const candidate of [...sameType, ...sameCategory, ...sameBrand]) {
+    if (seen.has(candidate.slug)) continue;
+    related.push(candidate);
+    seen.add(candidate.slug);
+    if (related.length >= limit) break;
+  }
+
+  return related;
 }
 
 export const ProductService = {
   getAll,
+  getIndexable,
   getBySlug,
   getByBrand,
   getByCategory,
+  getByType,
+  getTypes,
   search,
   getAllSlugs,
+  getIndexableSlugs,
+  getPartIndex,
   getFeatured,
   getRelated,
 };

@@ -39,7 +39,7 @@ export default function EnquiryForm({ product }: EnquiryFormProps) {
       phone: '',
       company: '',
       partNumber: product.part,
-      message: `Enquiry for ${product.title} (${product.part})`,
+      message: `Enquiry for ${product.title} (${product.partNumber})`,
     },
     mode: 'onSubmit',
     reValidateMode: 'onChange',
@@ -174,7 +174,7 @@ export default function EnquiryForm({ product }: EnquiryFormProps) {
         <input
           id="part-number"
           {...register('partNumber')}
-          value={product.part}
+          value={product.partNumber}
           readOnly
           className="w-full border border-line rounded-xl px-3 py-3 text-sm bg-slate-50 outline-none"
         />

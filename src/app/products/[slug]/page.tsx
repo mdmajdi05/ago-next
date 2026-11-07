@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -7,7 +6,7 @@ import Image from 'next/image';
 import { productService, brandService } from '@/services';
 import { siteConfig } from '@/config/site';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
-import { slugify } from '@/lib/utils';
+import { getProductImage } from '@/lib/catalog/images';
 import EnquiryForm from './EnquiryForm';
 
 interface ProductPageProps {
@@ -27,31 +26,33 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: 'Product Not Found | AGO Aviation',
+      title: 'Product Not Found',
       robots: { index: false, follow: false },
     };
   }
 
-  const description =
-    product.keywords ||
-    product.description ||
-    `Enquire about ${product.part}, ${product.title} from ${product.brand}. Contact AGO Aviation for availability and quotation.`;
+  const title = `${product.brand} ${product.partNumber} ${product.type}`;
+  const description = `Request a quote for ${product.brand} ${product.partNumber} (${product.type}) from AGO Aviation. Part specifications, compatibility, availability and worldwide shipping for ${product.category.toLowerCase()}.`;
 
   return {
-    title: product.title,
+    title,
     description,
+    alternates: {
+      canonical: product.canonicalUrl,
+    },
+    robots: product.indexable
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
     openGraph: {
-      title: product.title,
+      title: `${title} | AGO Aviation`,
       description,
       type: 'website',
-      url: `https://www.agoaviation.com/products/${product.slug}`,
-      images: product.image
-        ? [{ url: product.image }]
-        : [{ url: siteConfig.ogImage }],
+      url: product.canonicalUrl,
+      images: [{ url: getProductImage(product) }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: product.title,
+      title: `${title} | AGO Aviation`,
       description,
     },
   };
@@ -66,40 +67,96 @@ export default async function ProductPage({
   if (!product) notFound();
 
   const related = productService.getRelated(product, 4);
-  const imageUrl = product.image || '/images/engine-100.jpeg';
+  const imageUrl = getProductImage(product);
+  const typeCount = productService.getByType(
+    product.categorySlug,
+    product.typeSlug
+  ).length;
 
   const specifications = product.specifications
     ? Object.entries(product.specifications)
     : [
-        ['Part Number', product.part],
+        ['Part Number', product.partNumber],
         ['Brand', product.brand],
         ['Category', product.category],
+        ['Type', product.type],
+        ['Condition', 'New / Refurbished on request'],
+        ['Availability', 'Quote on request'],
       ];
 
   const breadcrumbs = [
     { label: 'Products', href: '/products' },
+    { label: product.category, href: `/categories/${product.categorySlug}` },
     { label: product.title, href: `/products/${product.slug}` },
   ];
 
-  const productUrl =
-    `https://www.agoaviation.com/products/${product.slug}`;
+  const productUrl = product.canonicalUrl;
+
+  const overview =
+    product.description ||
+    `${product.brand} ${product.partNumber} is a ${product.type.toLowerCase()} supplied by AGO Aviation for gas turbine and industrial applications. Our team verifies part specifications, compatibility and availability before sending a quotation.`;
+
+  const compatibility = [
+    `Gas turbine and industrial plant applications requiring ${product.type.toLowerCase()}`,
+    `${product.category} systems and overhaul programmes`,
+    'Replacement, repair and spares support for operating facilities',
+  ];
+
+  const faqs = [
+    {
+      question: `What is ${product.brand} ${product.partNumber}?`,
+      answer: `${product.brand} ${product.partNumber} is a ${product.type.toLowerCase()} listed under ${product.category} in the AGO Aviation catalogue.`,
+    },
+    {
+      question: `Can I request a quote for ${product.partNumber}?`,
+      answer: `Yes. Send your quantity, destination and any technical references through the enquiry form and our team will confirm availability and pricing.`,
+    },
+    {
+      question: `Does AGO Aviation supply ${product.brand} spare parts worldwide?`,
+      answer: `Yes. AGO Aviation supplies gas turbine and industrial spare parts to power plants, oil and gas facilities and EPC contractors worldwide.`,
+    },
+  ];
 
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: product.title,
+    name: `${product.brand} ${product.partNumber} ${product.type}`,
     image: imageUrl,
-    description:
-      product.description || product.keywords || undefined,
+    description: overview,
     brand: {
       '@type': 'Brand',
       name: product.brand,
     },
-    sku: product.part,
-    mpn: product.part,
+    sku: product.partNumber,
+    mpn: product.partNumber,
     category: product.category,
     url: productUrl,
   };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.label,
+      item: `${siteConfig.url}${item.href}`,
+    })),
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+
 
   return (
     <main className="min-h-screen bg-[#f5f8fb] text-[#102b43]">
@@ -108,7 +165,10 @@ export default async function ProductPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productSchema).replace(/</g, '\\u003c'),
+          __html: JSON.stringify([productSchema, breadcrumbSchema, faqSchema]).replace(
+            /</g,
+            '\\u003c'
+          ),
         }}
       />
 
@@ -133,7 +193,7 @@ export default async function ProductPage({
 
               <Image
                 src={imageUrl}
-                alt={`${product.title} - Part Number ${product.part} by ${product.brand}`}
+                alt={`${product.title} - Part Number ${product.partNumber} by ${product.brand}`}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -141,7 +201,7 @@ export default async function ProductPage({
               />
 
               <div className="absolute bottom-4 right-4 rounded-lg border border-[#e5ebf0] bg-white/90 px-3 py-2 text-[10px] font-semibold text-[#52687a]">
-                PART NO. {product.part}
+                PART NO. {product.partNumber}
               </div>
             </div>
 
@@ -197,7 +257,7 @@ export default async function ProductPage({
                     Part Number
                   </span>
                   <span className="mt-1 block font-mono text-sm font-bold text-[#123c5b]">
-                    {product.part}
+                    {product.partNumber}
                   </span>
                 </div>
 
@@ -218,28 +278,58 @@ export default async function ProductPage({
                     Category
                   </span>
                   <Link
-                    href={`/categories/${slugify(product.category)}`}
+                    href={`/categories/${product.categorySlug}`}
                     className="mt-1 inline-block text-sm font-bold text-[#123c5b] hover:text-[#d69a32] hover:underline"
                   >
                     {product.category} ↗
                   </Link>
                 </div>
 
+                <div>
+                  <span className="block text-[9px] font-bold uppercase tracking-widest text-[#718394]">
+                    Type
+                  </span>
+                  {typeCount >= 3 ? (
+                    <Link
+                      href={`/categories/${product.categorySlug}/${product.typeSlug}`}
+                      className="mt-1 inline-block text-sm font-bold text-[#123c5b] hover:text-[#d69a32] hover:underline"
+                    >
+                      {product.type} ↗
+                    </Link>
+                  ) : (
+                    <span className="mt-1 inline-block text-sm font-bold text-[#123c5b]">
+                      {product.type}
+                    </span>
+                  )}
+                </div>
+
               </div>
             </div>
 
             {/* Product Description */}
-            {(product.description || product.keywords) && (
-              <div className="border-t border-[#dfe7ed] pt-5">
-                <h2 className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-[#183c59]">
-                  Product Overview
-                </h2>
+            <div className="border-t border-[#dfe7ed] pt-5">
+              <h2 className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-[#183c59]">
+                Product Overview
+              </h2>
 
-                <p className="text-sm leading-7 text-[#53697b]">
-                  {product.description || product.keywords}
-                </p>
-              </div>
-            )}
+              <p className="text-sm leading-7 text-[#53697b]">{overview}</p>
+            </div>
+
+            {/* Compatibility */}
+            <div className="border-t border-[#dfe7ed] pt-5">
+              <h2 className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-[#183c59]">
+                Compatibility &amp; Applications
+              </h2>
+
+              <ul className="space-y-2 text-sm leading-6 text-[#53697b]">
+                {compatibility.map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <span className="text-[#d69a32]">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             {/* Quote CTA */}
             <div className="rounded-2xl bg-[#092d47] p-5 text-white shadow-[0_12px_30px_rgba(9,45,71,0.15)] sm:p-6">
@@ -375,7 +465,7 @@ export default async function ProductPage({
                 </p>
 
                 <p className="mt-1 font-mono text-xs text-[#718394]">
-                  Part Number: {product.part}
+                  Part Number: {product.partNumber}
                 </p>
               </div>
 
@@ -384,6 +474,34 @@ export default async function ProductPage({
 
           </section>
         </div>
+
+        {/* FAQ */}
+        <section className="mt-14">
+          <div className="mb-6">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#d69a32]">
+              Part Enquiry Help
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold text-[#092b45]">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {faqs.map((faq) => (
+              <div
+                key={faq.question}
+                className="rounded-2xl border border-[#e1e8ee] bg-white p-5 shadow-[0_5px_22px_rgba(12,39,60,0.04)]"
+              >
+                <h3 className="text-sm font-extrabold text-[#123c5b]">
+                  {faq.question}
+                </h3>
+                <p className="mt-2 text-xs leading-6 text-[#5d7182]">
+                  {faq.answer}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* Related Products */}
         {related.length > 0 && (
@@ -429,7 +547,7 @@ export default async function ProductPage({
                   </h3>
 
                   <p className="mt-2 font-mono text-xs text-[#718394]">
-                    P/N: {item.part}
+                    P/N: {item.partNumber}
                   </p>
 
                   <div className="mt-5 flex items-center justify-between border-t border-[#e8edf1] pt-3">

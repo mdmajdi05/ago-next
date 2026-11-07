@@ -29,9 +29,12 @@ export async function generateMetadata({
   }
 
   return {
-    title: category.name,
+    title: `${category.name} Spare Parts`,
     description:
       category.description || `Genuine ${category.name} gas turbine parts from AGO Aviation.`,
+    alternates: {
+      canonical: `${siteConfig.url}/categories/${category.slug}`,
+    },
     openGraph: {
       title: category.name,
       description: category.description,
@@ -48,6 +51,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!category) notFound();
 
   const products = productService.getByCategory(slug);
+  const types = productService.getTypes(category.slug);
   const brands = brandService.getAll().filter((brand) =>
     brand.categories.includes(category.name),
   );
@@ -92,6 +96,35 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </ul>
             </section>
           )}
+
+          {types.length > 0 && (
+            <section className="mt-8">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-primary mb-3 block">
+                Part types
+              </h2>
+              <ul className="flex flex-wrap gap-2">
+                {types.map((type) =>
+                  type.count >= 3 ? (
+                    <li key={type.slug}>
+                      <Link
+                        href={`/categories/${category.slug}/${type.slug}`}
+                        className="text-sm border border-line rounded-full px-3 py-1 text-muted hover:bg-primary hover:text-white transition-colors"
+                      >
+                        {type.name} ({type.count})
+                      </Link>
+                    </li>
+                  ) : (
+                    <li
+                      key={type.slug}
+                      className="text-sm border border-line rounded-full px-3 py-1 text-muted"
+                    >
+                      {type.name} ({type.count})
+                    </li>
+                  )
+                )}
+              </ul>
+            </section>
+          )}
         </div>
 
         <section className="flex-1">
@@ -109,7 +142,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                       <p className="text-sm font-semibold text-primary line-clamp-2">
                         {product.title}
                       </p>
-                      <p className="text-xs text-muted mt-1">{product.part}</p>
+                      <p className="text-xs text-muted mt-1">{product.partNumber}</p>
                       <p className="text-xs text-muted mt-1">{product.brand}</p>
                     </div>
                   </Link>

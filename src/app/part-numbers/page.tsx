@@ -1,0 +1,93 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+
+import { productService } from '@/services';
+import { siteConfig } from '@/config/site';
+
+export const metadata: Metadata = {
+  title: 'Part Number Index',
+  description:
+    'Browse A–Z part numbers for gas turbine, compressor, valve, automation and industrial spare parts supplied by AGO Aviation. Find a part number and request a quote.',
+  alternates: {
+    canonical: `${siteConfig.url}/part-numbers`,
+  },
+  openGraph: {
+    title: 'Part Number Index | AGO Aviation',
+    description:
+      'Browse A–Z part numbers for gas turbine and industrial spare parts supplied by AGO Aviation.',
+    type: 'website',
+    url: `${siteConfig.url}/part-numbers`,
+    images: [{ url: siteConfig.ogImage }],
+  },
+};
+
+export default function PartNumbersPage() {
+  const groups = productService.getPartIndex();
+  const total = groups.reduce((sum, group) => sum + group.products.length, 0);
+
+  return (
+    <main className="min-h-screen bg-[#f5f8fb] text-[#102b43]">
+      <section className="bg-[#06263b] px-5 py-14 text-white md:px-[7%] md:py-20">
+        <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#ffc34f]">
+          Catalogue Index
+        </p>
+        <h1 className="mt-3 max-w-3xl text-3xl font-bold leading-tight md:text-5xl">
+          Part Number Index
+        </h1>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-[#d7e3ec] md:text-base">
+          {total} indexed part numbers across gas turbine, compressor, valve,
+          automation, instrumentation and industrial spare part categories.
+        </p>
+      </section>
+
+      <section className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 lg:px-10">
+        <nav
+          aria-label="Part number groups"
+          className="mb-8 flex flex-wrap gap-2"
+        >
+          {groups.map((group) => (
+            <a
+              key={group.key}
+              href={`#group-${group.key}`}
+              className="rounded-full border border-[#d6e1e9] bg-white px-3 py-1.5 text-xs font-bold text-[#123c5b] transition hover:border-[#d69a32] hover:text-[#b77b1c]"
+            >
+              {group.key} ({group.products.length})
+            </a>
+          ))}
+        </nav>
+
+        <div className="space-y-10">
+          {groups.map((group) => (
+            <section key={group.key} id={`group-${group.key}`} className="scroll-mt-28">
+              <h2 className="mb-4 border-b border-[#dfe7ed] pb-2 text-xl font-bold text-[#123c5b]">
+                {group.key}
+              </h2>
+
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {group.products.map((product) => (
+                  <Link
+                    key={product.slug}
+                    href={`/products/${product.slug}`}
+                    className="group flex items-center justify-between gap-3 rounded-xl border border-[#e1e8ee] bg-white px-4 py-3 transition hover:border-[#d69a32] hover:shadow-[0_8px_20px_rgba(12,39,60,0.06)]"
+                  >
+                    <span className="min-w-0">
+                      <span className="block truncate font-mono text-xs font-bold text-[#123c5b]">
+                        {product.partNumber}
+                      </span>
+                      <span className="mt-0.5 block truncate text-[10px] text-[#718394]">
+                        {product.brand} · {product.type}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-[#d69a32] transition group-hover:translate-x-1">
+                      →
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}

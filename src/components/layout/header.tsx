@@ -3,22 +3,28 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { TopBar } from './topBar';
 
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Products', href: '/products' },
+  { label: 'Categories', href: '/categories' },
   { label: 'Brands', href: '/brands' },
-  { label: 'Stock', href: '/products' },
-  { label: 'Turbine Parts', href: '/products' },
   { label: 'Services', href: '/services' },
   { label: 'Insights', href: '/blog' },
   { label: 'Contact', href: '/contact' },
 ];
 
+function isActivePath(pathname: string, href: string): boolean {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname() || '/';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -77,8 +83,11 @@ export function Header() {
                 className={`site-nav ${menuOpen ? 'site-nav--open' : 'site-nav--closed'}`}
               >
                 <ul className="nav-list">
-                  {navLinks.map((link, index) => (
-                    <li key={link.label} className={`nav-item ${index === 0 ? 'active' : ''}`}>
+                  {navLinks.map((link) => (
+                    <li
+                      key={link.label}
+                      className={`nav-item ${isActivePath(pathname, link.href) ? 'active' : ''}`}
+                    >
                       <Link href={link.href} className="nav-link">
                         {link.label}
                       </Link>
@@ -94,7 +103,7 @@ export function Header() {
                   <input
                     type="search"
                     placeholder="Search here"
-                    name="q"
+                    name="search"
                     className="search-input"
                     aria-label="Search spare parts"
                   />

@@ -1,51 +1,70 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { DM_Sans } from 'next/font/google';
 import {
   productService,
   brandService,
   categoryService,
 } from '@/services';
 import { cn } from '@/lib/utils';
+import { siteConfig } from '@/config/site';
 import { Product, ProductFilters } from '@/types/product';
 import { CatalogFilters } from '@/components/products/catalog-filters';
-
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
-});
-
-export const metadata: Metadata = {
-  title: 'All Gas Turbine & Industrial Spare Parts',
-  description:
-    'Browse genuine gas turbine, compressor, automation and industrial spare parts across 24 brands. Search by part number, brand or category and request a quote.',
-  openGraph: {
-    title: 'All Gas Turbine & Industrial Spare Parts | AGO Aviation',
-    description:
-      'Browse genuine gas turbine, compressor, automation and industrial spare parts across 24 brands.',
-    type: 'website',
-    url: 'https://www.agoaviation.com/products',
-    images: [{ url: 'https://www.agoaviation.com/images/engine-100.jpeg' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'All Gas Turbine & Industrial Spare Parts | AGO Aviation',
-    description:
-      'Browse genuine gas turbine, compressor, automation and industrial spare parts across 24 brands.',
-  },
-};
 
 interface SearchParams {
   search?: string;
   brand?: string;
   category?: string;
+  type?: string;
   page?: string;
   limit?: string;
 }
 
 interface ProductsPageProps {
   searchParams: Promise<SearchParams>;
+}
+
+function isFilteredView(params: SearchParams): boolean {
+  return Boolean(
+    params.search ||
+      params.brand ||
+      params.category ||
+      params.type ||
+      (params.page && params.page !== '1') ||
+      (params.limit && params.limit !== '12')
+  );
+}
+
+export async function generateMetadata({
+  searchParams,
+}: ProductsPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const filtered = isFilteredView(params);
+
+  return {
+    title: 'All Gas Turbine & Industrial Spare Parts',
+    description:
+      'Browse genuine gas turbine, compressor, automation and industrial spare parts across 24 brands. Search by part number, brand or category and request a quote.',
+    alternates: {
+      canonical: `${siteConfig.url}/products`,
+    },
+    robots: filtered
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
+    openGraph: {
+      title: 'All Gas Turbine & Industrial Spare Parts | AGO Aviation',
+      description:
+        'Browse genuine gas turbine, compressor, automation and industrial spare parts across 24 brands.',
+      type: 'website',
+      url: `${siteConfig.url}/products`,
+      images: [{ url: siteConfig.ogImage }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'All Gas Turbine & Industrial Spare Parts | AGO Aviation',
+      description:
+        'Browse genuine gas turbine, compressor, automation and industrial spare parts across 24 brands.',
+    },
+  };
 }
 
 const A = '/ago-aviation/';
@@ -96,6 +115,7 @@ export default async function ProductsPage({
   const search = (params.search || '').trim();
   const brand = (params.brand || '').trim();
   const category = (params.category || '').trim();
+  const type = (params.type || '').trim();
 
   const requestedPage = Math.max(1, parseInt(params.page || '1', 10) || 1);
   const limit = Math.max(
@@ -108,6 +128,7 @@ export default async function ProductsPage({
   if (search) filters.search = search;
   if (brand) filters.brand = brand;
   if (category) filters.category = category;
+  if (type) filters.type = type;
 
   const {
     products,
@@ -127,11 +148,12 @@ export default async function ProductsPage({
     ...(search ? { search } : {}),
     ...(brand ? { brand } : {}),
     ...(category ? { category } : {}),
+    ...(type ? { type } : {}),
     limit: String(limit),
   };
 
   return (
-    <div className={cn('min-h-screen bg-[#f5f8fb] text-[#09233b] leading-[normal]', dmSans.className)}>
+    <div className={cn('min-h-screen bg-[#f5f8fb] text-[#09233b] leading-[normal]')}>
       {/* HERO */}
       <section className="relative h-[500px] min-h-[500px] overflow-hidden bg-[#06263b] text-white md:h-[350px] md:min-h-[350px]">
         <div
@@ -342,6 +364,12 @@ export default async function ProductsPage({
                 </b>{' '}
                 of {total} products
               </p>
+              <Link
+                href="/part-numbers"
+                className="text-[10px] font-bold text-[#b77b1c] hover:underline md:text-[11px]"
+              >
+                Browse A–Z part number index →
+              </Link>
             </div>
 
             <label className="whitespace-nowrap text-[10px] md:text-[11px]">
@@ -380,7 +408,7 @@ export default async function ProductsPage({
                 >
                   <img
                     src={productImage(product)}
-                    alt={`${product.title} ${product.part}`}
+                    alt={`${product.title} ${product.partNumber}`}
                     className="h-[110px] w-full bg-gradient-to-b from-white to-[#f7f9fb] object-contain p-[7px] md:h-[118px] max-[390px]:h-full max-[390px]:min-h-[220px]"
                   />
 
@@ -394,7 +422,7 @@ export default async function ProductsPage({
                     </h3>
 
                     <p className="my-[5px] text-[11px] text-[#344b60]">
-                      P/N: {product.part}
+                      P/N: {product.partNumber} · {product.type}
                     </p>
 
                     <p className="my-[5px] line-clamp-2 text-[9px] leading-[1.35] text-[#20394f] md:text-[10px]">
@@ -409,7 +437,7 @@ export default async function ProductsPage({
 
                     <div className="flex gap-1.5 max-[760px]:flex-col">
                       <a
-                        href={quoteHref(product.part)}
+                        href={quoteHref(product.partNumber)}
                         className="flex-1 whitespace-nowrap rounded-[7px] bg-[#062a43] px-1.5 py-2.5 text-center text-[10px] font-bold text-white"
                       >
                         Request a Quote

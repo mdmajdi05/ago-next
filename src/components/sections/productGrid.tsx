@@ -75,14 +75,14 @@ export function ProductGrid({
                   {product.title}
                 </h3>
                 <p className="text-sm text-text-muted mb-1">
-                  Part No: {product.part}
+                  Part No: {product.partNumber}
                 </p>
                 <div className="mt-auto pt-4 flex items-center gap-2">
                   <span className="brand-chip">{product.brand}</span>
                 </div>
                 <Button
                   variant="secondary"
-                  href={product.url}
+                  href={`/products/${product.slug}`}
                   className="mt-4 w-full text-center"
                 >
                   View

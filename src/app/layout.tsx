@@ -10,7 +10,6 @@ import { WebVitalsMonitor } from '@/components/sections/web-vitals';
 
 import '@/styles/globals.css';
 import '@/styles/home-sections.css';
-import '@/styles/home-sections.css';
 
 const yantramanav = Yantramanav({
   subsets: ['latin'],
@@ -20,6 +19,7 @@ const yantramanav = Yantramanav({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
     template: '%s | AGO Aviation',
     default: 'AGO Aviation - Gas Turbine Parts Manufacturer & Supplier',
@@ -30,11 +30,6 @@ export const metadata: Metadata = {
   creator: siteConfig.name,
   publisher: siteConfig.name,
 
-
-
-  alternates: {
-    canonical: siteConfig.url,
-  },
   openGraph: {
     title: `${siteConfig.name} - ${siteConfig.tagline}`,
     description: siteConfig.description,

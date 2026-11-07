@@ -57,7 +57,7 @@ describe('ProductService', () => {
   it('search with text filter works', () => {
     const result = search({ search: 'turbine', limit: 10 });
     result.products.forEach((p) => {
-      const haystack = [p.title, p.part, p.brand, p.category, p.keywords, p.name, p.description]
+      const haystack = [p.title, p.part, p.partNumber, p.brand, p.category, p.type, p.keywords, p.name, p.description]
         .join(' ')
         .toLowerCase();
       expect(haystack).toContain('turbine');

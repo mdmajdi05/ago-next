@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'Authorized Brands',
   description:
     'AGO Aviation is an authorized distributor for GE, Siemens, ABB, Atlas Copco and 23+ turbine parts brands worldwide. Genuine gas turbine spares with warranty.',
+  alternates: {
+    canonical: `${siteConfig.url}/brands`,
+  },
   openGraph: {
     title: 'Authorized Brands | AGO Aviation',
     description:

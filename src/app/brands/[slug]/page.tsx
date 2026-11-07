@@ -29,9 +29,12 @@ export async function generateMetadata({
   }
 
   return {
-    title: brand.name,
+    title: `${brand.name} Spare Parts`,
     description:
       brand.description || `Genuine ${brand.name} gas turbine parts and spares supplied by AGO Aviation worldwide.`,
+    alternates: {
+      canonical: `${siteConfig.url}/brands/${brand.slug}`,
+    },
     openGraph: {
       title: brand.name,
       description: brand.description,
@@ -112,7 +115,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
                       <p className="text-sm font-semibold text-primary line-clamp-2">
                         {product.title}
                       </p>
-                      <p className="text-xs text-muted mt-1">{product.part}</p>
+                      <p className="text-xs text-muted mt-1">{product.partNumber}</p>
                     </div>
                   </Link>
                 </li>
