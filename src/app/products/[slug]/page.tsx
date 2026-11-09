@@ -32,9 +32,11 @@ const BRAND_PLATFORMS: Record<string, string[]> = {
 };
 
 export async function generateStaticParams() {
-  const slugs = productService.getAllSlugs();
+  const slugs = productService.getStaticSlugs();
   return slugs.map((slug) => ({ slug }));
 }
+
+export const dynamicParams = true;
 
 export async function generateMetadata({
   params,
@@ -82,12 +84,12 @@ export default async function ProductPage({
 
   const related = productService.getRelated(product, 4);
   const imageUrl = getProductImage(product);
-  const typeCount = productService.getByType(
+  const typeCount = productService.getCountByType(
     product.categorySlug,
     product.typeSlug
-  ).length;
-  const categoryCount = productService.getByCategory(product.categorySlug).length;
-  const brandCount = productService.getByBrand(product.brand).length;
+  );
+  const categoryCount = productService.getCountByCategory(product.categorySlug);
+  const brandCount = productService.getCountByBrand(product.brand);
 
   const pageTitle = `${product.brand} ${product.partNumber} ${product.type}`;
   const catalogueTitle = product.displayTitle;

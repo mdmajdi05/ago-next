@@ -12,6 +12,10 @@ import {
   collectionPageSchema,
 } from '@/lib/seo';
 
+// Cap the number of products rendered on a type page so large types stay
+// fast to build; the full list stays reachable via /products filters.
+const TYPE_PAGE_CAP = 96;
+
 interface TypePageProps {
   params: Promise<{ slug: string; type: string }>;
 }
@@ -77,6 +81,9 @@ export default async function TypePage({ params }: TypePageProps) {
 
   const products = productService.getByType(category.slug, typeSummary.slug);
 
+  const displayProducts = products.slice(0, TYPE_PAGE_CAP);
+  const showViewMore = products.length > TYPE_PAGE_CAP;
+
   const breadcrumbs = [
     { label: 'Products', href: '/products' },
     { label: category.name, href: `/categories/${category.slug}` },
@@ -140,7 +147,7 @@ export default async function TypePage({ params }: TypePageProps) {
       </header>
 
       <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {products.map((product) => (
+        {displayProducts.map((product) => (
           <li key={product.slug}>
             <Link
               href={`/products/${product.slug}`}
@@ -157,6 +164,17 @@ export default async function TypePage({ params }: TypePageProps) {
           </li>
         ))}
       </ul>
+      {showViewMore && (
+        <p className="mt-4 text-sm text-muted">
+          Showing {TYPE_PAGE_CAP} of {products.length} products.{" "}
+          <Link
+            href={`/products?category=${slug}&type=${typeSummary.slug}`}
+            className="text-primary hover:underline"
+          >
+            View all {typeSummary.name} parts
+          </Link>
+        </p>
+      )}
     </main>
   );
 }

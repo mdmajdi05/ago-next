@@ -24,7 +24,14 @@ export default function PartNumbersPage() {
   const groups = productService.getPartIndex();
   const total = groups.reduce((sum, group) => sum + group.products.length, 0);
 
-  const allProducts = groups.flatMap((group) => group.products);
+  // Cap each letter group's display so the page stays fast; the full
+  // index stays reachable via /products?search=.
+  const PART_INDEX_CAP = 60;
+  const cappedGroups = groups.map((group) => ({
+    ...group,
+    products: group.products.slice(0, PART_INDEX_CAP),
+  }));
+  const allProducts = cappedGroups.flatMap((group) => group.products);
 
   const schema = [
     breadcrumbSchema([
@@ -69,7 +76,7 @@ export default function PartNumbersPage() {
           aria-label="Part number groups"
           className="mb-8 flex flex-wrap gap-2"
         >
-          {groups.map((group) => (
+          {cappedGroups.map((group) => (
             <a
               key={group.key}
               href={`#group-${group.key}`}
@@ -81,7 +88,7 @@ export default function PartNumbersPage() {
         </nav>
 
         <div className="space-y-10">
-          {groups.map((group) => (
+          {cappedGroups.map((group) => (
             <section key={group.key} id={`group-${group.key}`} className="scroll-mt-28">
               <h2 className="mb-4 border-b border-[#dfe7ed] pb-2 text-xl font-bold text-[#123c5b]">
                 {group.key}

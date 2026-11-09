@@ -28,6 +28,10 @@ function mtime(rel: string, fallback: Date): Date {
 const buildTime = new Date();
 const staticLastmod = mtime('src/app/page.tsx', buildTime);
 const productsLastmod = mtime('src/data/static/products/products.json', buildTime);
+const legacyCatalogLastmod = mtime(
+  'src/data/static/products/legacy-catalog.json',
+  buildTime
+);
 const brandsLastmod = mtime('src/data/static/brands/brands.json', buildTime);
 const navLastmod = mtime('src/data/static/nav.json', buildTime);
 const categoryLastmod = mtime('src/app/categories/[slug]/page.tsx', navLastmod);
@@ -84,14 +88,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 
   // Every genuine product page is canonical and indexable.
-  // Product routes use the products.json mtime, not the build time.
+  // Product routes use the newer of products.json / legacy-catalog.json mtime.
+  const productLastmod = new Date(
+    Math.max(productsLastmod.getTime(), legacyCatalogLastmod.getTime())
+  );
   const productRoutes: MetadataRoute.Sitemap = getAllProducts().map(
     (product) => ({
       url: product.canonicalUrl,
-      lastModified: productsLastmod,
+      lastModified: productLastmod,
       changeFrequency: 'monthly',
       priority: product.tier === 'A' ? 0.8 : 0.6,
-      images: [getProductImage(product)],
+      ...(product.tier === 'A'
+        ? { images: [getProductImage(product)].filter(Boolean) as string[] }
+        : {}),
     })
   );
 

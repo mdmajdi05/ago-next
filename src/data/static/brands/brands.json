@@ -1,186 +1,306 @@
 [
   {
     "name": "GE",
-    "count": 59,
+    "count": 37106,
     "group": "Turbines & Power Generation",
     "categories": [
       "Turbine Parts",
-      "Compressors & Pumps",
-      "Valves & Actuators",
-      "Automation & Controls",
+      "Seals, Filters & Consumables",
       "Instrumentation",
+      "Piping & Fittings",
+      "Automation & Controls",
+      "Mechanical Power Transmission",
+      "Valves & Actuators",
       "Electrical & Motors",
-      "Seals, Filters & Consumables"
-    ]
+      "Compressors & Pumps"
+    ],
+    "description": "Genuine and OEM-equivalent GE spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
-    "name": "Metso",
-    "count": 23,
-    "group": "Valves & Flow Control",
-    "categories": [
-      "Valves & Actuators",
-      "Instrumentation"
-    ]
-  },
-  {
-    "name": "Siemens",
-    "count": 22,
-    "group": "Turbines & Power Generation",
-    "categories": [
-      "Turbine Parts",
-      "Compressors & Pumps",
-      "Valves & Actuators",
-      "Automation & Controls",
-      "Instrumentation",
-      "Electrical & Motors",
-      "Mechanical Power Transmission"
-    ]
-  },
-  {
-    "name": "ABB",
-    "count": 20,
-    "group": "Automation & Controls",
-    "categories": [
-      "Valves & Actuators",
-      "Automation & Controls",
-      "Instrumentation",
-      "Electrical & Motors"
-    ]
-  },
-  {
-    "name": "Atlas Copco",
-    "count": 20,
+    "name": "Flender",
+    "count": 4563,
     "group": "Rotating Equipment",
     "categories": [
+      "Mechanical Power Transmission",
+      "Turbine Parts",
+      "Seals, Filters & Consumables",
+      "Piping & Fittings",
+      "Electrical & Motors",
       "Compressors & Pumps",
-      "Valves & Actuators",
-      "Automation & Controls",
       "Instrumentation",
-      "Seals, Filters & Consumables"
-    ]
+      "Automation & Controls"
+    ],
+    "description": "Genuine and OEM-equivalent Flender spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
-    "name": "Gutor",
-    "count": 20,
-    "group": "Automation & Controls",
+    "name": "Pratt & Whitney",
+    "count": 3227,
+    "group": "Turbines & Power Generation",
     "categories": [
-      "Automation & Controls",
-      "Electrical & Motors"
-    ]
-  },
-  {
-    "name": "Qualitrol",
-    "count": 19,
-    "group": "Instrumentation & Monitoring",
-    "categories": [
+      "Turbine Parts",
+      "Seals, Filters & Consumables",
+      "Piping & Fittings",
       "Valves & Actuators",
-      "Automation & Controls",
-      "Instrumentation"
-    ]
-  },
-  {
-    "name": "Allen-Bradley",
-    "count": 18,
-    "group": "Automation & Controls",
-    "categories": [
-      "Automation & Controls",
       "Instrumentation",
-      "Electrical & Motors"
-    ]
-  },
-  {
-    "name": "Swagelok",
-    "count": 18,
-    "group": "Valves & Flow Control",
-    "categories": [
-      "Valves & Actuators",
-      "Piping & Fittings"
-    ]
-  },
-  {
-    "name": "Bently Nevada",
-    "count": 17,
-    "group": "Instrumentation & Monitoring",
-    "categories": [
+      "Mechanical Power Transmission",
       "Automation & Controls",
-      "Instrumentation",
-      "Electrical & Motors"
-    ]
-  },
-  {
-    "name": "Woodward",
-    "count": 17,
-    "group": "Automation & Controls",
-    "categories": [
-      "Valves & Actuators",
-      "Automation & Controls",
-      "Instrumentation",
-      "Electrical & Motors"
-    ]
+      "Electrical & Motors",
+      "Compressors & Pumps"
+    ],
+    "description": "Genuine and OEM-equivalent Pratt & Whitney spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
     "name": "Honeywell",
-    "count": 16,
+    "count": 1984,
     "group": "Instrumentation & Monitoring",
     "categories": [
-      "Automation & Controls",
       "Instrumentation",
+      "Automation & Controls",
+      "Valves & Actuators",
       "Electrical & Motors"
-    ]
+    ],
+    "description": "Genuine and OEM-equivalent Honeywell spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
-    "name": "ITT Goulds",
-    "count": 15,
+    "name": "ABB",
+    "count": 1901,
+    "group": "Automation & Controls",
+    "categories": [
+      "Automation & Controls",
+      "Valves & Actuators",
+      "Electrical & Motors",
+      "Instrumentation",
+      "Mechanical Power Transmission",
+      "Piping & Fittings",
+      "Seals, Filters & Consumables"
+    ],
+    "description": "Genuine and OEM-equivalent ABB spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Woodward",
+    "count": 883,
+    "group": "Automation & Controls",
+    "categories": [
+      "Automation & Controls",
+      "Valves & Actuators",
+      "Instrumentation",
+      "Electrical & Motors",
+      "Seals, Filters & Consumables",
+      "Mechanical Power Transmission",
+      "Piping & Fittings",
+      "Compressors & Pumps",
+      "Turbine Parts"
+    ],
+    "description": "Genuine and OEM-equivalent Woodward spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Allen-Bradley",
+    "count": 706,
+    "group": "Automation & Controls",
+    "categories": [
+      "Automation & Controls",
+      "Electrical & Motors",
+      "Turbine Parts",
+      "Instrumentation",
+      "Piping & Fittings"
+    ],
+    "description": "Genuine and OEM-equivalent Allen-Bradley spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Milton Roy",
+    "count": 539,
     "group": "Rotating Equipment",
     "categories": [
       "Compressors & Pumps",
       "Mechanical Power Transmission",
-      "Seals, Filters & Consumables"
-    ]
+      "Valves & Actuators",
+      "Piping & Fittings",
+      "Seals, Filters & Consumables",
+      "Turbine Parts",
+      "Electrical & Motors",
+      "Automation & Controls",
+      "Instrumentation"
+    ],
+    "description": "Genuine and OEM-equivalent Milton Roy spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Atlas Copco",
+    "count": 426,
+    "group": "Rotating Equipment",
+    "categories": [
+      "Compressors & Pumps",
+      "Seals, Filters & Consumables",
+      "Valves & Actuators",
+      "Instrumentation",
+      "Automation & Controls"
+    ],
+    "description": "Genuine and OEM-equivalent Atlas Copco spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Bently Nevada",
+    "count": 329,
+    "group": "Instrumentation & Monitoring",
+    "categories": [
+      "Instrumentation",
+      "Turbine Parts",
+      "Valves & Actuators",
+      "Automation & Controls",
+      "Compressors & Pumps",
+      "Electrical & Motors",
+      "Seals, Filters & Consumables",
+      "Mechanical Power Transmission"
+    ],
+    "description": "Genuine and OEM-equivalent Bently Nevada spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Swagelok",
+    "count": 293,
+    "group": "Valves & Flow Control",
+    "categories": [
+      "Piping & Fittings",
+      "Valves & Actuators",
+      "Seals, Filters & Consumables",
+      "Instrumentation",
+      "Mechanical Power Transmission",
+      "Turbine Parts",
+      "Compressors & Pumps"
+    ],
+    "description": "Genuine and OEM-equivalent Swagelok spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Chint",
+    "count": 171,
+    "group": "Electrical & Motors",
+    "categories": [
+      "Electrical & Motors",
+      "Automation & Controls",
+      "Instrumentation"
+    ],
+    "description": "Genuine and OEM-equivalent Chint spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Siemens",
+    "count": 118,
+    "group": "Turbines & Power Generation",
+    "categories": [
+      "Turbine Parts",
+      "Electrical & Motors",
+      "Automation & Controls",
+      "Valves & Actuators",
+      "Instrumentation",
+      "Mechanical Power Transmission",
+      "Compressors & Pumps",
+      "Piping & Fittings"
+    ],
+    "description": "Genuine and OEM-equivalent Siemens spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "ITT Goulds",
+    "count": 116,
+    "group": "Rotating Equipment",
+    "categories": [
+      "Compressors & Pumps",
+      "Mechanical Power Transmission",
+      "Seals, Filters & Consumables",
+      "Electrical & Motors"
+    ],
+    "description": "Genuine and OEM-equivalent ITT Goulds spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Metso",
+    "count": 114,
+    "group": "Valves & Flow Control",
+    "categories": [
+      "Valves & Actuators",
+      "Instrumentation",
+      "Mechanical Power Transmission"
+    ],
+    "description": "Genuine and OEM-equivalent Metso spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Baldor",
+    "count": 79,
+    "group": "Electrical & Motors",
+    "categories": [
+      "Electrical & Motors",
+      "Seals, Filters & Consumables",
+      "Automation & Controls"
+    ],
+    "description": "Genuine and OEM-equivalent Baldor spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Gutor",
+    "count": 66,
+    "group": "Automation & Controls",
+    "categories": [
+      "Electrical & Motors",
+      "Automation & Controls",
+      "Seals, Filters & Consumables",
+      "Instrumentation"
+    ],
+    "description": "Genuine and OEM-equivalent Gutor spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "GE Fanuc",
+    "count": 45,
+    "group": "Automation & Controls",
+    "categories": [
+      "Automation & Controls",
+      "Instrumentation"
+    ],
+    "description": "Genuine and OEM-equivalent GE Fanuc spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Qualitrol",
+    "count": 43,
+    "group": "Instrumentation & Monitoring",
+    "categories": [
+      "Instrumentation",
+      "Valves & Actuators",
+      "Automation & Controls"
+    ],
+    "description": "Genuine and OEM-equivalent Qualitrol spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Rosemount",
+    "count": 39,
+    "group": "Instrumentation & Monitoring",
+    "categories": [
+      "Instrumentation",
+      "Turbine Parts",
+      "Compressors & Pumps"
+    ],
+    "description": "Genuine and OEM-equivalent Rosemount spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Fanuc",
+    "count": 30,
+    "group": "Automation & Controls",
+    "categories": [
+      "Turbine Parts",
+      "Automation & Controls"
+    ],
+    "description": "Genuine and OEM-equivalent Fanuc spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
     "name": "Panametrics",
-    "count": 15,
+    "count": 19,
     "group": "Instrumentation & Monitoring",
     "categories": [
       "Instrumentation",
       "Piping & Fittings"
-    ]
+    ],
+    "description": "Genuine and OEM-equivalent Panametrics spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
-    "name": "Flender",
-    "count": 14,
-    "group": "Rotating Equipment",
-    "categories": [
-      "Mechanical Power Transmission"
-    ]
-  },
-  {
-    "name": "GE Fanuc",
-    "count": 13,
-    "group": "Automation & Controls",
-    "categories": [
-      "Automation & Controls"
-    ]
-  },
-  {
-    "name": "Chint",
-    "count": 9,
-    "group": "Electrical & Motors",
+    "name": "AI-Tek",
+    "count": 8,
+    "group": "Instrumentation & Monitoring",
     "categories": [
       "Automation & Controls",
-      "Instrumentation",
-      "Electrical & Motors"
-    ]
-  },
-  {
-    "name": "Milton Roy",
-    "count": 7,
-    "group": "Rotating Equipment",
-    "categories": [
-      "Compressors & Pumps",
-      "Valves & Actuators"
-    ]
+      "Instrumentation"
+    ],
+    "description": "Genuine and OEM-equivalent AI-Tek spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
     "name": "Leslie Controls",
@@ -188,15 +308,17 @@
     "group": "Valves & Flow Control",
     "categories": [
       "Valves & Actuators"
-    ]
+    ],
+    "description": "Genuine and OEM-equivalent Leslie Controls spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
-    "name": "Baldor",
+    "name": "AAF",
     "count": 4,
-    "group": "Electrical & Motors",
+    "group": "Rotating Equipment",
     "categories": [
-      "Electrical & Motors"
-    ]
+      "Seals, Filters & Consumables"
+    ],
+    "description": "Genuine and OEM-equivalent AAF spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
     "name": "Jamesbury",
@@ -204,15 +326,35 @@
     "group": "Valves & Flow Control",
     "categories": [
       "Valves & Actuators"
-    ]
+    ],
+    "description": "Genuine and OEM-equivalent Jamesbury spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
-    "name": "AAF",
+    "name": "Airpax",
     "count": 1,
-    "group": "Rotating Equipment",
+    "group": "Instrumentation & Monitoring",
     "categories": [
-      "Seals, Filters & Consumables"
-    ]
+      "Automation & Controls"
+    ],
+    "description": "Genuine and OEM-equivalent Airpax spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Dynalco",
+    "count": 1,
+    "group": "Instrumentation & Monitoring",
+    "categories": [
+      "Instrumentation"
+    ],
+    "description": "Genuine and OEM-equivalent Dynalco spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
+  },
+  {
+    "name": "Vicor",
+    "count": 1,
+    "group": "Automation & Controls",
+    "categories": [
+      "Automation & Controls"
+    ],
+    "description": "Genuine and OEM-equivalent Vicor spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   },
   {
     "name": "Zenith Pumps",
@@ -220,6 +362,7 @@
     "group": "Rotating Equipment",
     "categories": [
       "Compressors & Pumps"
-    ]
+    ],
+    "description": "Genuine and OEM-equivalent Zenith Pumps spare parts for gas turbines, compressors and industrial plant, sourced and verified by AGO Aviation."
   }
 ]

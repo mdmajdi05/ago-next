@@ -10,6 +10,10 @@ import {
   collectionPageSchema,
 } from '@/lib/seo';
 
+// Cap the number of products rendered on a category page so large
+// categories (e.g. Turbine Parts with 25k+ parts) stay fast to build.
+const CATEGORY_PAGE_CAP = 96;
+
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -68,6 +72,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const brands = brandService.getAll().filter((brand) =>
     brand.categories.includes(category.name),
   );
+
+  // Only render a capped window on the page; the full catalogue stays
+  // reachable via /products?category=xxx.
+  const displayProducts = products.slice(0, CATEGORY_PAGE_CAP);
+  const showViewMore = products.length > CATEGORY_PAGE_CAP;
 
   const breadcrumbs = [
     { label: 'Products', href: '/products' },
@@ -174,21 +183,34 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           {products.length === 0 ? (
             <p className="text-muted">No products listed in this category.</p>
           ) : (
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {products.map((product) => (
-                <li key={product.slug}>
-                  <Link href={`/products/${product.slug}`} className="block">
-                    <div className="rounded-xl border border-line bg-slate-50 p-4 hover:border-primary transition-colors">
-                      <p className="text-sm font-semibold text-primary line-clamp-2">
-                        {product.displayTitle}
-                      </p>
-                      <p className="text-xs text-muted mt-1">{product.partNumber}</p>
-                      <p className="text-xs text-muted mt-1">{product.brand}</p>
-                    </div>
+            <>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {displayProducts.map((product) => (
+                  <li key={product.slug}>
+                    <Link href={`/products/${product.slug}`} className="block">
+                      <div className="rounded-xl border border-line bg-slate-50 p-4 hover:border-primary transition-colors">
+                        <p className="text-sm font-semibold text-primary line-clamp-2">
+                          {product.displayTitle}
+                        </p>
+                        <p className="text-xs text-muted mt-1">{product.partNumber}</p>
+                        <p className="text-xs text-muted mt-1">{product.brand}</p>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              {showViewMore && (
+                <p className="mt-4 text-sm text-muted">
+                  Showing {CATEGORY_PAGE_CAP} of {products.length} products.{" "}
+                  <Link
+                    href={`/products?category=${category.slug}`}
+                    className="text-primary hover:underline"
+                  >
+                    View all {category.name} parts
                   </Link>
-                </li>
-              ))}
-            </ul>
+                </p>
+              )}
+            </>
           )}
         </section>
       </div>

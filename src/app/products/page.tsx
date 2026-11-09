@@ -516,32 +516,80 @@ export default async function ProductsPage({
                 </Link>
               )}
 
-              {Array.from(
-                { length: totalPages },
-                (_, index) => index + 1
-              ).map((pageNumber) => (
-                <Link
-                  key={pageNumber}
-                  href={{
-                    pathname: '/products',
-                    query: {
-                      ...paginationQuery,
-                      page: String(pageNumber),
-                    },
-                  }}
-                  aria-current={
-                    pageNumber === currentPage ? 'page' : undefined
+              {/* Windowed pagination: first, ellipsis, window around current, ellipsis, last. */}
+              {(() => {
+                const window = 2;
+                const pages: (number | "...")[] = [];
+                const push = (p: number | null) => {
+                  if (p === null) {
+                    if (pages[pages.length - 1] !== "...") pages.push("...");
+                  } else if (p >= 1 && p <= totalPages) {
+                    pages.push(p);
                   }
-                  className={cn(
-                    'inline-flex h-8 min-w-8 items-center justify-center rounded-[8px] border px-2 text-[11px] font-bold',
-                    pageNumber === currentPage
-                      ? 'border-[#062a43] bg-[#062a43] text-white'
-                      : 'border-[#d5dfe8] bg-white text-[#40576b] hover:border-[#e8a928] hover:text-[#09233b]'
-                  )}
-                >
-                  {pageNumber}
-                </Link>
-              ))}
+                };
+                push(1);
+                for (
+                  let p = Math.max(2, currentPage - window);
+                  p <= Math.min(totalPages - 1, currentPage + window);
+                  p++
+                ) {
+                  push(p);
+                }
+                if (currentPage - window > 2) {
+                  pages.splice(1, 0, "...");
+                }
+                if (currentPage + window < totalPages - 1) {
+                  pages.splice(pages.length - 1, 0, "...");
+                }
+                if (pages.length > 0 && pages[pages.length - 1] !== totalPages) {
+                  pages.push(totalPages);
+                }
+
+                // de-duplicate while preserving order
+                const seen = new Set<string | number>();
+                const unique = pages.filter((p) => {
+                  const key = p === "..." ? "..." : String(p);
+                  if (seen.has(key)) return false;
+                  seen.add(key);
+                  return true;
+                });
+
+                return unique.map((pageNumber) => {
+                  if (pageNumber === "...") {
+                    return (
+                      <span
+                        key="ellipsis"
+                        className="inline-flex h-8 min-w-8 items-center justify-center rounded-[8px] border border-[#d5dfe8] bg-white px-2 text-[11px] font-bold text-[#40576b]"
+                      >
+                        …
+                      </span>
+                    );
+                  }
+                  return (
+                    <Link
+                      key={pageNumber}
+                      href={{
+                        pathname: '/products',
+                        query: {
+                          ...paginationQuery,
+                          page: String(pageNumber),
+                        },
+                      }}
+                      aria-current={
+                        pageNumber === currentPage ? "page" : undefined
+                      }
+                      className={cn(
+                        "inline-flex h-8 min-w-8 items-center justify-center rounded-[8px] border px-2 text-[11px] font-bold",
+                        pageNumber === currentPage
+                          ? "border-[#062a43] bg-[#062a43] text-white"
+                          : "border-[#d5dfe8] bg-white text-[#40576b] hover:border-[#e8a928] hover:text-[#09233b]"
+                      )}
+                    >
+                      {pageNumber}
+                    </Link>
+                  );
+                });
+              })()}
 
               {currentPage < totalPages && (
                 <Link

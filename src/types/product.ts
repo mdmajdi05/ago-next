@@ -34,6 +34,8 @@ export interface Product {
   description?: string;
   specifications?: Record<string, string>;
   image?: string;
+  /** Internal flag: true for imported legacy parts, false for curated. */
+  _legacy?: boolean;
 }
 
 export interface ProductFilters {

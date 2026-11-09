@@ -67,6 +67,11 @@ export default async function BrandPage({ params }: BrandPageProps) {
     .getAll()
     .filter((category) => brand.categories.includes(category.name));
 
+  // Cap rendering so large brands stay fast; full list via /products?brand=.
+  const BRAND_PAGE_CAP = 96;
+  const displayProducts = products.slice(0, BRAND_PAGE_CAP);
+  const showViewMore = products.length > BRAND_PAGE_CAP;
+
   const breadcrumbs = [
     { label: 'Brands', href: '/brands' },
     { label: brand.name, href: `/brands/${brand.slug}` },
@@ -146,20 +151,33 @@ export default async function BrandPage({ params }: BrandPageProps) {
           {products.length === 0 ? (
             <p className="text-muted">No products listed for this brand.</p>
           ) : (
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {products.map((product) => (
-                <li key={product.slug}>
-                  <Link href={`/products/${product.slug}`} className="block">
-                    <div className="rounded-xl border border-line bg-slate-50 p-4 hover:border-primary transition-colors">
-                      <p className="text-sm font-semibold text-primary line-clamp-2">
-                        {product.displayTitle}
-                      </p>
-                      <p className="text-xs text-muted mt-1">{product.partNumber}</p>
-                    </div>
+            <>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {displayProducts.map((product) => (
+                  <li key={product.slug}>
+                    <Link href={`/products/${product.slug}`} className="block">
+                      <div className="rounded-xl border border-line bg-slate-50 p-4 hover:border-primary transition-colors">
+                        <p className="text-sm font-semibold text-primary line-clamp-2">
+                          {product.displayTitle}
+                        </p>
+                        <p className="text-xs text-muted mt-1">{product.partNumber}</p>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              {showViewMore && (
+                <p className="mt-4 text-sm text-muted">
+                  Showing {BRAND_PAGE_CAP} of {products.length} products.{" "}
+                  <Link
+                    href={`/products?brand=${brand.slug}`}
+                    className="text-primary hover:underline"
+                  >
+                    View all {brand.name} parts
                   </Link>
-                </li>
-              ))}
-            </ul>
+                </p>
+              )}
+            </>
           )}
         </section>
       </div>
