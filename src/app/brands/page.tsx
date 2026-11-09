@@ -1,44 +1,62 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { brandService } from '@/services';
-import { siteConfig } from '@/config/site';
+import { breadcrumbSchema, buildPageMetadata, collectionPageSchema } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Authorized Brands',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Gas Turbine Parts Brands We Supply – 23 Manufacturers',
   description:
-    'AGO Aviation is an authorized distributor for GE, Siemens, ABB, Atlas Copco and 23+ turbine parts brands worldwide. Genuine gas turbine spares with warranty.',
-  alternates: {
-    canonical: `${siteConfig.url}/brands`,
-  },
-  openGraph: {
-    title: 'Authorized Brands | AGO Aviation',
-    description:
-      'AGO Aviation is an authorized distributor for GE, Siemens, ABB, Atlas Copco and 23+ turbine parts brands worldwide.',
-    type: 'website',
-    url: 'https://www.agoaviation.com/brands',
-    images: [{ url: siteConfig.ogImage }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Authorized Brands | AGO Aviation',
-    description:
-      'AGO Aviation is an authorized distributor for turbine parts brands worldwide.',
-  },
-};
+    'Browse 23 gas turbine and industrial brands supported by AGO Aviation, including GE, Siemens, ABB, Atlas Copco, Metso, Bently Nevada, Woodward and Honeywell.',
+  path: '/brands',
+  keywords: [
+    'gas turbine parts brands',
+    'GE gas turbine parts',
+    'Siemens gas turbine parts',
+    'ABB spare parts',
+    'industrial parts manufacturers',
+  ],
+  image: '/images/ge-general.jpeg',
+  imageAlt: 'Gas turbine brands supported by AGO Aviation',
+});
 
 export default function BrandsPage() {
   const groups = brandService.getGroups();
   const totalBrands = brandService.getAll().length;
 
+  const schema = [
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Brands', path: '/brands' },
+    ]),
+    collectionPageSchema({
+      name: 'Gas Turbine Parts Brands We Supply',
+      description:
+        'Gas turbine and industrial manufacturers supported by AGO Aviation.',
+      path: '/brands',
+      items: groups.flatMap((group) =>
+        group.brands.map((brand) => ({
+          name: brand.name,
+          url: `/brands/${brand.slug}`,
+        }))
+      ),
+    }),
+  ];
+
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
+        }}
+      />
       <section className="ago-page-hero">
         <div className="ago-container">
           <div className="ago-page-hero__inner">
             <span className="ago-eyebrow">Brands</span>
-            <h1>Authorized Brands</h1>
+            <h1>Brands We Supply</h1>
             <p>
-              Genuine gas turbine parts and spares from {totalBrands} authorized brands worldwide.
+              Gas turbine parts and spares from {totalBrands} manufacturers worldwide.
             </p>
             <div className="ago-page-hero__actions">
               <Link href="/contact" className="ago-btn ago-btn--primary">

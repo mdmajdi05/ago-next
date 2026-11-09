@@ -4,9 +4,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { productService, brandService } from '@/services';
-import { siteConfig } from '@/config/site';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { getProductImage } from '@/lib/catalog/images';
+import { buildProductContent } from '@/lib/catalog/productContent';
+import {
+  breadcrumbSchema as buildBreadcrumbSchema,
+  buildPageMetadata,
+  faqSchema as buildFaqSchema,
+  productSchema as buildProductSchema,
+} from '@/lib/seo';
 import EnquiryForm from './EnquiryForm';
 
 interface ProductPageProps {
@@ -25,35 +31,33 @@ export async function generateMetadata({
   const product = productService.getBySlug(slug);
 
   if (!product) {
-    return {
+    return buildPageMetadata({
       title: 'Product Not Found',
-      robots: { index: false, follow: false },
-    };
+      description: 'The requested spare part could not be found.',
+      path: `/products/${slug}`,
+      noIndex: true,
+    });
   }
 
-  const title = `${product.brand} ${product.partNumber} ${product.type}`;
-  const description = `${product.brand} ${product.partNumber} is listed as "${product.title}" in the AGO Aviation ${product.category.toLowerCase()} catalogue under ${product.type}. Request a quote for specifications, compatibility and availability.`;
+  const title = `${product.partNumber} ${product.type} - ${product.brand} Spare Part`;
+  const description = buildProductContent(product).metaDescription;
 
-  return {
+  return buildPageMetadata({
     title,
     description,
-    alternates: {
-      canonical: product.canonicalUrl,
-    },
-    robots: { index: true, follow: true },
-    openGraph: {
-      title: `${title} | AGO Aviation`,
-      description,
-      type: 'website',
-      url: product.canonicalUrl,
-      images: [{ url: getProductImage(product) }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${title} | AGO Aviation`,
-      description,
-    },
-  };
+    path: `/products/${product.slug}`,
+    keywords: [
+      product.partNumber,
+      `${product.brand} ${product.partNumber}`,
+      `${product.brand} ${product.type}`,
+      `${product.type} spare part`,
+      `${product.category} parts`,
+      `buy ${product.brand} ${product.partNumber}`,
+      `${product.partNumber} price`,
+    ],
+    image: getProductImage(product),
+    imageAlt: `${product.brand} ${product.partNumber} ${product.type}`,
+  });
 }
 
 export default async function ProductPage({
@@ -74,8 +78,9 @@ export default async function ProductPage({
   const brandCount = productService.getByBrand(product.brand).length;
 
   const pageTitle = `${product.brand} ${product.partNumber} ${product.type}`;
+  const catalogueTitle = product.displayTitle;
   const showCatalogueTitle =
-    product.title.trim().toLowerCase() !== pageTitle.toLowerCase();
+    catalogueTitle.trim().toLowerCase() !== pageTitle.toLowerCase();
 
   const specifications = product.specifications
     ? Object.entries(product.specifications)
@@ -104,70 +109,40 @@ export default async function ProductPage({
 
   const productUrl = product.canonicalUrl;
 
-  const overview =
-    product.description ||
-    `${product.brand} ${product.partNumber} — listed in our catalogue as "${product.title}" — sits within the ${product.type} group of our ${product.category.toLowerCase()} range. AGO Aviation sources and supplies this ${product.brand} component for gas turbine and industrial applications. Our team verifies part specifications, compatibility and availability before sending a quotation.`;
-
-  const compatibility = [
-    `Gas turbine and industrial plant applications requiring ${product.brand} ${product.type.toLowerCase()}`,
-    `${product.category} systems, overhauls and replacement programmes`,
-    'Replacement, repair and spares support for operating facilities',
-  ];
+  const content = buildProductContent(product);
 
   const faqs = [
     {
       question: `What is ${product.brand} ${product.partNumber}?`,
-      answer: `${product.brand} ${product.partNumber} is listed under ${product.type} in the ${product.category} category of the AGO Aviation catalogue.`,
+      answer: `${product.brand} ${product.partNumber} is a ${product.type.toLowerCase()} listed under ${product.category} in the AGO Aviation catalogue. It is identified in our records as "${catalogueTitle}".`,
     },
     {
       question: `Can I request a quote for ${product.partNumber}?`,
-      answer: `Yes. Send your quantity, destination and any technical references through the enquiry form and our team will confirm availability and pricing.`,
+      answer: `Yes. Send your quantity, destination and any technical references through the enquiry form and our team will confirm availability, condition and pricing for ${product.brand} ${product.partNumber}.`,
     },
     {
       question: `Does AGO Aviation supply ${product.brand} spare parts worldwide?`,
-      answer: `Yes. AGO Aviation supplies gas turbine and industrial spare parts to power plants, oil and gas facilities and EPC contractors worldwide.`,
+      answer: `Yes. AGO Aviation supplies gas turbine and industrial spare parts to power plants, oil and gas facilities and EPC contractors worldwide. Quote part number ${product.partNumber} when you contact us.`,
     },
   ];
 
-  const productSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: `${product.brand} ${product.partNumber} ${product.type}`,
-    image: imageUrl,
-    description: overview,
-    brand: {
-      '@type': 'Brand',
-      name: product.brand,
-    },
-    sku: product.partNumber,
-    mpn: product.partNumber,
-    category: product.category,
+  const productSchema = buildProductSchema({
+    name: pageTitle,
+    description: content.overview.join(' '),
     url: productUrl,
-  };
+    image: imageUrl,
+    brand: product.brand,
+    sku: product.partNumber,
+    category: product.category,
+    type: product.type,
+    relatedUrls: related.map((item) => item.canonicalUrl),
+  });
 
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: breadcrumbs.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.label,
-      item: `${siteConfig.url}${item.href}`,
-    })),
-  };
+  const breadcrumbSchema = buildBreadcrumbSchema(
+    breadcrumbs.map((item) => ({ name: item.label, path: item.href }))
+  );
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  };
+  const faqSchema = buildFaqSchema(faqs);
 
 
   return (
@@ -205,7 +180,7 @@ export default async function ProductPage({
 
               <Image
                 src={imageUrl}
-                alt={`${product.title} - Part Number ${product.partNumber} by ${product.brand}`}
+                alt={`${catalogueTitle} - Part Number ${product.partNumber} by ${product.brand}`}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -264,7 +239,7 @@ export default async function ProductPage({
 
               {showCatalogueTitle && (
                 <p className="mt-2 text-sm font-semibold leading-6 text-[#53697b]">
-                  Catalogue listing: {product.title}
+                  Catalogue listing: {catalogueTitle}
                 </p>
               )}
 
@@ -330,7 +305,11 @@ export default async function ProductPage({
                 Product Overview
               </h2>
 
-              <p className="text-sm leading-7 text-[#53697b]">{overview}</p>
+              <div className="space-y-3 text-sm leading-7 text-[#53697b]">
+                {content.overview.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
             </div>
 
             {/* Compatibility */}
@@ -340,12 +319,66 @@ export default async function ProductPage({
               </h2>
 
               <ul className="space-y-2 text-sm leading-6 text-[#53697b]">
-                {compatibility.map((item) => (
+                {content.applications.map((item) => (
                   <li key={item} className="flex gap-2">
                     <span className="text-[#d69a32]">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
+              </ul>
+            </div>
+
+            {/* Inspection & documentation */}
+            <div className="border-t border-[#dfe7ed] pt-5">
+              <h2 className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-[#183c59]">
+                Inspection &amp; Documentation
+              </h2>
+
+              <ul className="space-y-2 text-sm leading-6 text-[#53697b]">
+                {content.inspection.map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <span className="text-[#d69a32]">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Why source from AGO Aviation */}
+            <div className="border-t border-[#dfe7ed] pt-5">
+              <h2 className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-[#183c59]">
+                Why source this part from AGO Aviation
+              </h2>
+
+              <ul className="space-y-2 text-sm leading-6 text-[#53697b]">
+                <li className="flex gap-2">
+                  <span className="text-[#d69a32]">•</span>
+                  <span>
+                    Part-number verification against the exact {product.brand}{' '}
+                    {product.type.toLowerCase()} configuration
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#d69a32]">•</span>
+                  <span>
+                    New, refurbished and as-removed options confirmed before
+                    quotation
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#d69a32]">•</span>
+                  <span>
+                    Worldwide delivery with export documentation available on
+                    request
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#d69a32]">•</span>
+                  <span>
+                    Cross-referencing for superseded or obsolete{' '}
+                    {product.partNumber} references
+                  </span>
+                </li>
               </ul>
             </div>
 
@@ -360,7 +393,7 @@ export default async function ProductPage({
                   ['Manufacturer', product.brand],
                   ['Part number', product.partNumber],
                   ['Component type', product.type],
-                  ['Catalogue title', product.title],
+                  ['Catalogue title', catalogueTitle],
                   ['Catalogue reference', product.name],
                   ['Category', product.category],
                 ].map(([label, value]) => (
@@ -532,7 +565,7 @@ export default async function ProductPage({
                 </span>
 
                 <p className="mt-1 text-sm font-bold text-[#123c5b]">
-                  {product.title}
+                  {catalogueTitle}
                 </p>
 
                 <p className="mt-1 font-mono text-xs text-[#718394]">

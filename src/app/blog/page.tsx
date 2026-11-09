@@ -5,6 +5,12 @@ import {
   BlogExplorer,
   type BlogPostItem,
 } from '@/components/blog/blog-explorer';
+import { blogPosts } from '@/data/blog/posts';
+import {
+  breadcrumbSchema,
+  buildPageMetadata,
+  collectionPageSchema,
+} from '@/lib/seo';
 
 const agoContainer = 'max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8';
 const sectionTitle = (eyebrow: string, title: string, description: string) => (
@@ -17,138 +23,59 @@ const sectionTitle = (eyebrow: string, title: string, description: string) => (
   </div>
 );
 
-const posts: BlogPostItem[] = [
-  {
-    title: 'Case study: pre-staging hot gas path parts for a Frame 6 outage',
-    excerpt:
-      'How a planned inspection scope was translated into a staged spares list, with part numbers and documentation verified before the outage window opened.',
-    date: '02 Oct 2026',
-    href: '/contact',
-    image: '/images/engine-6000.jpeg',
-    imageAlt: 'Gas turbine hot gas path components prepared for a planned outage',
-    category: 'Outage support',
-    type: 'Case Study',
-  },
-  {
-    title: 'Case study: cross-referencing an obsolete compressor control part',
-    excerpt:
-      'A legacy part number with no current OEM listing was matched using drawings, nameplate data and dimensional checks before supply.',
-    date: '18 Sep 2026',
-    href: '/contact',
-    image: '/images/engine-lm2500-banner.jpg',
-    imageAlt: 'Industrial compressor and turbine package used for an obsolescence case study',
-    category: 'Obsolescence',
-    type: 'Case Study',
-  },
-  {
-    title: 'Gas turbine spare parts procurement: a practical checklist',
-    excerpt:
-      'A step-by-step process for identifying a requirement, checking documentation, comparing offers and planning delivery.',
-    date: '15 Oct 2026',
-    href: '/blog/gas-turbine-spare-parts-procurement-checklist',
-    image: '/images/engine-portfolio-banner.webp',
-    imageAlt: 'Gas turbine engine and component portfolio for spare parts sourcing',
-    category: 'Procurement guide',
-    type: 'Blog',
-  },
-  {
-    title: 'Gas turbine outage spares planning: build a reliable list',
-    excerpt:
-      'Turn inspection scope, failure history and lead-time risk into a practical outage inventory plan.',
-    date: '08 Oct 2026',
-    href: '/blog/gas-turbine-outage-spares-planning',
-    image: '/images/engine-lm2500-banner.jpg',
-    imageAlt: 'Industrial gas turbine used to illustrate maintenance outage spares planning',
-    category: 'Maintenance planning',
-    type: 'Blog',
-  },
-  {
-    title: 'Gas turbine hot gas path parts: functions, wear and sourcing',
-    excerpt:
-      'Understand the roles of combustion liners, transition pieces, nozzles, blades and shrouds without guessing interchangeability.',
-    date: '24 Sep 2026',
-    href: '/blog/gas-turbine-hot-gas-path-parts-guide',
-    image: '/images/engine-6000.jpeg',
-    imageAlt: 'Gas turbine system representing hot gas path components and inspection planning',
-    category: 'Component guide',
-    type: 'Blog',
-  },
-  {
-    title: 'How to verify a gas turbine spare part number before ordering',
-    excerpt:
-      'Use nameplates, drawings, revisions, configuration records and supplier evidence to reduce mismatch risk.',
-    date: '12 Sep 2026',
-    href: '/blog/verify-gas-turbine-spare-part-number',
-    image: '/images/cfm-56-turbine.webp',
-    imageAlt: 'Turbine engine image accompanying a guide to checking spare part numbers',
-    category: 'Part identification',
-    type: 'Blog',
-  },
-  {
-    title: 'How to evaluate an industrial spare parts supplier',
-    excerpt:
-      'Compare traceability, inspection scope, commercial terms, export documentation and delivery commitments.',
-    date: '28 Aug 2026',
-    href: '/blog/evaluate-industrial-spare-parts-supplier',
-    image: '/images/about-img.webp',
-    imageAlt: 'AGO Aviation team image accompanying industrial spare parts supplier evaluation guidance',
-    category: 'Supplier evaluation',
-    type: 'Blog',
-  },
-  {
-    title: 'GE Frame 5, 6, 7 and 9: what differs across the fleet',
-    excerpt:
-      'Firing temperature, bucket metallurgy, cooling architecture and the spares that matter most for each frame.',
-    date: '14 Aug 2026',
-    href: '/blog/ge-frame-5-6-7-9',
-    image: '/images/ge-general.jpeg',
-    imageAlt: 'GE gas turbine frame representing the Frame 5, 6, 7 and 9 platform guide',
-    category: 'GE platform guide',
-    type: 'Blog',
-  },
-];
+const posts: BlogPostItem[] = blogPosts.map((post) => ({
+  title: post.title,
+  excerpt: post.excerpt,
+  date: post.date,
+  href: `/blog/${post.slug}`,
+  image: post.image,
+  imageAlt: post.imageAlt,
+  category: post.category,
+  type: post.type,
+}));
 
-export const metadata: Metadata = {
-  title: 'Blog',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Gas Turbine Parts Blog, Guides & Case Studies',
   description:
-    'Technical guides, case studies and sourcing notes on GE, Siemens and Alstom gas turbine platforms, obsolescence, inventory planning and spare parts. Request a quote from AGO Aviation.',
-  keywords: siteConfig.keywords as unknown as string[],
-  authors: [{ name: siteConfig.name, url: siteConfig.url }],
-  alternates: {
-    canonical: `${siteConfig.url}/blog`,
-  },
-  openGraph: {
-    title: 'Blog | Gas Turbine Parts Guides, Case Studies & Sourcing Notes | AGO Aviation',
-    description:
-      'Technical guides, case studies and sourcing notes on GE, Siemens and Alstom gas turbine platforms, obsolescence, inventory planning and spare parts.',
-    url: `${siteConfig.url}/blog`,
-    siteName: siteConfig.name,
-    type: 'website',
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.logoAlt,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Blog | Gas Turbine Parts Guides, Case Studies & Sourcing Notes | AGO Aviation',
-    description:
-      'Technical guides, case studies and sourcing notes on GE, Siemens and Alstom gas turbine platforms, obsolescence, inventory planning and spare parts.',
-    images: [siteConfig.ogImage],
-    creator: siteConfig.socials.x.handle,
-  },
-};
+    'Practical guides on gas turbine spare parts, hot gas path components, obsolescence, outage planning and supplier evaluation, plus real sourcing case studies from AGO Aviation.',
+  path: '/blog',
+  keywords: [
+    'gas turbine parts blog',
+    'gas turbine spare parts guide',
+    'hot gas path parts',
+    'gas turbine outage planning',
+    'obsolescence sourcing',
+  ],
+  image: '/images/engine-portfolio-banner.webp',
+  imageAlt: 'AGO Aviation gas turbine parts guides and case studies',
+});
 
 export default function BlogPage() {
   const primaryBtn =
     'inline-flex items-center justify-center gap-2 bg-primary text-secondary font-semibold px-6 py-3 rounded-[20px_0px] hover:bg-secondary hover:text-primary transition-colors duration-200 whitespace-nowrap';
 
+  const schema = [
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Blog', path: '/blog' },
+    ]),
+    collectionPageSchema({
+      name: 'AGO Aviation Blog, Guides and Case Studies',
+      description:
+        'Technical guides and case studies on gas turbine spare parts, obsolescence, outage planning and supplier evaluation.',
+      path: '/blog',
+      items: posts.map((post) => ({ name: post.title, url: post.href })),
+    }),
+  ];
+
   return (
     <main className="bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
+        }}
+      />
       <section className="py-15 bg-soft">
         <div className={agoContainer}>
           {sectionTitle(

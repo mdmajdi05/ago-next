@@ -20,6 +20,10 @@ export interface Product {
   typeSlug: string;
   /** Canonical category slug, e.g. "valves-actuators". */
   categorySlug: string;
+  /** Unique title that disambiguates duplicate catalogue names. */
+  displayTitle: string;
+  /** True when another catalogue row shares the same title. */
+  isDuplicateTitle: boolean;
   tier: ProductTier;
   entityType: ProductEntityType;
   qualityScore: number;

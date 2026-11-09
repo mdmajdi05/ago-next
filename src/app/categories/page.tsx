@@ -2,24 +2,22 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { categoryService, productService } from '@/services';
-import { siteConfig } from '@/config/site';
+import { breadcrumbSchema, buildPageMetadata, collectionPageSchema } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Product Categories',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Gas Turbine & Industrial Spare Parts Categories',
   description:
-    'Browse gas turbine, compressor, valve, automation, instrumentation and industrial spare part categories supplied by AGO Aviation worldwide.',
-  alternates: {
-    canonical: `${siteConfig.url}/categories`,
-  },
-  openGraph: {
-    title: 'Product Categories | AGO Aviation',
-    description:
-      'Browse gas turbine, compressor, valve, automation, instrumentation and industrial spare part categories.',
-    type: 'website',
-    url: `${siteConfig.url}/categories`,
-    images: [{ url: siteConfig.ogImage }],
-  },
-};
+    'Browse 9 spare parts categories covering turbine parts, compressors, valves, automation, instrumentation, electrical motors, mechanical transmission, seals and piping.',
+  path: '/categories',
+  keywords: [
+    'gas turbine parts categories',
+    'industrial spare parts categories',
+    'turbine parts by category',
+    'spare parts catalogue categories',
+  ],
+  image: '/ago-aviation/category-turbine.jpg',
+  imageAlt: 'AGO Aviation spare parts categories',
+});
 
 const CATEGORY_IMAGES: Record<string, string> = {
   'turbine-parts': '/ago-aviation/category-turbine.jpg',
@@ -36,8 +34,31 @@ const CATEGORY_IMAGES: Record<string, string> = {
 export default function CategoriesPage() {
   const categories = categoryService.getAll();
 
+  const schema = [
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Categories', path: '/categories' },
+    ]),
+    collectionPageSchema({
+      name: 'Gas Turbine & Industrial Spare Parts Categories',
+      description:
+        'Browse gas turbine, compressor, valve, automation, instrumentation, electrical, mechanical, seal and piping spare part categories.',
+      path: '/categories',
+      items: categories.map((category) => ({
+        name: category.name,
+        url: `/categories/${category.slug}`,
+      })),
+    }),
+  ];
+
   return (
     <main className="min-h-screen bg-[#f5f8fb] text-[#102b43]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
+        }}
+      />
       <section className="bg-[#06263b] px-5 py-14 text-white md:px-[7%] md:py-20">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#ffc34f]">
           Catalogue

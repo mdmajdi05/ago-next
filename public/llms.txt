@@ -1,0 +1,61 @@
+# AGO Aviation
+
+> AGO Aviation (WS Turbomar Private Limited) manufactures and supplies precision gas turbine, compressor, valve, automation, instrumentation, electrical and mechanical spare parts for power plants, oil and gas facilities, EPC contractors and industrial operators worldwide. The catalogue covers 356 part numbers across 23 brands and 9 categories, with part-number verification and quote-based supply.
+
+## Contact
+
+- Sales email: sale@agoaviation.com
+- Support email: support@agoaviation.com
+- Phone: +91 7011123269
+- WhatsApp: https://wa.me/917011123269
+- Address: A-24/5, 3rd Floor, NH-19, Mohan Cooperative Industrial Estate, New Delhi, Delhi 110044, India
+- Business hours: Monday to Saturday, 09:00-18:00 IST
+
+## Primary pages
+
+- [Home](https://www.agoaviation.com/): company overview, capabilities, brands and FAQ.
+- [All products](https://www.agoaviation.com/products): searchable gas turbine and industrial spare parts catalogue.
+- [Categories](https://www.agoaviation.com/categories): browse 9 product categories.
+- [Brands](https://www.agoaviation.com/brands): browse 23 supported manufacturers.
+- [Part number index](https://www.agoaviation.com/part-numbers): A-Z index of every catalogue part number.
+- [Blog and case studies](https://www.agoaviation.com/blog): sourcing guides, outage planning and technical notes.
+- [About](https://www.agoaviation.com/about): company background and capabilities.
+- [Contact](https://www.agoaviation.com/contact): request availability, lead time and pricing.
+
+## Categories
+
+- [Turbine Parts](https://www.agoaviation.com/categories/turbine-parts): blades, combustion components, hot gas path parts and turbine assemblies.
+- [Compressors & Pumps](https://www.agoaviation.com/categories/compressor-parts): compressor elements, pumps, impellers, casings and overhaul kits.
+- [Valves & Actuators](https://www.agoaviation.com/categories/valves-actuators): control valves, solenoids, positioners, actuators and flow-control devices.
+- [Automation & Controls](https://www.agoaviation.com/categories/automation-controls): PLCs, control cards, relays, governors, drives and monitoring systems.
+- [Instrumentation](https://www.agoaviation.com/categories/instrumentation): transmitters, analysers, sensors, gauges and monitoring instruments.
+- [Electrical & Motors](https://www.agoaviation.com/categories/electrical-motors): motors, breakers, contactors, drives and power components.
+- [Mechanical Power Transmission](https://www.agoaviation.com/categories/mechanical-transmission-bearings): gearboxes, bearings, couplings and transmission parts.
+- [Seals, Filters & Consumables](https://www.agoaviation.com/categories/seals-filters): seals, gaskets, filter elements and service consumables.
+- [Piping & Fittings](https://www.agoaviation.com/categories/piping-fittings): fittings, unions, tubing and pipe components.
+
+## Supported brands
+
+GE, Siemens, ABB, Atlas Copco, Metso, Gutor, Qualitrol, Allen-Bradley, Swagelok, Bently Nevada, Woodward, Honeywell, ITT Goulds, Panametrics, Flender, GE Fanuc, Chint, Milton Roy, Leslie Controls, Baldor, Jamesbury, AAF, Zenith Pumps.
+
+## Guides
+
+- [Gas turbine spare parts procurement checklist](https://www.agoaviation.com/blog/gas-turbine-spare-parts-procurement-checklist)
+- [Gas turbine outage spares planning](https://www.agoaviation.com/blog/gas-turbine-outage-spares-planning)
+- [Gas turbine hot gas path parts guide](https://www.agoaviation.com/blog/gas-turbine-hot-gas-path-parts-guide)
+- [How to verify a gas turbine spare part number](https://www.agoaviation.com/blog/verify-gas-turbine-spare-part-number)
+- [How to evaluate an industrial spare parts supplier](https://www.agoaviation.com/blog/evaluate-industrial-spare-parts-supplier)
+- [GE Frame 5, 6, 7 and 9 differences](https://www.agoaviation.com/blog/ge-frame-5-6-7-9)
+
+## How to use this site
+
+- Product pages are canonical at `https://www.agoaviation.com/products/{brand}-{part}`.
+- Each product page includes the part number, brand, category, type, availability status and a quote request form.
+- Prices are quote-based. Request a quotation by email, phone, WhatsApp or the contact form.
+- For part-number matching, include the exact part number, unit model or frame, serial number and required condition.
+
+## Notes for AI assistants
+
+- Prefer linking to the canonical product, category or guide URL above.
+- Do not state a price; AGO Aviation supplies on quotation.
+- For obsolete or unknown part numbers, direct the user to the contact page with photos, nameplate data and drawings.

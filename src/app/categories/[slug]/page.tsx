@@ -2,8 +2,13 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { categoryService, productService, brandService } from '@/services';
-import { siteConfig } from '@/config/site';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { getCategoryImage } from '@/lib/catalog/images';
+import {
+  breadcrumbSchema,
+  buildPageMetadata,
+  collectionPageSchema,
+} from '@/lib/seo';
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -22,27 +27,35 @@ export async function generateMetadata({
   const { slug } = await params;
   const category = categoryService.getBySlug(slug);
   if (!category) {
-    return {
-      title: 'Category Not Found - AGO Aviation',
-      robots: { index: false, follow: false },
-    };
+    return buildPageMetadata({
+      title: 'Category Not Found',
+      description: 'The requested product category could not be found.',
+      path: `/categories/${slug}`,
+      noIndex: true,
+    });
   }
 
-  return {
-    title: `${category.name} Spare Parts`,
-    description:
-      category.description || `Genuine ${category.name} gas turbine parts from AGO Aviation.`,
-    alternates: {
-      canonical: `${siteConfig.url}/categories/${category.slug}`,
-    },
-    openGraph: {
-      title: category.name,
-      description: category.description,
-      type: 'website',
-      url: `${siteConfig.url}/categories/${category.slug}`,
-      images: [{ url: siteConfig.ogImage }],
-    },
-  };
+  const products = productService.getByCategory(slug);
+  const brands = brandService.getAll().filter((brand) =>
+    brand.categories.includes(category.name),
+  );
+  const brandNames = brands.slice(0, 5).map((brand) => brand.name);
+  const brandLabel =
+    brandNames.length > 0 ? brandNames.join(', ') : 'leading OEMs';
+
+  return buildPageMetadata({
+    title: `${category.name} – ${products.length} Spare Parts from ${brands.length} Brands`,
+    description: `Browse ${products.length} ${category.name.toLowerCase()} for gas turbines and industrial plants, including ${brandLabel}. AGO Aviation verifies part numbers, condition and availability, with worldwide delivery and quote-based supply.`,
+    path: `/categories/${category.slug}`,
+    keywords: [
+      `${category.name} spare parts`,
+      `${category.name.toLowerCase()} gas turbine`,
+      `buy ${category.name.toLowerCase()}`,
+      ...brands.slice(0, 6).map((brand) => `${brand.name} ${category.name.toLowerCase()}`),
+    ],
+    image: getCategoryImage(category.slug),
+    imageAlt: `${category.name} supplied by AGO Aviation`,
+  });
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
@@ -61,8 +74,35 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     { label: category.name, href: `/categories/${category.slug}` },
   ];
 
+  const schema = [
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Products', path: '/products' },
+      { name: category.name, path: `/categories/${category.slug}` },
+    ]),
+    collectionPageSchema({
+      name: `${category.name} Spare Parts`,
+      description:
+        category.description ||
+        `${category.name} spare parts supplied by AGO Aviation.`,
+      path: `/categories/${category.slug}`,
+      items: products
+        .slice(0, 50)
+        .map((product) => ({
+          name: `${product.brand} ${product.partNumber}`,
+          url: `/products/${product.slug}`,
+        })),
+    }),
+  ];
+
   return (
     <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
+        }}
+      />
       <Breadcrumbs items={breadcrumbs} />
 
       <div className="lg:flex lg:gap-12">
@@ -140,7 +180,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   <Link href={`/products/${product.slug}`} className="block">
                     <div className="rounded-xl border border-line bg-slate-50 p-4 hover:border-primary transition-colors">
                       <p className="text-sm font-semibold text-primary line-clamp-2">
-                        {product.title}
+                        {product.displayTitle}
                       </p>
                       <p className="text-xs text-muted mt-1">{product.partNumber}</p>
                       <p className="text-xs text-muted mt-1">{product.brand}</p>

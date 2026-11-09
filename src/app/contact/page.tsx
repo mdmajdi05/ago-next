@@ -4,50 +4,22 @@ import Link from 'next/link';
 import { ContactForm } from './ContactForm';
 import { getAll as getAllBrands } from '@/services/brandService';
 import { siteConfig } from '@/config/site';
+import { buildPageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Contact AGO Aviation | 24/7 Spare Parts Desk',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Contact AGO Aviation – Spare Parts Quotes & Support',
   description:
-    'Contact AGO Aviation for gas turbine and industrial spare parts. Call +91 7011123269, email sale@agoaviation.com or send a part. Request a quote from AGO Aviation.',
-  alternates: {
-    canonical: `${siteConfig.url}/contact`,
-  },
-  openGraph: {
-    title: 'Contact AGO Aviation | 24/7 Spare Parts Desk',
-    description:
-      'Contact AGO Aviation for gas turbine and industrial spare parts. Call +91 7011123269, email sale@agoaviation.com or send a part. Request a quote from AGO Aviation.',
-    url: `${siteConfig.url}/contact`,
-    siteName: siteConfig.name,
-    locale: 'en_US',
-    type: 'website',
-    images: [
-      {
-        url: 'https://www.agoaviation.com/assets/img/engine-lm2500-banner.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'AGO Aviation — gas turbine and industrial spare parts',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Contact AGO Aviation | 24/7 Spare Parts Desk',
-    description:
-      'Contact AGO Aviation for gas turbine and industrial spare parts. Call +91 7011123269, email sale@agoaviation.com or send a part. Request a quote from AGO Aviation.',
-    images: ['https://www.agoaviation.com/assets/img/engine-lm2500-banner.jpg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-};
+    'Contact AGO Aviation for gas turbine and industrial spare parts. Email sale@agoaviation.com, call +91 7011123269 or send your part number for availability, lead time and pricing.',
+  path: '/contact',
+  keywords: [
+    'contact AGO Aviation',
+    'gas turbine spare parts quote',
+    'industrial spare parts enquiry',
+    'gas turbine parts supplier contact',
+  ],
+  image: '/assets/img/engine-lm2500-banner.jpg',
+  imageAlt: 'Contact AGO Aviation for gas turbine spare parts',
+});
 
 const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}`;
 

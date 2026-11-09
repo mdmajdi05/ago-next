@@ -3,9 +3,14 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
 import { categoryService, productService } from '@/services';
-import { siteConfig } from '@/config/site';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { MIN_PRODUCTS_PER_TYPE_PAGE } from '@/lib/catalog/taxonomy';
+import { getCategoryImage } from '@/lib/catalog/images';
+import {
+  breadcrumbSchema,
+  buildPageMetadata,
+  collectionPageSchema,
+} from '@/lib/seo';
 
 interface TypePageProps {
   params: Promise<{ slug: string; type: string }>;
@@ -30,29 +35,30 @@ export async function generateMetadata({
     : undefined;
 
   if (!category || !typeSummary || typeSummary.count < MIN_PRODUCTS_PER_TYPE_PAGE) {
-    return {
+    return buildPageMetadata({
       title: 'Page Not Found',
-      robots: { index: false, follow: false },
-    };
+      description: 'The requested part type could not be found.',
+      path: `/categories/${slug}/${type}`,
+      noIndex: true,
+    });
   }
 
-  const title = `${typeSummary.name} - ${category.name}`;
-  const description = `Browse ${typeSummary.count} ${typeSummary.name.toLowerCase()} part numbers in the ${category.name} category. Request availability and quotations from AGO Aviation.`;
+  const products = productService.getByType(category.slug, typeSummary.slug);
+  const brands = Array.from(new Set(products.map((product) => product.brand)));
 
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `${siteConfig.url}/categories/${category.slug}/${typeSummary.slug}`,
-    },
-    openGraph: {
-      title: `${title} | AGO Aviation`,
-      description,
-      type: 'website',
-      url: `${siteConfig.url}/categories/${category.slug}/${typeSummary.slug}`,
-      images: [{ url: siteConfig.ogImage }],
-    },
-  };
+  return buildPageMetadata({
+    title: `${typeSummary.name} – ${typeSummary.count} ${category.name} Part Numbers`,
+    description: `Browse ${typeSummary.count} ${typeSummary.name.toLowerCase()} in the ${category.name.toLowerCase()} range from ${brands.slice(0, 5).join(', ')}. AGO Aviation verifies part numbers, condition and availability, with worldwide quote-based supply.`,
+    path: `/categories/${category.slug}/${typeSummary.slug}`,
+    keywords: [
+      `${typeSummary.name} spare parts`,
+      `${typeSummary.name.toLowerCase()} ${category.name.toLowerCase()}`,
+      `buy ${typeSummary.name.toLowerCase()}`,
+      ...brands.slice(0, 6).map((brand) => `${brand} ${typeSummary.name.toLowerCase()}`),
+    ],
+    image: getCategoryImage(category.slug),
+    imageAlt: `${typeSummary.name} supplied by AGO Aviation`,
+  });
 }
 
 export default async function TypePage({ params }: TypePageProps) {
@@ -80,8 +86,37 @@ export default async function TypePage({ params }: TypePageProps) {
     },
   ];
 
+  const schema = [
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Products', path: '/products' },
+      { name: category.name, path: `/categories/${category.slug}` },
+      {
+        name: typeSummary.name,
+        path: `/categories/${category.slug}/${typeSummary.slug}`,
+      },
+    ]),
+    collectionPageSchema({
+      name: `${typeSummary.name} – ${category.name}`,
+      description: `${typeSummary.count} ${typeSummary.name.toLowerCase()} part numbers in the ${category.name} range.`,
+      path: `/categories/${category.slug}/${typeSummary.slug}`,
+      items: products
+        .slice(0, 50)
+        .map((product) => ({
+          name: `${product.brand} ${product.partNumber}`,
+          url: `/products/${product.slug}`,
+        })),
+    }),
+  ];
+
   return (
     <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
+        }}
+      />
       <Breadcrumbs items={breadcrumbs} />
 
       <header className="mt-4 rounded-2xl border border-line bg-slate-50 p-6 sm:p-8">
@@ -112,7 +147,7 @@ export default async function TypePage({ params }: TypePageProps) {
               className="block h-full rounded-xl border border-line bg-white p-4 transition-colors hover:border-primary"
             >
               <p className="line-clamp-2 text-sm font-semibold text-primary">
-                {product.title}
+                {product.displayTitle}
               </p>
               <p className="mt-1 font-mono text-xs text-muted">
                 {product.partNumber}

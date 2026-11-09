@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 function toExplorerProduct(product: Product): NotFoundProduct {
   return {
     slug: product.slug,
-    title: product.title,
+    title: product.displayTitle,
     partNumber: product.partNumber,
     brand: product.brand,
     category: product.category,
@@ -56,7 +56,7 @@ export default function NotFound() {
   }));
 
   return (
-    <div className="bg-white text-[#09233b]">
+    <main className="bg-white text-[#09233b]">
       <section className="relative overflow-hidden bg-[#062a43] px-4 pb-20 pt-14 text-white md:pb-24 md:pt-20">
         <div
           aria-hidden="true"
@@ -115,6 +115,6 @@ export default function NotFound() {
         brands={brands}
         categories={categories}
       />
-    </div>
+    </main>
   );
 }

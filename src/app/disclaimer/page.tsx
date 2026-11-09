@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
+import { buildPageMetadata } from '@/lib/seo';
 
 const agoContainer = 'max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8';
 
@@ -97,40 +98,13 @@ const proseBlocks: ProseBlock[] = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: 'Disclaimer',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Disclaimer – AGO Aviation Website Information',
   description:
-    'Disclaimer policy of WS Turbomar Private Limited at agoaviation.com. Understand limitations of liability, content accuracy, and use of the Service. Request a quote from AGO Aviation.',
-  keywords: siteConfig.keywords as unknown as string[],
-  authors: [{ name: siteConfig.name, url: siteConfig.url }],
-  alternates: {
-    canonical: `${siteConfig.url}/disclaimer`,
-  },
-  openGraph: {
-    title: 'Disclaimer | AGO Aviation',
-    description:
-      'Disclaimer policy of WS Turbomar Private Limited at agoaviation.com. Understand limitations of liability, content accuracy, and use of the Service.',
-    url: `${siteConfig.url}/disclaimer`,
-    siteName: siteConfig.name,
-    type: 'website',
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.logoAlt,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Disclaimer | AGO Aviation',
-    description:
-      'Disclaimer policy of WS Turbomar Private Limited at agoaviation.com. Understand limitations of liability, content accuracy, and use of the Service.',
-    images: [siteConfig.ogImage],
-    creator: siteConfig.socials.x.handle,
-  },
-};
+    'Read the AGO Aviation disclaimer covering content accuracy, part-number references, brand names, liability limits and the use of website information.',
+  path: '/disclaimer',
+  keywords: ['AGO Aviation disclaimer', 'website disclaimer', 'part number disclaimer'],
+});
 
 export default function DisclaimerPage() {
   return (

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { siteConfig } from '@/config/site';
+import { buildPageMetadata } from '@/lib/seo';
 
 const stats = [
   { value: '356+', label: 'Precision Parts in Stock' },
@@ -10,40 +10,20 @@ const stats = [
   { value: '25+ Years', label: 'Industry Experience' },
 ];
 
-export const metadata: Metadata = {
-  title: 'About Us',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'About AGO Aviation – Gas Turbine Parts Manufacturer & Supplier',
   description:
-    'WS Turbomar Private Limited (AGO Aviation) is a New Delhi-based supplier of gas turbine, compressor, automation and industrial spare parts worldwide. Request a quote from AGO Aviation.',
-  keywords: siteConfig.keywords as unknown as string[],
-  authors: [{ name: siteConfig.name, url: siteConfig.url }],
-  alternates: {
-    canonical: `${siteConfig.url}/about`,
-  },
-  openGraph: {
-    title: 'About AGO Aviation | WS Turbomar Private Limited',
-    description:
-      'WS Turbomar Private Limited (AGO Aviation) is a New Delhi-based supplier of gas turbine, compressor, automation and industrial spare parts worldwide.',
-    url: `${siteConfig.url}/about`,
-    siteName: siteConfig.name,
-    type: 'website',
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.logoAlt,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'About AGO Aviation | WS Turbomar Private Limited',
-    description:
-      'WS Turbomar Private Limited (AGO Aviation) is a New Delhi-based supplier of gas turbine, compressor, automation and industrial spare parts worldwide.',
-    images: [siteConfig.ogImage],
-    creator: siteConfig.socials.x.handle,
-  },
-};
+    'WS Turbomar Private Limited (AGO Aviation) is a New Delhi-based manufacturer and supplier of gas turbine, compressor, automation and industrial spare parts, serving power plants, oil & gas and EPC projects worldwide.',
+  path: '/about',
+  keywords: [
+    'about AGO Aviation',
+    'WS Turbomar Private Limited',
+    'gas turbine parts manufacturer India',
+    'industrial spare parts supplier New Delhi',
+  ],
+  image: '/images/about-img.webp',
+  imageAlt: 'AGO Aviation gas turbine parts team and capabilities',
+});
 
 export default function AboutPage() {
   return (

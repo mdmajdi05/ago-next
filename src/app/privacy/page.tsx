@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
+import { buildPageMetadata } from '@/lib/seo';
 
 const agoContainer = 'max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8';
 
@@ -112,40 +113,13 @@ const proseBlocks: ProseBlock[] = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Privacy Policy – How AGO Aviation Handles Your Data',
   description:
-    'Privacy policy of WS Turbomar Private Limited at agoaviation.com. Learn how we collect, use, and protect your personal data. Request a quote from AGO Aviation.',
-  keywords: siteConfig.keywords as unknown as string[],
-  authors: [{ name: siteConfig.name, url: siteConfig.url }],
-  alternates: {
-    canonical: `${siteConfig.url}/privacy`,
-  },
-  openGraph: {
-    title: 'Privacy Policy | AGO Aviation',
-    description:
-      'Privacy policy of WS Turbomar Private Limited at agoaviation.com. Learn how we collect, use, and protect your personal data across our aviation services.',
-    url: `${siteConfig.url}/privacy`,
-    siteName: siteConfig.name,
-    type: 'website',
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.logoAlt,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Privacy Policy | AGO Aviation',
-    description:
-      'Privacy policy of WS Turbomar Private Limited at agoaviation.com. Learn how we collect, use, and protect your personal data across our aviation services.',
-    images: [siteConfig.ogImage],
-    creator: siteConfig.socials.x.handle,
-  },
-};
+    'Read how WS Turbomar Private Limited (AGO Aviation) collects, uses, stores and protects personal data submitted through enquiries, quotes and website forms.',
+  path: '/privacy',
+  keywords: ['AGO Aviation privacy policy', 'WS Turbomar privacy', 'data protection policy'],
+});
 
 export default function PrivacyPage() {
   return (

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { siteConfig } from '@/config/site';
+import { buildPageMetadata } from '@/lib/seo';
 
 interface Service {
   icon: string;
@@ -48,40 +48,21 @@ const services: Service[] = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: 'Services',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Services – Spare Parts Supply, Obsolescence & AOG Support',
   description:
-    'Gas turbine and industrial spare parts supply, obsolescence support, repair management, inventory planning and 24/7 AOG response from AGO Aviation. Request a quote.',
-  keywords: siteConfig.keywords as unknown as string[],
-  authors: [{ name: siteConfig.name, url: siteConfig.url }],
-  alternates: {
-    canonical: `${siteConfig.url}/services`,
-  },
-  openGraph: {
-    title: 'Services | Spare Parts Supply, Repair & AOG Support | AGO Aviation',
-    description:
-      'Gas turbine and industrial spare parts supply, obsolescence support, repair management, inventory planning and 24/7 AOG response from AGO Aviation.',
-    url: `${siteConfig.url}/services`,
-    siteName: siteConfig.name,
-    type: 'website',
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.logoAlt,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Services | Spare Parts Supply, Repair & AOG Support | AGO Aviation',
-    description:
-      'Gas turbine and industrial spare parts supply, obsolescence support, repair management, inventory planning and 24/7 AOG response from AGO Aviation.',
-    images: [siteConfig.ogImage],
-    creator: siteConfig.socials.x.handle,
-  },
-};
+    'Gas turbine and industrial spare parts supply, obsolescence and legacy part sourcing, repair coordination, inventory planning and urgent AOG response from AGO Aviation.',
+  path: '/services',
+  keywords: [
+    'gas turbine spare parts services',
+    'obsolescence sourcing',
+    'AOG spares support',
+    'repair management gas turbine',
+    'inventory planning spare parts',
+  ],
+  image: '/images/engine-portfolio-banner.webp',
+  imageAlt: 'AGO Aviation gas turbine spare parts services',
+});
 
 export default function ServicesPage() {
   return (

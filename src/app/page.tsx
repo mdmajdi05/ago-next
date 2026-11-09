@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { siteConfig } from '@/config/site';
+import { buildPageMetadata, faqSchema, serviceSchema } from '@/lib/seo';
 
 import PageSplash from "@/components/home/PageSplash";
 import HeroSection from "@/components/home/HeroSection";
@@ -18,56 +19,105 @@ import CTABanner from "@/components/home/CTABanner";
 import ContactSection from "@/components/home/ContactSection";
 import HomePageEffects from "@/components/home/HomePageEffects";
 
-export const metadata: Metadata = {
-  title: 'Gas Turbine Parts Manufacturer and Supplier | Ago Aviation',
-  description: siteConfig.description,
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Gas Turbine Parts Manufacturer & Supplier Worldwide',
+  description:
+    'AGO Aviation manufactures and supplies precision gas turbine parts and spares for power plants, oil & gas and EPC projects. 350+ part numbers across GE, Siemens, ABB and 20 more brands — request a verified quote.',
+  path: '/',
   keywords: siteConfig.keywords as unknown as string[],
-  authors: [{ name: siteConfig.name, url: siteConfig.url }],
-  alternates: {
-    canonical: siteConfig.url,
+  image: siteConfig.ogImage,
+  imageAlt: siteConfig.logoAlt,
+});
+
+const homeFaqs = [
+  {
+    question: 'What are the main parts of a gas turbine?',
+    answer:
+      'A gas turbine has three main sections: the compressor, the combustor and the turbine. The compressor raises air pressure, the combustor burns fuel with that air, and the turbine extracts energy from the hot gas to drive a generator or machine. Shrouds, buckets, nozzles and combustion liners wear fastest.',
   },
-  openGraph: {
-    title: 'Gas Turbine Parts Manufacturer and Supplier | Ago Aviation',
-    description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    type: 'website',
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.logoAlt,
-      },
-    ],
+  {
+    question: 'What are gas turbine blades made of?',
+    answer:
+      'Turbine blades in the hot section are usually made from nickel or cobalt based superalloys, often with protective coatings, because they must hold strength at very high temperatures. Compressor blades typically use steel or titanium alloys, which handle lower temperatures.',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Gas Turbine Parts Manufacturer and Supplier | Ago Aviation',
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
-    creator: siteConfig.socials.x.handle,
+  {
+    question: 'What is the hot gas path in a gas turbine?',
+    answer:
+      'The hot gas path is the route combustion gas takes from the combustor through the turbine nozzles, buckets and shrouds. These parts face the highest temperatures and stresses, so they are inspected closely and are usually the first to need replacement.',
   },
-};
+  {
+    question: 'How often should gas turbine parts be replaced?',
+    answer:
+      "There is no single interval. It depends on your OEM's inspection schedule, running hours, number of starts, fuel type and operating conditions. Follow your OEM's maintenance guidance and inspection findings, and send us your part details early so spares are ready before an outage.",
+  },
+  {
+    question: 'What causes gas turbine blade damage?',
+    answer:
+      'Common causes are high temperature oxidation and creep, thermal fatigue from starts and stops, erosion and corrosion from contaminants, foreign object damage and vibration. Regular borescope and outage inspections help catch damage before it forces an unplanned shutdown.',
+  },
+  {
+    question: 'What is the difference between OEM and aftermarket gas turbine parts?',
+    answer:
+      "OEM parts come from the turbine's original manufacturer. Aftermarket parts come from independent suppliers working to a drawing or specification. Quality depends on the supplier's material control, inspection and documentation, so ask to see all three before you order.",
+  },
+  {
+    question: 'Is Ago Aviation a gas turbine parts manufacturer and supplier?',
+    answer:
+      'Yes. Ago Aviation is a gas turbine parts manufacturer and supplier. Depending on the part, we manufacture to your drawing or specification or supply it through our sourcing network, and we confirm the specification with you before you order.',
+  },
+  {
+    question: 'How do I order the right gas turbine part from Ago Aviation?',
+    answer:
+      'Send the OEM, turbine model, frame and stage, plus any part number or drawing and the quantity you need. We confirm the details, tell you whether we can supply the part, and send a quote. The more detail you share, the faster we can respond.',
+  },
+  {
+    question: 'Does Ago Aviation ship gas turbine parts worldwide?',
+    answer:
+      'Yes. We supply customers worldwide and prepare shipments for international transit, including protective packaging and export documentation.',
+  },
+];
 
 export default function Home() {
   return (
     <>
-      <PageSplash />
-      <HeroSection />
-      <BrandsSection />
-      <AboutIntroSection />
-      <PartsSection />
-      <FrameSection />
-      <MaterialsSection />
-      <WhyChooseSection />
-      <CertificationsSection />
-      <HowItWorksSection />
-      <IndustriesSection />
-      <FAQSection />
-      <CTABanner />
-      <ContactSection />
-      <HomePageEffects />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            faqSchema(homeFaqs),
+            serviceSchema,
+            {
+              '@context': 'https://schema.org',
+              '@type': 'WebPage',
+              '@id': `${siteConfig.url}/#webpage`,
+              url: siteConfig.url,
+              name: 'Gas Turbine Parts Manufacturer & Supplier | AGO Aviation',
+              description: siteConfig.description,
+              isPartOf: { '@id': `${siteConfig.url}/#website` },
+              about: { '@id': `${siteConfig.url}/#organization` },
+              primaryImageOfPage: siteConfig.ogImage,
+              inLanguage: 'en',
+            },
+          ]).replace(/</g, '\\u003c'),
+        }}
+      />
+      <main>
+        <PageSplash />
+        <HeroSection />
+        <BrandsSection />
+        <AboutIntroSection />
+        <PartsSection />
+        <FrameSection />
+        <MaterialsSection />
+        <WhyChooseSection />
+        <CertificationsSection />
+        <HowItWorksSection />
+        <IndustriesSection />
+        <FAQSection />
+        <CTABanner />
+        <ContactSection />
+        <HomePageEffects />
+      </main>
     </>
   );
 }

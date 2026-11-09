@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
+import { buildPageMetadata } from '@/lib/seo';
 
 const agoContainer = 'max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8';
 
@@ -139,40 +140,13 @@ const proseBlocks: ProseBlock[] = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: 'Terms and Conditions',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Terms & Conditions – AGO Aviation Website & Supply',
   description:
-    'Terms and conditions of WS Turbomar Private Limited at agoaviation.com. Understand the legal terms governing the use of our services. Request a quote from AGO Aviation.',
-  keywords: siteConfig.keywords as unknown as string[],
-  authors: [{ name: siteConfig.name, url: siteConfig.url }],
-  alternates: {
-    canonical: `${siteConfig.url}/terms`,
-  },
-  openGraph: {
-    title: 'Terms and Conditions | AGO Aviation',
-    description:
-      'Terms and conditions of WS Turbomar Private Limited at agoaviation.com. Understand the legal terms governing the use of our services.',
-    url: `${siteConfig.url}/terms`,
-    siteName: siteConfig.name,
-    type: 'website',
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.logoAlt,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Terms and Conditions | AGO Aviation',
-    description:
-      'Terms and conditions of WS Turbomar Private Limited at agoaviation.com. Understand the legal terms governing the use of our services.',
-    images: [siteConfig.ogImage],
-    creator: siteConfig.socials.x.handle,
-  },
-};
+    'Read the terms and conditions governing use of the AGO Aviation website, quotations, orders and supply of gas turbine and industrial spare parts.',
+  path: '/terms',
+  keywords: ['AGO Aviation terms', 'supply terms and conditions', 'website terms of use'],
+});
 
 export default function TermsPage() {
   return (

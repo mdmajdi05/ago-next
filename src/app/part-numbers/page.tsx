@@ -2,31 +2,55 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { productService } from '@/services';
-import { siteConfig } from '@/config/site';
+import { breadcrumbSchema, buildPageMetadata, collectionPageSchema } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Part Number Index',
+export const metadata: Metadata = buildPageMetadata({
+  title: 'A–Z Gas Turbine Part Number Index',
   description:
-    'Browse A–Z part numbers for gas turbine, compressor, valve, automation and industrial spare parts supplied by AGO Aviation. Find a part number and request a quote.',
-  alternates: {
-    canonical: `${siteConfig.url}/part-numbers`,
-  },
-  openGraph: {
-    title: 'Part Number Index | AGO Aviation',
-    description:
-      'Browse A–Z part numbers for gas turbine and industrial spare parts supplied by AGO Aviation.',
-    type: 'website',
-    url: `${siteConfig.url}/part-numbers`,
-    images: [{ url: siteConfig.ogImage }],
-  },
-};
+    'Search 350+ gas turbine and industrial part numbers A–Z by brand and category. Find a part number and request availability, lead time and pricing from AGO Aviation.',
+  path: '/part-numbers',
+  keywords: [
+    'gas turbine part number search',
+    'part number index',
+    'GE part numbers',
+    'Siemens part numbers',
+    'industrial spare part lookup',
+  ],
+  image: '/ago-aviation/product-turbine-blade.jpg',
+  imageAlt: 'AGO Aviation A–Z gas turbine part number index',
+});
 
 export default function PartNumbersPage() {
   const groups = productService.getPartIndex();
   const total = groups.reduce((sum, group) => sum + group.products.length, 0);
 
+  const allProducts = groups.flatMap((group) => group.products);
+
+  const schema = [
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Part Number Index', path: '/part-numbers' },
+    ]),
+    collectionPageSchema({
+      name: 'A–Z Gas Turbine Part Number Index',
+      description:
+        'Index of gas turbine and industrial spare part numbers supplied by AGO Aviation.',
+      path: '/part-numbers',
+      items: allProducts.slice(0, 150).map((product) => ({
+        name: `${product.brand} ${product.partNumber}`,
+        url: `/products/${product.slug}`,
+      })),
+    }),
+  ];
+
   return (
     <main className="min-h-screen bg-[#f5f8fb] text-[#102b43]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
+        }}
+      />
       <section className="bg-[#06263b] px-5 py-14 text-white md:px-[7%] md:py-20">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#ffc34f]">
           Catalogue Index

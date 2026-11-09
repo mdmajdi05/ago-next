@@ -39,7 +39,7 @@ export default function EnquiryForm({ product }: EnquiryFormProps) {
       phone: '',
       company: '',
       partNumber: product.part,
-      message: `Enquiry for ${product.title} (${product.partNumber})`,
+      message: `Enquiry for ${product.displayTitle} (${product.partNumber})`,
     },
     mode: 'onSubmit',
     reValidateMode: 'onChange',
@@ -57,9 +57,9 @@ export default function EnquiryForm({ product }: EnquiryFormProps) {
       return;
     }
 
-    const subject = `Parts Enquiry – ${data.partNumber} (${product.title})`;
+    const subject = `Parts Enquiry – ${data.partNumber} (${product.displayTitle})`;
     const body =
-      `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nCompany: ${data.company || 'N/A'}\nPart Number: ${data.partNumber}\nProduct: ${product.title}\nBrand: ${product.brand}\n\nMessage:\n${data.message}`;
+      `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nCompany: ${data.company || 'N/A'}\nPart Number: ${data.partNumber}\nProduct: ${product.displayTitle}\nBrand: ${product.brand}\n\nMessage:\n${data.message}`;
     window.location.href = `mailto:${siteConfig.email.sales}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSubmitStatus('success');
   };
@@ -71,7 +71,7 @@ export default function EnquiryForm({ product }: EnquiryFormProps) {
           Enquiry ready to send
         </h3>
         <p className="mt-1 text-sm text-muted">
-          Your email client will open with the enquiry pre-filled for {product.title}.
+          Your email client will open with the enquiry pre-filled for {product.displayTitle}.
         </p>
       </div>
     );

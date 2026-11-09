@@ -6,9 +6,13 @@ import {
   categoryService,
 } from '@/services';
 import { cn } from '@/lib/utils';
-import { siteConfig } from '@/config/site';
 import { Product, ProductFilters } from '@/types/product';
 import { CatalogFilters } from '@/components/products/catalog-filters';
+import {
+  breadcrumbSchema,
+  buildPageMetadata,
+  collectionPageSchema,
+} from '@/lib/seo';
 
 interface SearchParams {
   search?: string;
@@ -34,31 +38,22 @@ export async function generateMetadata({
     params?.search || params?.brand || params?.category || params?.type
   );
 
-  return {
-    title: 'All Gas Turbine & Industrial Spare Parts',
+  return buildPageMetadata({
+    title: 'Gas Turbine & Industrial Spare Parts Catalogue',
     description:
-      'Browse genuine gas turbine, compressor, automation and industrial spare parts across 24 brands. Search by part number, brand or category and request a quote.',
-    alternates: {
-      canonical: `${siteConfig.url}/products`,
-    },
-    robots: isFiltered
-      ? { index: false, follow: true }
-      : { index: true, follow: true },
-    openGraph: {
-      title: 'All Gas Turbine & Industrial Spare Parts | AGO Aviation',
-      description:
-        'Browse genuine gas turbine, compressor, automation and industrial spare parts across 24 brands.',
-      type: 'website',
-      url: `${siteConfig.url}/products`,
-      images: [{ url: siteConfig.ogImage }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'All Gas Turbine & Industrial Spare Parts | AGO Aviation',
-      description:
-        'Browse genuine gas turbine, compressor, automation and industrial spare parts across 24 brands.',
-    },
-  };
+      'Search 350+ gas turbine, compressor, valve, automation, instrumentation and electrical spare parts across 23 brands. Filter by part number, brand or category and request a verified quote.',
+    path: '/products',
+    keywords: [
+      'gas turbine spare parts',
+      'industrial spare parts catalogue',
+      'gas turbine parts by part number',
+      'buy gas turbine spares',
+      'OEM spare parts supplier',
+    ],
+    image: '/ago-aviation/category-turbine.jpg',
+    imageAlt: 'AGO Aviation gas turbine and industrial spare parts catalogue',
+    noIndex: isFiltered,
+  });
 }
 
 const A = '/ago-aviation/';
@@ -146,8 +141,31 @@ export default async function ProductsPage({
     limit: String(limit),
   };
 
+  const schema = [
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Products', path: '/products' },
+    ]),
+    collectionPageSchema({
+      name: 'Gas Turbine & Industrial Spare Parts Catalogue',
+      description:
+        'Search gas turbine, compressor, valve, automation, instrumentation and electrical spare parts by part number, brand or category.',
+      path: '/products',
+      items: products.map((product) => ({
+        name: `${product.brand} ${product.partNumber}`,
+        url: `/products/${product.slug}`,
+      })),
+    }),
+  ];
+
   return (
-    <div className={cn('min-h-screen bg-[#f5f8fb] text-[#09233b] leading-[normal]')}>
+    <main className={cn('min-h-screen bg-[#f5f8fb] text-[#09233b] leading-[normal]')}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
+        }}
+      />
       {/* HERO */}
       <section className="relative h-[500px] min-h-[500px] overflow-hidden bg-[#06263b] text-white md:h-[350px] md:min-h-[350px]">
         <div
@@ -402,7 +420,7 @@ export default async function ProductsPage({
                 >
                   <img
                     src={productImage(product)}
-                    alt={`${product.title} ${product.partNumber}`}
+                    alt={`${product.displayTitle} ${product.partNumber}`}
                     className="h-[110px] w-full bg-gradient-to-b from-white to-[#f7f9fb] object-contain p-[7px] md:h-[118px] max-[390px]:h-full max-[390px]:min-h-[220px]"
                   />
 
@@ -412,7 +430,7 @@ export default async function ProductsPage({
                     </span>
 
                     <h3 className="mb-0.5 mt-[7px] line-clamp-2 text-[13px] font-bold leading-[1.2] md:text-[15px]">
-                      {product.title}
+                      {product.displayTitle}
                     </h3>
 
                     <p className="my-[5px] text-[11px] text-[#344b60]">
@@ -555,6 +573,6 @@ export default async function ProductsPage({
           </div>
         </aside>
       </section>
-    </div>
+    </main>
   );
 }

@@ -7,6 +7,8 @@ import {
 } from '@/services/categoryService';
 import { MIN_PRODUCTS_PER_TYPE_PAGE } from '@/lib/catalog/taxonomy';
 import { siteConfig } from '@/config/site';
+import { blogPosts } from '@/data/blog/posts';
+import { getProductImage } from '@/lib/catalog/images';
 import fs from 'fs';
 import path from 'path';
 
@@ -28,6 +30,7 @@ const productsLastmod = mtime('src/data/static/products/products.json', buildTim
 const brandsLastmod = mtime('src/data/static/brands/brands.json', buildTime);
 const navLastmod = mtime('src/data/static/nav.json', buildTime);
 const categoryLastmod = mtime('src/app/categories/[slug]/page.tsx', navLastmod);
+const blogLastmod = mtime('src/data/blog/posts.ts', staticLastmod);
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -85,8 +88,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: productsLastmod,
       changeFrequency: 'monthly',
       priority: product.tier === 'A' ? 0.8 : 0.6,
+      images: [getProductImage(product)],
     })
   );
 
-  return [...staticRoutes, ...categoryRoutes, ...typeRoutes, ...brandRoutes, ...productRoutes];
+  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.dateModified),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+    images: [`${baseUrl}${post.image}`],
+  }));
+
+  return [
+    ...staticRoutes,
+    ...categoryRoutes,
+    ...typeRoutes,
+    ...brandRoutes,
+    ...productRoutes,
+    ...blogRoutes,
+  ];
 }

@@ -40,6 +40,13 @@ const normalizedProducts: Product[] = rawProducts.map((raw) => {
     category?.slug || slugifyCatalogValue(raw.category || 'uncategorized');
   const partNumber = normalizePartNumber(raw.part);
   const duplicateTitle = (titleCounts.get(raw.title.trim().toLowerCase()) || 0) > 1;
+  const baseTitle = raw.title.trim();
+  const displayTitle =
+    duplicateTitle &&
+    partNumber &&
+    !baseTitle.toLowerCase().includes(partNumber.toLowerCase())
+      ? `${partNumber} ${baseTitle}`
+      : baseTitle;
 
   const classification = classifyProduct(
     {
@@ -82,6 +89,8 @@ const normalizedProducts: Product[] = rawProducts.map((raw) => {
     type: type.name,
     typeSlug: type.slug,
     categorySlug,
+    displayTitle,
+    isDuplicateTitle: duplicateTitle,
     tier: classification.tier,
     entityType: classification.entityType,
     qualityScore: classification.qualityScore,
