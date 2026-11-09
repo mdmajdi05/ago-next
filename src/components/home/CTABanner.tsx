@@ -17,7 +17,7 @@ export default function CTABanner() {
                         will respond with a clear, detailed quote.</p>
 </div>
 <div className="cta-actions">
-<a href="contact.html">
+<a href="/contact">
 <button className="primary-btn" type="button">Request a Quote</button>
 </a>
 <a className="cta-call" href="mailto:sale@agoaviation.com"><i className="fa-solid fa-envelope"></i> sale@agoaviation.com</a>

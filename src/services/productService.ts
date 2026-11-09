@@ -120,7 +120,7 @@ for (const product of normalizedProducts) {
   categoryKeyMap.set(product.categorySlug, categoryList);
 }
 
-/** Returns every normalized product (including noindex family/listing rows). */
+/** Returns every normalized product in the catalogue. */
 export function getAll(): Product[] {
   return [...normalizedProducts];
 }

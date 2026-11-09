@@ -1,8 +1,5 @@
 import type { MetadataRoute } from 'next';
-import {
-  getIndexable as getIndexableProducts,
-  getTypes,
-} from '@/services/productService';
+import { getAll as getAllProducts, getTypes } from '@/services/productService';
 import { getAllSlugs as getBrandSlugs } from '@/services/brandService';
 import {
   getAll as getCategories,
@@ -10,35 +7,53 @@ import {
 } from '@/services/categoryService';
 import { MIN_PRODUCTS_PER_TYPE_PAGE } from '@/lib/catalog/taxonomy';
 import { siteConfig } from '@/config/site';
+import fs from 'fs';
+import path from 'path';
 
 const baseUrl = siteConfig.url;
-const lastModified = new Date();
+
+// Use file mtimes as genuine last-modified dates instead of "now".
+// This keeps crawlers from re-crawling every URL on every build.
+function mtime(rel: string, fallback: Date): Date {
+  try {
+    return fs.statSync(path.join(process.cwd(), rel)).mtime;
+  } catch {
+    return fallback;
+  }
+}
+
+const buildTime = new Date();
+const staticLastmod = mtime('src/app/page.tsx', buildTime);
+const productsLastmod = mtime('src/data/static/products/products.json', buildTime);
+const brandsLastmod = mtime('src/data/static/brands/brands.json', buildTime);
+const navLastmod = mtime('src/data/static/nav.json', buildTime);
+const categoryLastmod = mtime('src/app/categories/[slug]/page.tsx', navLastmod);
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
-    { path: '', priority: 1 },
-    { path: '/products', priority: 0.9 },
-    { path: '/categories', priority: 0.8 },
-    { path: '/brands', priority: 0.8 },
-    { path: '/part-numbers', priority: 0.8 },
-    { path: '/services', priority: 0.7 },
-    { path: '/about', priority: 0.6 },
-    { path: '/contact', priority: 0.6 },
-    { path: '/blog', priority: 0.6 },
-    { path: '/privacy', priority: 0.2 },
-    { path: '/terms', priority: 0.2 },
-    { path: '/disclaimer', priority: 0.2 },
-  ].map(({ path, priority }) => ({
-    url: `${baseUrl}${path}`,
+    { path: '', priority: 1, lastModified: staticLastmod },
+    { path: '/products', priority: 0.9, lastModified: productsLastmod },
+    { path: '/categories', priority: 0.8, lastModified: navLastmod },
+    { path: '/brands', priority: 0.8, lastModified: brandsLastmod },
+    { path: '/part-numbers', priority: 0.8, lastModified: productsLastmod },
+    { path: '/services', priority: 0.7, lastModified: staticLastmod },
+    { path: '/about', priority: 0.6, lastModified: staticLastmod },
+    { path: '/contact', priority: 0.6, lastModified: staticLastmod },
+    { path: '/blog', priority: 0.6, lastModified: staticLastmod },
+    { path: '/privacy', priority: 0.2, lastModified: staticLastmod },
+    { path: '/terms', priority: 0.2, lastModified: staticLastmod },
+    { path: '/disclaimer', priority: 0.2, lastModified: staticLastmod },
+  ].map(({ path: p, priority, lastModified }) => ({
+    url: `${baseUrl}${p}`,
     lastModified,
-    changeFrequency: path === '' ? 'weekly' : 'monthly',
+    changeFrequency: p === '' ? 'weekly' : 'monthly',
     priority,
   }));
 
   const categoryRoutes: MetadataRoute.Sitemap = getCategorySlugs().map(
     (slug) => ({
       url: `${baseUrl}/categories/${slug.toLowerCase()}`,
-      lastModified,
+      lastModified: categoryLastmod,
       changeFrequency: 'weekly',
       priority: 0.7,
     })
@@ -46,7 +61,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const brandRoutes: MetadataRoute.Sitemap = getBrandSlugs().map((slug) => ({
     url: `${baseUrl}/brands/${slug.toLowerCase()}`,
-    lastModified,
+    lastModified: brandsLastmod,
     changeFrequency: 'weekly',
     priority: 0.7,
   }));
@@ -56,17 +71,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       .filter((type) => type.count >= MIN_PRODUCTS_PER_TYPE_PAGE)
       .map((type) => ({
         url: `${baseUrl}/categories/${category.slug}/${type.slug}`,
-        lastModified,
+        lastModified: categoryLastmod,
         changeFrequency: 'monthly' as const,
         priority: 0.6,
       }))
   );
 
-  // Only canonical, indexable product pages belong in the sitemap.
-  const productRoutes: MetadataRoute.Sitemap = getIndexableProducts().map(
+  // Every genuine product page is canonical and indexable.
+  // Product routes use the products.json mtime, not the build time.
+  const productRoutes: MetadataRoute.Sitemap = getAllProducts().map(
     (product) => ({
       url: product.canonicalUrl,
-      lastModified,
+      lastModified: productsLastmod,
       changeFrequency: 'monthly',
       priority: product.tier === 'A' ? 0.8 : 0.6,
     })

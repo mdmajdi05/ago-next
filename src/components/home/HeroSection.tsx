@@ -30,10 +30,10 @@ export default function HeroSection() {
 </div>
 </div>
 <div className="hero-actions">
-<a href="contact.html">
+<a href="/contact">
 <button className="primary-btn" type="button">Request a Quote</button>
 </a>
-<a href="gas-turbines-parts.html" className="hero-btn-ghost">Browse Gas Turbine Parts <i className="fa-solid fa-arrow-right"></i></a>
+<a href="/categories/turbine-parts" className="hero-btn-ghost">Browse Gas Turbine Parts <i className="fa-solid fa-arrow-right"></i></a>
 </div>
 <ul className="hero-trust">
 <li><i className="fa-solid fa-industry"></i> Manufacturer and supplier</li>
@@ -62,7 +62,7 @@ export default function HeroSection() {
 <span><i className="fa-solid fa-gears"></i> OEM, frame and stage</span>
 <i className="fa-solid fa-check"></i>
 </div>
-<a className="hero-ops-link" href="contact.html">
+<a className="hero-ops-link" href="/contact">
                                 Request a Quote <i className="fa-solid fa-arrow-up-right-from-square"></i>
 </a>
 </aside>

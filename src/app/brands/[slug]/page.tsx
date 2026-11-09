@@ -39,7 +39,7 @@ export async function generateMetadata({
       title: brand.name,
       description: brand.description,
       type: 'website',
-      url: `https://www.agoaviation.com/brands/${brand.slug}`,
+      url: `${siteConfig.url}/brands/${brand.slug}`,
       images: [{ url: siteConfig.ogImage }],
     },
   };

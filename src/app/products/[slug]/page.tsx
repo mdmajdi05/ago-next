@@ -32,7 +32,7 @@ export async function generateMetadata({
   }
 
   const title = `${product.brand} ${product.partNumber} ${product.type}`;
-  const description = `Request a quote for ${product.brand} ${product.partNumber} (${product.type}) from AGO Aviation. Part specifications, compatibility, availability and worldwide shipping for ${product.category.toLowerCase()}.`;
+  const description = `${product.brand} ${product.partNumber} is listed as "${product.title}" in the AGO Aviation ${product.category.toLowerCase()} catalogue under ${product.type}. Request a quote for specifications, compatibility and availability.`;
 
   return {
     title,
@@ -40,9 +40,7 @@ export async function generateMetadata({
     alternates: {
       canonical: product.canonicalUrl,
     },
-    robots: product.indexable
-      ? { index: true, follow: true }
-      : { index: false, follow: true },
+    robots: { index: true, follow: true },
     openGraph: {
       title: `${title} | AGO Aviation`,
       description,
@@ -72,6 +70,12 @@ export default async function ProductPage({
     product.categorySlug,
     product.typeSlug
   ).length;
+  const categoryCount = productService.getByCategory(product.categorySlug).length;
+  const brandCount = productService.getByBrand(product.brand).length;
+
+  const pageTitle = `${product.brand} ${product.partNumber} ${product.type}`;
+  const showCatalogueTitle =
+    product.title.trim().toLowerCase() !== pageTitle.toLowerCase();
 
   const specifications = product.specifications
     ? Object.entries(product.specifications)
@@ -87,25 +91,33 @@ export default async function ProductPage({
   const breadcrumbs = [
     { label: 'Products', href: '/products' },
     { label: product.category, href: `/categories/${product.categorySlug}` },
-    { label: product.title, href: `/products/${product.slug}` },
+    ...(typeCount >= 3
+      ? [
+          {
+            label: product.type,
+            href: `/categories/${product.categorySlug}/${product.typeSlug}`,
+          },
+        ]
+      : []),
+    { label: product.partNumber, href: `/products/${product.slug}` },
   ];
 
   const productUrl = product.canonicalUrl;
 
   const overview =
     product.description ||
-    `${product.brand} ${product.partNumber} is a ${product.type.toLowerCase()} supplied by AGO Aviation for gas turbine and industrial applications. Our team verifies part specifications, compatibility and availability before sending a quotation.`;
+    `${product.brand} ${product.partNumber} — listed in our catalogue as "${product.title}" — sits within the ${product.type} group of our ${product.category.toLowerCase()} range. AGO Aviation sources and supplies this ${product.brand} component for gas turbine and industrial applications. Our team verifies part specifications, compatibility and availability before sending a quotation.`;
 
   const compatibility = [
-    `Gas turbine and industrial plant applications requiring ${product.type.toLowerCase()}`,
-    `${product.category} systems and overhaul programmes`,
+    `Gas turbine and industrial plant applications requiring ${product.brand} ${product.type.toLowerCase()}`,
+    `${product.category} systems, overhauls and replacement programmes`,
     'Replacement, repair and spares support for operating facilities',
   ];
 
   const faqs = [
     {
       question: `What is ${product.brand} ${product.partNumber}?`,
-      answer: `${product.brand} ${product.partNumber} is a ${product.type.toLowerCase()} listed under ${product.category} in the AGO Aviation catalogue.`,
+      answer: `${product.brand} ${product.partNumber} is listed under ${product.type} in the ${product.category} category of the AGO Aviation catalogue.`,
     },
     {
       question: `Can I request a quote for ${product.partNumber}?`,
@@ -247,8 +259,14 @@ export default async function ProductPage({
               </div>
 
               <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[#092b45] sm:text-4xl lg:text-[42px]">
-                {product.title}
+                {pageTitle}
               </h1>
+
+              {showCatalogueTitle && (
+                <p className="mt-2 text-sm font-semibold leading-6 text-[#53697b]">
+                  Catalogue listing: {product.title}
+                </p>
+              )}
 
               <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3">
 
@@ -329,6 +347,59 @@ export default async function ProductPage({
                   </li>
                 ))}
               </ul>
+            </div>
+
+            {/* Part number references */}
+            <div className="border-t border-[#dfe7ed] pt-5">
+              <h2 className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-[#183c59]">
+                Part Number &amp; Catalogue Reference
+              </h2>
+
+              <dl className="grid gap-x-5 gap-y-3 text-sm sm:grid-cols-2">
+                {[
+                  ['Manufacturer', product.brand],
+                  ['Part number', product.partNumber],
+                  ['Component type', product.type],
+                  ['Catalogue title', product.title],
+                  ['Catalogue reference', product.name],
+                  ['Category', product.category],
+                ].map(([label, value]) => (
+                  <div key={label}>
+                    <dt className="text-[10px] font-bold uppercase tracking-widest text-[#718394]">
+                      {label}
+                    </dt>
+                    <dd className="mt-0.5 break-words font-semibold text-[#24455f]">
+                      {value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <p className="mt-4 text-sm leading-7 text-[#53697b]">
+                {product.brand} {product.partNumber} is catalogued by AGO
+                Aviation under {product.type} within the{' '}
+                {product.category.toLowerCase()} range. Quote part number{' '}
+                <span className="font-mono font-bold text-[#123c5b]">
+                  {product.partNumber}
+                </span>{' '}
+                in your enquiry so our sourcing team can confirm the exact{' '}
+                {product.brand} configuration. The catalogue currently lists{' '}
+                {categoryCount} parts in{' '}
+                <Link
+                  href={`/categories/${product.categorySlug}`}
+                  className="font-bold text-[#123c5b] underline decoration-[#d69a32] decoration-2 underline-offset-2 hover:text-[#b77b1c]"
+                >
+                  {product.category}
+                </Link>{' '}
+                and {brandCount} products from{' '}
+                <Link
+                  href={`/brands/${brandService.slugifyBrand(product.brand)}`}
+                  className="font-bold text-[#123c5b] underline decoration-[#d69a32] decoration-2 underline-offset-2 hover:text-[#b77b1c]"
+                >
+                  {product.brand}
+                </Link>
+                .
+              </p>
             </div>
 
             {/* Quote CTA */}

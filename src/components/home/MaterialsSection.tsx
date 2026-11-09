@@ -75,7 +75,7 @@ export default function MaterialsSection() {
 </li>
 </ul>
 <div className="about-btn">
-<a href="contact.html">
+<a href="/contact">
 <button className="primary-btn">Request a Quote</button>
 </a>
 </div>

@@ -23,22 +23,16 @@ interface ProductsPageProps {
   searchParams: Promise<SearchParams>;
 }
 
-function isFilteredView(params: SearchParams): boolean {
-  return Boolean(
-    params.search ||
-      params.brand ||
-      params.category ||
-      params.type ||
-      (params.page && params.page !== '1') ||
-      (params.limit && params.limit !== '12')
-  );
-}
-
 export async function generateMetadata({
   searchParams,
 }: ProductsPageProps): Promise<Metadata> {
   const params = await searchParams;
-  const filtered = isFilteredView(params);
+
+  // Filtered / searched variants (e.g. /products?search=xxx or ?brand=yyy)
+  // should not be indexed — only the canonical /products page should.
+  const isFiltered = Boolean(
+    params?.search || params?.brand || params?.category || params?.type
+  );
 
   return {
     title: 'All Gas Turbine & Industrial Spare Parts',
@@ -47,7 +41,7 @@ export async function generateMetadata({
     alternates: {
       canonical: `${siteConfig.url}/products`,
     },
-    robots: filtered
+    robots: isFiltered
       ? { index: false, follow: true }
       : { index: true, follow: true },
     openGraph: {
@@ -312,7 +306,7 @@ export default async function ProductsPage({
           {featuredCategories.map((item) => (
             <Link
               key={item.slug}
-              href={`/products?category=${encodeURIComponent(item.name)}`}
+              href={`/categories/${item.slug}`}
               className="relative min-w-0 overflow-hidden rounded-[15px] border border-[#e2eaf1] bg-white pb-3.5 shadow-[0_3px_10px_#0a2b4510] transition hover:-translate-y-1 hover:shadow-lg desk:h-[199px]"
             >
               <img

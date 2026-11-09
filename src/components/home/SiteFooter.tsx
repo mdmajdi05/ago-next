@@ -49,22 +49,22 @@ export default function SiteFooter() {
 <h4>Quick Links</h4>
 <ul>
 <li>
-<a href="About.html">About Us</a>
+<a href="/about">About Us</a>
 </li>
 <li>
-<a href="Service.html">Services</a>
+<a href="/services">Services</a>
 </li>
 <li>
-<a href="contact.html">Contact Us</a>
+<a href="/contact">Contact Us</a>
 </li>
 <li>
-<a href="Bently-nevada.html">Bently Nevada</a>
+<a href="/brands/bently-nevada">Bently Nevada</a>
 </li>
 <li>
-<a href="gas-turbines-parts.html">Gas Turbines parts</a>
+<a href="/categories/turbine-parts">Gas Turbines parts</a>
 </li>
 <li>
-<a href="blog.html">Blog</a>
+<a href="/blog">Blog</a>
 </li>
 </ul>
 </div>
@@ -74,16 +74,16 @@ export default function SiteFooter() {
 <h4>Useful Links</h4>
 <ul>
 <li>
-<a href="Disclaimer.html">Disclaimer Policy</a>
+<a href="/disclaimer">Disclaimer Policy</a>
 </li>
 <li>
-<a href="Privacy.html">Privacy Policy</a>
+<a href="/privacy">Privacy Policy</a>
 </li>
 <li>
-<a href="Term-and-condition.html">Terms & Conditions</a>
+<a href="/terms">Terms & Conditions</a>
 </li>
 <li>
-<a href="sitemap.html">Sitemap</a>
+<a href="/sitemap.xml">Sitemap</a>
 </li>
 </ul>
 </div>
@@ -145,11 +145,11 @@ export default function SiteFooter() {
                         AGO Aviation <span>·</span> Gas turbine parts & spares
                     </span>
 <span className="footer-bottom-links">
-<a href="Privacy.html">Privacy</a>
-<a href="Term-and-condition.html">Terms</a>
-<a href="sitemap.html">Sitemap</a>
+<a href="/privacy">Privacy</a>
+<a href="/terms">Terms</a>
+<a href="/sitemap.xml">Sitemap</a>
 </span>
-<a className="footer-bottom-status" href="contact.html">
+<a className="footer-bottom-status" href="/contact">
 <i></i> Gas turbine parts <strong>Worldwide</strong>
 </a>
 </div>

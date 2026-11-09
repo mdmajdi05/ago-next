@@ -854,6 +854,30 @@
   text-transform: uppercase;
 }
 
+/* Mega-menu triggers.
+   We use explicit classes instead of Tailwind's `hidden`/`flex` utilities
+   because this file is unlayered and `.nav-link`'s `display:flex` would win
+   over Tailwind's layered utilities — which made the mobile and desktop
+   labels render at the same time (duplicate "Products"/"Brands"). */
+.nav-link.mega-toggle {
+  display: none;
+}
+
+.nav-link.mega-link {
+  display: flex;
+}
+
+@media (max-width: 1024px) {
+  .nav-link.mega-toggle {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .nav-link.mega-link {
+    display: none;
+  }
+}
+
 .nav-item:hover .nav-link {
   color: #0b3b66;
   background: #fdf1de;

@@ -7,9 +7,68 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { FloatBar } from '@/components/layout/floatBar';
 import { WebVitalsMonitor } from '@/components/sections/web-vitals';
+import { buildCatalogMenu } from '@/lib/catalog/menu';
 
 import '@/styles/globals.css';
 import '@/styles/home-sections.css';
+
+const catalogMenu = buildCatalogMenu();
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${siteConfig.url}/#organization`,
+  name: siteConfig.name,
+  legalName: siteConfig.legalName,
+  url: siteConfig.url,
+  logo: {
+    '@type': 'ImageObject',
+    url: siteConfig.logo,
+    caption: siteConfig.logoAlt,
+  },
+  description: siteConfig.description,
+  email: siteConfig.email.sales,
+  telephone: siteConfig.phoneRaw,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: siteConfig.address.street,
+    addressLocality: siteConfig.address.city,
+    addressRegion: siteConfig.address.state,
+    postalCode: siteConfig.address.postalCode,
+    addressCountry: siteConfig.address.countryCode,
+  },
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      telephone: siteConfig.phoneRaw,
+      contactType: 'sales',
+      email: siteConfig.email.sales,
+      areaServed: 'Worldwide',
+      availableLanguage: ['English'],
+    },
+  ],
+  sameAs: Object.values(siteConfig.socials)
+    .map((social) => social.url)
+    .filter(Boolean),
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteConfig.url}/#website`,
+  url: siteConfig.url,
+  name: siteConfig.name,
+  description: siteConfig.description,
+  publisher: { '@id': `${siteConfig.url}/#organization` },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${siteConfig.url}/products?search={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
 
 const yantramanav = Yantramanav({
   subsets: ['latin'],
@@ -110,7 +169,16 @@ export default function RootLayout({
         />
       </head>
       <body id="top" className={`${yantramanav.variable} font-sans home-page`}>
-        <Header />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              organizationSchema,
+              websiteSchema,
+            ]).replace(/</g, '\\u003c'),
+          }}
+        />
+        <Header catalogMenu={catalogMenu} />
         <main>{children}</main>
         <Footer />
         <FloatBar />

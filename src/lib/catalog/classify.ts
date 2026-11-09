@@ -2,8 +2,8 @@ import { DEFAULT_TYPE, TAXONOMY_BY_CATEGORY, TAXONOMY_BY_CATEGORY_NAME, TypeDefi
 
 /**
  * Part numbers that are actually generic labels rather than real part codes.
- * These pages are kept reachable but marked noindex so they do not dilute the
- * catalogue with thin content.
+ * They stay indexable; the flag only affects prioritisation (tier/entity type)
+ * so the catalogue keeps every genuine product discoverable.
  */
 const GENERIC_PART_VALUES = new Set([
   'list-1',
@@ -182,12 +182,14 @@ export function classifyProduct(
   if (input.description) qualityScore += 10;
   if (input.image) qualityScore += 5;
 
-  const indexable = entityType === 'part';
-  const tier = !indexable
-    ? 'C'
-    : PRIORITY_PARTS.has(partNumber)
-      ? 'A'
-      : 'B';
+  // Every genuine catalogue page is indexable. Tier is used for prioritisation
+  // (featured products, sitemap priority) — not for blocking indexation.
+  const indexable = true;
+  const tier = PRIORITY_PARTS.has(partNumber)
+    ? 'A'
+    : entityType === 'part'
+      ? 'B'
+      : 'C';
 
   return {
     type,

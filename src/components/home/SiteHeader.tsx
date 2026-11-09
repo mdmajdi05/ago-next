@@ -12,7 +12,7 @@ export default function SiteHeader() {
 <div className="col-lg-3 col-md-3 col-sm-6 col-6 w-full lg:w-1/4 md:w-1/4 sm:w-1/2 w-1/2">
 <div className="header-logo">
 <div className="logo">
-<a href="index.html">
+<a href="/">
 <img src="/assets/img/LOGO.png" alt="LOGO" />
 </a>
 </div>
@@ -26,14 +26,14 @@ export default function SiteHeader() {
 </button>
 <nav className={`menu ${menuOpen ? "is-open" : ""}`} id="ago-site-navigation" aria-label="Primary">
 <ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="products.html">Products</a></li>
-<li><a href="brands.html">Brands</a></li>
-<li><a href="stock-and-inventory.html">Stock</a></li>
-<li><a href="turbine-platforms.html">Turbine Parts</a></li>
-<li><a href="Service.html">Services</a></li>
-<li><a href="blog.html">Insights</a></li>
-<li><a href="contact.html">Contact</a></li>
+<li><a href="/">Home</a></li>
+<li><a href="/products">Products</a></li>
+<li><a href="/brands">Brands</a></li>
+<li><a href="/products">Stock</a></li>
+<li><a href="/categories/turbine-parts">Turbine Parts</a></li>
+<li><a href="/about">About Us</a></li>
+<li><a href="/blog">Blog</a></li>
+<li><a href="/contact">Contact</a></li>
 </ul>
 </nav>
 </div>
@@ -41,8 +41,8 @@ export default function SiteHeader() {
 <div className="col-lg-3 col-md d-none d-lg-block w-full lg:w-1/4 hidden lg:block">
 <div className="header-search">
 <div className="search-bar">
-<form className="search-form" action="search-results.html" method="get" role="search">
-<input type="search" placeholder="Search here" name="q" className="search-input" aria-label="Search spare parts" />
+<form className="search-form" action="/products" method="get" role="search">
+<input type="search" placeholder="Search here" name="search" className="search-input" aria-label="Search spare parts" />
 <button type="submit" className="search-btn" aria-label="Search">
 <i className="fa-solid fa-magnifying-glass"></i>
 </button>

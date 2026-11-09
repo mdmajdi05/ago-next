@@ -1,17 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import { siteConfig } from '@/config/site';
-
-interface BlogPost {
-  title: string;
-  excerpt: string;
-  date: string;
-  href: string;
-  image: string;
-  imageAlt: string;
-  category: string;
-}
+import {
+  BlogExplorer,
+  type BlogPostItem,
+} from '@/components/blog/blog-explorer';
 
 const agoContainer = 'max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8';
 const sectionTitle = (eyebrow: string, title: string, description: string) => (
@@ -24,7 +17,29 @@ const sectionTitle = (eyebrow: string, title: string, description: string) => (
   </div>
 );
 
-const posts: BlogPost[] = [
+const posts: BlogPostItem[] = [
+  {
+    title: 'Case study: pre-staging hot gas path parts for a Frame 6 outage',
+    excerpt:
+      'How a planned inspection scope was translated into a staged spares list, with part numbers and documentation verified before the outage window opened.',
+    date: '02 Oct 2026',
+    href: '/contact',
+    image: '/images/engine-6000.jpeg',
+    imageAlt: 'Gas turbine hot gas path components prepared for a planned outage',
+    category: 'Outage support',
+    type: 'Case Study',
+  },
+  {
+    title: 'Case study: cross-referencing an obsolete compressor control part',
+    excerpt:
+      'A legacy part number with no current OEM listing was matched using drawings, nameplate data and dimensional checks before supply.',
+    date: '18 Sep 2026',
+    href: '/contact',
+    image: '/images/engine-lm2500-banner.jpg',
+    imageAlt: 'Industrial compressor and turbine package used for an obsolescence case study',
+    category: 'Obsolescence',
+    type: 'Case Study',
+  },
   {
     title: 'Gas turbine spare parts procurement: a practical checklist',
     excerpt:
@@ -34,6 +49,7 @@ const posts: BlogPost[] = [
     image: '/images/engine-portfolio-banner.webp',
     imageAlt: 'Gas turbine engine and component portfolio for spare parts sourcing',
     category: 'Procurement guide',
+    type: 'Blog',
   },
   {
     title: 'Gas turbine outage spares planning: build a reliable list',
@@ -44,6 +60,7 @@ const posts: BlogPost[] = [
     image: '/images/engine-lm2500-banner.jpg',
     imageAlt: 'Industrial gas turbine used to illustrate maintenance outage spares planning',
     category: 'Maintenance planning',
+    type: 'Blog',
   },
   {
     title: 'Gas turbine hot gas path parts: functions, wear and sourcing',
@@ -54,6 +71,7 @@ const posts: BlogPost[] = [
     image: '/images/engine-6000.jpeg',
     imageAlt: 'Gas turbine system representing hot gas path components and inspection planning',
     category: 'Component guide',
+    type: 'Blog',
   },
   {
     title: 'How to verify a gas turbine spare part number before ordering',
@@ -64,6 +82,7 @@ const posts: BlogPost[] = [
     image: '/images/cfm-56-turbine.webp',
     imageAlt: 'Turbine engine image accompanying a guide to checking spare part numbers',
     category: 'Part identification',
+    type: 'Blog',
   },
   {
     title: 'How to evaluate an industrial spare parts supplier',
@@ -74,6 +93,7 @@ const posts: BlogPost[] = [
     image: '/images/about-img.webp',
     imageAlt: 'AGO Aviation team image accompanying industrial spare parts supplier evaluation guidance',
     category: 'Supplier evaluation',
+    type: 'Blog',
   },
   {
     title: 'GE Frame 5, 6, 7 and 9: what differs across the fleet',
@@ -84,22 +104,23 @@ const posts: BlogPost[] = [
     image: '/images/ge-general.jpeg',
     imageAlt: 'GE gas turbine frame representing the Frame 5, 6, 7 and 9 platform guide',
     category: 'GE platform guide',
+    type: 'Blog',
   },
 ];
 
 export const metadata: Metadata = {
   title: 'Blog',
   description:
-    'Technical guides and sourcing notes on GE, Siemens and Alstom gas turbine platforms, obsolescence, inventory planning and spare parts. Request a quote from AGO Aviation.',
+    'Technical guides, case studies and sourcing notes on GE, Siemens and Alstom gas turbine platforms, obsolescence, inventory planning and spare parts. Request a quote from AGO Aviation.',
   keywords: siteConfig.keywords as unknown as string[],
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   alternates: {
     canonical: `${siteConfig.url}/blog`,
   },
   openGraph: {
-    title: 'Insights | Gas Turbine Parts Guides & Sourcing Notes | AGO Aviation',
+    title: 'Blog | Gas Turbine Parts Guides, Case Studies & Sourcing Notes | AGO Aviation',
     description:
-      'Technical guides and sourcing notes on GE, Siemens and Alstom gas turbine platforms, obsolescence, inventory planning and spare parts.',
+      'Technical guides, case studies and sourcing notes on GE, Siemens and Alstom gas turbine platforms, obsolescence, inventory planning and spare parts.',
     url: `${siteConfig.url}/blog`,
     siteName: siteConfig.name,
     type: 'website',
@@ -114,9 +135,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Insights | Gas Turbine Parts Guides & Sourcing Notes | AGO Aviation',
+    title: 'Blog | Gas Turbine Parts Guides, Case Studies & Sourcing Notes | AGO Aviation',
     description:
-      'Technical guides and sourcing notes on GE, Siemens and Alstom gas turbine platforms, obsolescence, inventory planning and spare parts.',
+      'Technical guides, case studies and sourcing notes on GE, Siemens and Alstom gas turbine platforms, obsolescence, inventory planning and spare parts.',
     images: [siteConfig.ogImage],
     creator: siteConfig.socials.x.handle,
   },
@@ -131,9 +152,9 @@ export default function BlogPage() {
       <section className="py-15 bg-soft">
         <div className={agoContainer}>
           {sectionTitle(
-            'Insights',
+            'Blog & Case Studies',
             'Blog',
-            'Practical notes on turbine platforms, obsolescence, sourcing strategy and inventory planning — written by the team that handles these parts every day.'
+            'Practical notes on turbine platforms, obsolescence, sourcing strategy and inventory planning — plus case studies from the team that handles these parts every day.'
           )}
           <div className="flex items-center gap-3 justify-center">
             <a
@@ -160,36 +181,7 @@ export default function BlogPage() {
 
       <section className="py-15">
         <div className={agoContainer}>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post, index) => (
-              <article
-                key={post.href}
-                className="border border-line rounded-lg bg-white p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200 flex flex-col"
-              >
-                <Image
-                  src={post.image}
-                  alt={post.imageAlt}
-                  width={1200}
-                  height={630}
-                  className="rounded-lg mb-4 object-cover h-48 w-full"
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  priority={index === 0}
-                />
-                <div className="flex items-center gap-2 mb-3">
-                  <time className="text-xs font-semibold text-primary">{post.date}</time>
-                  <span className="text-xs font-medium text-muted">{post.category}</span>
-                </div>
-                <h3 className="text-lg font-bold text-ink mb-2 group-hover:text-primary transition-colors">
-                  {post.title}
-                </h3>
-                <p className="text-muted leading-relaxed mb-4 flex-1">{post.excerpt}</p>
-                <span className="mt-auto inline-flex items-center gap-1 text-primary font-semibold hover:text-secondary transition-colors">
-                  Read the guide
-                  <i className="fa-solid fa-arrow-right text-[12px]"></i>
-                </span>
-              </article>
-            ))}
-          </div>
+          <BlogExplorer posts={posts} />
         </div>
       </section>
 

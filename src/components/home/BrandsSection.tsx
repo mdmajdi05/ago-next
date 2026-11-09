@@ -14,30 +14,30 @@ export default function BrandsSection() {
 <div className="brands-marquee">
 <div className="brands-track">
 <div className="brand-group">
-<a className="brand-chip" href="general-Electric-(GE).html">General Electric</a>
-<a className="brand-chip" href="rolls-royce.html">Rolls-Royce</a>
-<a className="brand-chip" href="siemens.html">Siemens</a>
-<a className="brand-chip" href="solar-turbines.html">Solar Turbines</a>
-<a className="brand-chip" href="alstom.html">Alstom</a>
-<a className="brand-chip" href="ansaldo.html">Ansaldo</a>
-<a className="brand-chip" href="Bently-nevada.html">Bently Nevada</a>
-<a className="brand-chip" href="ge-lm6000-turbine-steam-turbine-parts-specialist.html">GE LM6000</a>
-<a className="brand-chip" href="pw-mpa-ft8-turbine-steam-turbine-parts-specialist.html">Pratt &
+<a className="brand-chip" href="/brands/ge">General Electric</a>
+<a className="brand-chip" href="/products?search=Rolls-Royce">Rolls-Royce</a>
+<a className="brand-chip" href="/brands/siemens">Siemens</a>
+<a className="brand-chip" href="/products?search=Solar%20Turbines">Solar Turbines</a>
+<a className="brand-chip" href="/products?search=Alstom">Alstom</a>
+<a className="brand-chip" href="/products?search=Ansaldo">Ansaldo</a>
+<a className="brand-chip" href="/brands/bently-nevada">Bently Nevada</a>
+<a className="brand-chip" href="/products?search=LM6000">GE LM6000</a>
+<a className="brand-chip" href="/products?search=FT8">Pratt &
                         Whitney</a>
-<a className="brand-chip" href="zorya-mashproekt.html">Zorya-Mashproekt</a>
+<a className="brand-chip" href="/products?search=Zorya">Zorya-Mashproekt</a>
 </div>
 <div className="brand-group" aria-hidden="true">
-<a className="brand-chip" href="general-Electric-(GE).html">General Electric</a>
-<a className="brand-chip" href="rolls-royce.html">Rolls-Royce</a>
-<a className="brand-chip" href="siemens.html">Siemens</a>
-<a className="brand-chip" href="solar-turbines.html">Solar Turbines</a>
-<a className="brand-chip" href="alstom.html">Alstom</a>
-<a className="brand-chip" href="ansaldo.html">Ansaldo</a>
-<a className="brand-chip" href="Bently-nevada.html">Bently Nevada</a>
-<a className="brand-chip" href="ge-lm6000-turbine-steam-turbine-parts-specialist.html">GE LM6000</a>
-<a className="brand-chip" href="pw-mpa-ft8-turbine-steam-turbine-parts-specialist.html">Pratt &
+<a className="brand-chip" href="/brands/ge">General Electric</a>
+<a className="brand-chip" href="/products?search=Rolls-Royce">Rolls-Royce</a>
+<a className="brand-chip" href="/brands/siemens">Siemens</a>
+<a className="brand-chip" href="/products?search=Solar%20Turbines">Solar Turbines</a>
+<a className="brand-chip" href="/products?search=Alstom">Alstom</a>
+<a className="brand-chip" href="/products?search=Ansaldo">Ansaldo</a>
+<a className="brand-chip" href="/brands/bently-nevada">Bently Nevada</a>
+<a className="brand-chip" href="/products?search=LM6000">GE LM6000</a>
+<a className="brand-chip" href="/products?search=FT8">Pratt &
                         Whitney</a>
-<a className="brand-chip" href="zorya-mashproekt.html">Zorya-Mashproekt</a>
+<a className="brand-chip" href="/products?search=Zorya">Zorya-Mashproekt</a>
 </div>
 </div>
 </div>

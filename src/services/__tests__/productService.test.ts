@@ -70,6 +70,21 @@ describe('ProductService', () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
+  it('every catalogue product is indexable with a unique canonical URL', () => {
+    const products = getAll();
+    const canonicalUrls = new Set(products.map((p) => p.canonicalUrl));
+
+    expect(products.every((p) => p.indexable)).toBe(true);
+    expect(canonicalUrls.size).toBe(products.length);
+    expect(getAllSlugs().length).toBe(products.length);
+
+    products.forEach((product) => {
+      expect(product.canonicalUrl.endsWith(`/products/${product.slug}`)).toBe(
+        true
+      );
+    });
+  });
+
   it('getFeatured returns curated products', () => {
     const featured = getFeatured(8);
     expect(featured.length).toBeLessThanOrEqual(8);

@@ -108,7 +108,7 @@ export default function HowItWorksSection() {
 </div>
 </div>
 <div className="text-center mt-5">
-<a href="contact.html">
+<a href="/contact">
 <button className="primary-btn" type="button">Request a Quote</button>
 </a>
 </div>
