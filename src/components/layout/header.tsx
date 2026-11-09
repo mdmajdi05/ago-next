@@ -12,6 +12,7 @@ const navLinks = [
   { label: 'Products', href: '/products' },
   { label: 'Categories', href: '/categories' },
   { label: 'Brands', href: '/brands' },
+  { label: 'Platforms', href: '/platforms' },
   { label: 'About Us', href: '/about' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact' },

@@ -33,16 +33,38 @@ export async function generateMetadata({
   const params = await searchParams;
 
   // Filtered / searched variants (e.g. /products?search=xxx or ?brand=yyy)
-  // should not be indexed — only the canonical /products page should.
+  // should not be indexed — only the canonical catalogue pages should.
   const isFiltered = Boolean(
     params?.search || params?.brand || params?.category || params?.type
   );
 
+  const requestedPage = Math.max(1, parseInt(params?.page || '1', 10) || 1);
+  const requestedLimit = Math.max(
+    1,
+    Math.min(parseInt(params?.limit || '12', 10) || 12, 100)
+  );
+
+  // Every paginated catalogue page is self-canonical so Google can index the
+  // full inventory instead of folding pages 2..N into page 1. Page 1 keeps the
+  // clean /products URL; later pages carry their own page (and non-default
+  // limit) parameter so each URL has exactly one canonical version.
+  const query: string[] = [];
+  if (requestedPage > 1) query.push(`page=${requestedPage}`);
+  if (requestedLimit !== 12) query.push(`limit=${requestedLimit}`);
+  const canonicalPath = query.length
+    ? `/products?${query.join('&')}`
+    : '/products';
+
+  const pageLabel =
+    requestedPage > 1 ? ` – Page ${requestedPage}` : '';
+
   return buildPageMetadata({
-    title: 'Gas Turbine & Industrial Spare Parts Catalogue',
+    title: `Gas Turbine & Industrial Spare Parts Catalogue${pageLabel}`,
     description:
-      'Search 350+ gas turbine, compressor, valve, automation, instrumentation and electrical spare parts across 23 brands. Filter by part number, brand or category and request a verified quote.',
-    path: '/products',
+      requestedPage > 1
+        ? `Browse page ${requestedPage} of the AGO Aviation gas turbine and industrial spare parts catalogue. Compare part numbers across 23 brands and request a verified quote with condition and documentation confirmed.`
+        : 'Search 350+ gas turbine, compressor, valve, automation, instrumentation and electrical spare parts across 23 brands. Filter by part number, brand or category and request a verified quote.',
+    path: canonicalPath,
     keywords: [
       'gas turbine spare parts',
       'industrial spare parts catalogue',
@@ -141,6 +163,13 @@ export default async function ProductsPage({
     limit: String(limit),
   };
 
+  const schemaQuery: string[] = [];
+  if (currentPage > 1) schemaQuery.push(`page=${currentPage}`);
+  if (limit !== 12) schemaQuery.push(`limit=${limit}`);
+  const schemaPath = schemaQuery.length
+    ? `/products?${schemaQuery.join('&')}`
+    : '/products';
+
   const schema = [
     breadcrumbSchema([
       { name: 'Home', path: '/' },
@@ -150,7 +179,7 @@ export default async function ProductsPage({
       name: 'Gas Turbine & Industrial Spare Parts Catalogue',
       description:
         'Search gas turbine, compressor, valve, automation, instrumentation and electrical spare parts by part number, brand or category.',
-      path: '/products',
+      path: schemaPath,
       items: products.map((product) => ({
         name: `${product.brand} ${product.partNumber}`,
         url: `/products/${product.slug}`,

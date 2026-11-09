@@ -8,6 +8,7 @@ import {
 import { MIN_PRODUCTS_PER_TYPE_PAGE } from '@/lib/catalog/taxonomy';
 import { siteConfig } from '@/config/site';
 import { blogPosts } from '@/data/blog/posts';
+import { getPlatformSlugs } from '@/data/platforms';
 import { getProductImage } from '@/lib/catalog/images';
 import fs from 'fs';
 import path from 'path';
@@ -31,6 +32,7 @@ const brandsLastmod = mtime('src/data/static/brands/brands.json', buildTime);
 const navLastmod = mtime('src/data/static/nav.json', buildTime);
 const categoryLastmod = mtime('src/app/categories/[slug]/page.tsx', navLastmod);
 const blogLastmod = mtime('src/data/blog/posts.ts', staticLastmod);
+const platformsLastmod = mtime('src/data/platforms.ts', staticLastmod);
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -38,6 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/products', priority: 0.9, lastModified: productsLastmod },
     { path: '/categories', priority: 0.8, lastModified: navLastmod },
     { path: '/brands', priority: 0.8, lastModified: brandsLastmod },
+    { path: '/platforms', priority: 0.8, lastModified: platformsLastmod },
     { path: '/part-numbers', priority: 0.8, lastModified: productsLastmod },
     { path: '/services', priority: 0.7, lastModified: staticLastmod },
     { path: '/about', priority: 0.6, lastModified: staticLastmod },
@@ -100,11 +103,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     images: [`${baseUrl}${post.image}`],
   }));
 
+  const platformRoutes: MetadataRoute.Sitemap = getPlatformSlugs().map(
+    (slug) => ({
+      url: `${baseUrl}/platforms/${slug}`,
+      lastModified: platformsLastmod,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    })
+  );
+
   return [
     ...staticRoutes,
     ...categoryRoutes,
     ...typeRoutes,
     ...brandRoutes,
+    ...platformRoutes,
     ...productRoutes,
     ...blogRoutes,
   ];

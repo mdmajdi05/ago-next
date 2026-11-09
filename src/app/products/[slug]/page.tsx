@@ -7,6 +7,7 @@ import { productService, brandService } from '@/services';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { getProductImage } from '@/lib/catalog/images';
 import { buildProductContent } from '@/lib/catalog/productContent';
+import { getPlatform, type Platform } from '@/data/platforms';
 import {
   breadcrumbSchema as buildBreadcrumbSchema,
   buildPageMetadata,
@@ -18,6 +19,17 @@ import EnquiryForm from './EnquiryForm';
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
+
+/**
+ * Brand-to-platform links. These are editorial guides, not fitment claims, so
+ * a GE part links to the GE platform family rather than asserting one model.
+ */
+const BRAND_PLATFORMS: Record<string, string[]> = {
+  ge: ['ge-frame-6', 'ge-lm2500', 'ge-mark-iv-v'],
+  siemens: ['siemens-sgt-700-800', 'siemens-sgt-400', 'siemens-sgt-a05'],
+  'bently-nevada': ['bently-nevada-3300-3500', 'ge-mark-iv-v'],
+  woodward: ['woodward-controls', 'ge-mark-iv-v'],
+};
 
 export async function generateStaticParams() {
   const slugs = productService.getAllSlugs();
@@ -110,6 +122,12 @@ export default async function ProductPage({
   const productUrl = product.canonicalUrl;
 
   const content = buildProductContent(product);
+
+  const platformLinks = (
+    BRAND_PLATFORMS[brandService.slugifyBrand(product.brand)] || []
+  )
+    .map((platformSlug) => getPlatform(platformSlug))
+    .filter((platform): platform is Platform => Boolean(platform));
 
   const faqs = [
     {
@@ -603,6 +621,51 @@ export default async function ProductPage({
                   {faq.answer}
                 </p>
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Platform & model guides */}
+        <section className="mt-14 rounded-2xl border border-[#e1e8ee] bg-white p-6 shadow-[0_5px_22px_rgba(12,39,60,0.04)] sm:p-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#d69a32]">
+                Platform Support
+              </p>
+              <h2 className="mt-2 text-2xl font-extrabold text-[#092b45]">
+                Gas turbine platform guides
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#718394]">
+                Confirm the machine family and the part groups normally sourced
+                for it. These guides are a starting point; exact fitment is
+                verified against your part number and unit details.
+              </p>
+            </div>
+            <Link
+              href="/platforms"
+              className="text-xs font-bold text-[#123c5b] transition hover:text-[#d69a32]"
+            >
+              All platform guides →
+            </Link>
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {platformLinks.map((platform) => (
+              <Link
+                key={platform.slug}
+                href={`/platforms/${platform.slug}`}
+                className="group rounded-xl border border-[#e5ebf0] bg-[#f8fafc] p-4 transition hover:border-[#d69a32] hover:bg-[#fffaf0]"
+              >
+                <span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#9b6917]">
+                  {platform.manufacturer}
+                </span>
+                <span className="mt-1 block text-sm font-bold text-[#123c5b]">
+                  {platform.shortName} →
+                </span>
+                <span className="mt-1 line-clamp-2 block text-[11px] leading-5 text-[#718394]">
+                  {platform.summary}
+                </span>
+              </Link>
             ))}
           </div>
         </section>

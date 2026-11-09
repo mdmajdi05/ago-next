@@ -15,7 +15,7 @@ export const mainNavLinks: NavLink[] = [
   { title: 'Home', href: '/' },
   { title: 'Products', href: '/products' },
   { title: 'Brands', href: '/brands' },
-  { title: 'Stock', href: '/stock-and-inventory' },
+  { title: 'Platforms', href: '/platforms' },
   { title: 'Turbine Parts', href: '/categories/turbine-parts' },
   { title: 'About Us', href: '/about' },
   { title: 'Blog', href: '/blog' },

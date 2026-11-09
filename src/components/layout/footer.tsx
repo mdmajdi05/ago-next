@@ -6,7 +6,8 @@ const quickLinks = [
   { label: 'About Us', href: '/about' },
   { label: 'Services', href: '/services' },
   { label: 'Contact Us', href: '/contact' },
-  { label: 'Bently Nevada', href: '/brands' },
+  { label: 'Platforms & Models', href: '/platforms' },
+  { label: 'Bently Nevada', href: '/brands/bently-nevada' },
   { label: 'Gas Turbines parts', href: '/products' },
   { label: 'Blog', href: '/blog' },
 ];

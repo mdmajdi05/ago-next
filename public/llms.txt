@@ -17,6 +17,7 @@
 - [All products](https://www.agoaviation.com/products): searchable gas turbine and industrial spare parts catalogue.
 - [Categories](https://www.agoaviation.com/categories): browse 9 product categories.
 - [Brands](https://www.agoaviation.com/brands): browse 23 supported manufacturers.
+- [Platforms & models](https://www.agoaviation.com/platforms): gas turbine platform and control-system guides.
 - [Part number index](https://www.agoaviation.com/part-numbers): A-Z index of every catalogue part number.
 - [Blog and case studies](https://www.agoaviation.com/blog): sourcing guides, outage planning and technical notes.
 - [About](https://www.agoaviation.com/about): company background and capabilities.
@@ -46,6 +47,30 @@ GE, Siemens, ABB, Atlas Copco, Metso, Gutor, Qualitrol, Allen-Bradley, Swagelok,
 - [How to verify a gas turbine spare part number](https://www.agoaviation.com/blog/verify-gas-turbine-spare-part-number)
 - [How to evaluate an industrial spare parts supplier](https://www.agoaviation.com/blog/evaluate-industrial-spare-parts-supplier)
 - [GE Frame 5, 6, 7 and 9 differences](https://www.agoaviation.com/blog/ge-frame-5-6-7-9)
+
+## Platform and model guides
+
+- [GE Frame 5 (MS5001)](https://www.agoaviation.com/platforms/ge-frame-5)
+- [GE Frame 6, 6B and 6FA](https://www.agoaviation.com/platforms/ge-frame-6)
+- [GE Frame 7 and 7EA](https://www.agoaviation.com/platforms/ge-frame-7)
+- [GE Frame 9 and 9E](https://www.agoaviation.com/platforms/ge-frame-9)
+- [GE LM2500](https://www.agoaviation.com/platforms/ge-lm2500)
+- [GE LM5000](https://www.agoaviation.com/platforms/ge-lm5000)
+- [GE LM6000](https://www.agoaviation.com/platforms/ge-lm6000)
+- [GE LM1600](https://www.agoaviation.com/platforms/ge-lm1600)
+- [GE MS5002D](https://www.agoaviation.com/platforms/ge-ms5002d)
+- [Alstom GT11](https://www.agoaviation.com/platforms/alstom-gt11)
+- [Alstom GT13E2](https://www.agoaviation.com/platforms/alstom-gt13e2)
+- [Alstom GT26](https://www.agoaviation.com/platforms/alstom-gt26)
+- [Siemens SGT-400](https://www.agoaviation.com/platforms/siemens-sgt-400)
+- [Siemens SGT-700 and SGT-800](https://www.agoaviation.com/platforms/siemens-sgt-700-800)
+- [Siemens SGT-A05](https://www.agoaviation.com/platforms/siemens-sgt-a05)
+- [Rolls-Royce Avon](https://www.agoaviation.com/platforms/rolls-royce-avon)
+- [Zorya-Mashproekt](https://www.agoaviation.com/platforms/zorya-mashproekt)
+- [Solar Turbines](https://www.agoaviation.com/platforms/solar-turbines)
+- [Bently Nevada 3300 and 3500](https://www.agoaviation.com/platforms/bently-nevada-3300-3500)
+- [GE Mark IV and Mark V Speedtronic](https://www.agoaviation.com/platforms/ge-mark-iv-v)
+- [Woodward controls](https://www.agoaviation.com/platforms/woodward-controls)
 
 ## How to use this site
 

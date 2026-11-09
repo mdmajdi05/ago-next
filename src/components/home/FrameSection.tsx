@@ -53,6 +53,28 @@ export default function FrameSection() {
 <button className="primary-btn">Request a Quote</button>
 </a>
 </div>
+<div className="mt-5">
+<p className="mb-2 text-xs font-bold uppercase tracking-wider text-[#b77b1c]">Popular platform guides</p>
+<div className="flex flex-wrap gap-2">
+{[
+  ["GE Frame 5", "/platforms/ge-frame-5"],
+  ["GE Frame 6 / 6FA", "/platforms/ge-frame-6"],
+  ["GE Frame 7 / 9", "/platforms/ge-frame-7"],
+  ["GE LM2500", "/platforms/ge-lm2500"],
+  ["GE LM6000", "/platforms/ge-lm6000"],
+  ["Alstom GT26", "/platforms/alstom-gt26"],
+  ["Siemens SGT-700/800", "/platforms/siemens-sgt-700-800"],
+  ["Bently Nevada 3300/3500", "/platforms/bently-nevada-3300-3500"],
+].map(([label, href]) => (
+  <a key={href} href={href} className="rounded-full border border-[#d5dfe8] px-3 py-1 text-xs font-semibold text-[#40576b] transition hover:border-[#e8a928] hover:text-[#09233b]">
+    {label}
+  </a>
+))}
+<a href="/platforms" className="rounded-full bg-[#062a43] px-3 py-1 text-xs font-bold text-white">
+  All platforms →
+</a>
+</div>
+</div>
 </div>
 </div>
 <div className="col-lg-6 w-full lg:w-1/2">
