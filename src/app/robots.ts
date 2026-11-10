@@ -45,7 +45,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/_next/', '/products?', '/products/*?*'],
       })),
     ],
-    sitemap: `${siteConfig.url}/sitemap.xml`,
+    sitemap: `${siteConfig.url}/sitemap-index.xml`,
     host: siteConfig.url,
   };
 }

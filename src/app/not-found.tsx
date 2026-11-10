@@ -29,12 +29,14 @@ function toExplorerProduct(product: Product): NotFoundProduct {
     categorySlug: product.categorySlug,
     type: product.type,
     image: getProductImage(product),
-    keywords: product.keywords,
   };
 }
 
 export default function NotFound() {
-  const products = productService.getAll().map(toExplorerProduct);
+  // Send only a small suggestion set to the browser. The full catalogue lives
+  // on /products and is searched server-side; serialising 52k rows made every
+  // 404 response ~13 MB.
+  const products = productService.getFeatured(140).map(toExplorerProduct);
   const featured = productService.getFeatured(8).map(toExplorerProduct);
 
   const brands = brandService

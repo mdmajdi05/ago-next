@@ -58,12 +58,15 @@ export async function generateMetadata({
   const pageLabel =
     requestedPage > 1 ? ` – Page ${requestedPage}` : '';
 
+  const catalogueSize = productService.getAll().length.toLocaleString('en-US');
+  const brandCount = brandService.getAll().length;
+
   return buildPageMetadata({
     title: `Gas Turbine & Industrial Spare Parts Catalogue${pageLabel}`,
     description:
       requestedPage > 1
-        ? `Browse page ${requestedPage} of the AGO Aviation gas turbine and industrial spare parts catalogue. Compare part numbers across 23 brands and request a verified quote with condition and documentation confirmed.`
-        : 'Search 350+ gas turbine, compressor, valve, automation, instrumentation and electrical spare parts across 23 brands. Filter by part number, brand or category and request a verified quote.',
+        ? `Browse page ${requestedPage} of the AGO Aviation gas turbine and industrial spare parts catalogue. Compare part numbers across ${brandCount} brands and request a verified quote with condition and documentation confirmed.`
+        : `Search ${catalogueSize} gas turbine, compressor, valve, automation, instrumentation and electrical spare parts across ${brandCount} brands. Filter by part number, brand or category and request a verified quote.`,
     path: canonicalPath,
     keywords: [
       'gas turbine spare parts',

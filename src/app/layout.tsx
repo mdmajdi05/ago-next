@@ -80,8 +80,15 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link
+          rel="preload"
+          href="/fonts/fa-solid-900.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
           rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          href="/fonts/fa-subset.css"
         />
 
         {/* Google Tag Manager */}

@@ -18,6 +18,8 @@ interface CategoryPageProps {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 86_400;
+
 export async function generateStaticParams() {
   const slugs = categoryService.getAllSlugs();
   return slugs.map((slug) => ({ slug }));

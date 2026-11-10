@@ -4,8 +4,10 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
   output: 'standalone',
+  outputFileTracingIncludes: {
+    '/**': ['./src/data/static/products/legacy-catalog.json'],
+  },
   images: {
-    domains: ['agoaviation.com', 'www.agoaviation.com'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -24,6 +26,15 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 31536000, // 1 year
   },
   // Performance headers for caching and security
+  async redirects() {
+    return [
+      {
+        source: '/sitemap.xml',
+        destination: '/sitemap-index.xml',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

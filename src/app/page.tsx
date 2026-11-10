@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { siteConfig } from '@/config/site';
 import { buildPageMetadata, faqSchema, serviceSchema } from '@/lib/seo';
+import { productService, brandService } from '@/services';
 
 import PageSplash from "@/components/home/PageSplash";
 import HeroSection from "@/components/home/HeroSection";
@@ -19,10 +20,13 @@ import CTABanner from "@/components/home/CTABanner";
 import ContactSection from "@/components/home/ContactSection";
 import HomePageEffects from "@/components/home/HomePageEffects";
 
+const catalogueSize = productService.getAll().length.toLocaleString('en-US');
+const brandCount = brandService.getAll().length;
+
 export const metadata: Metadata = buildPageMetadata({
   title: 'Gas Turbine Parts Manufacturer & Supplier Worldwide',
   description:
-    'AGO Aviation manufactures and supplies precision gas turbine parts and spares for power plants, oil & gas and EPC projects. 350+ part numbers across GE, Siemens, ABB and 20 more brands — request a verified quote.',
+    `AGO Aviation manufactures and supplies precision gas turbine parts and spares for power plants, oil & gas and EPC projects. ${catalogueSize} part numbers across GE, Siemens, ABB and ${brandCount} brands — request a verified quote.`,
   path: '/',
   keywords: siteConfig.keywords as unknown as string[],
   image: siteConfig.ogImage,

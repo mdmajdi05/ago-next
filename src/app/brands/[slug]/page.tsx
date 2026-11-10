@@ -14,6 +14,8 @@ interface BrandPageProps {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 86_400;
+
 export async function generateStaticParams() {
   const slugs = brandService.getAllSlugs();
   return slugs.map((slug) => ({ slug }));

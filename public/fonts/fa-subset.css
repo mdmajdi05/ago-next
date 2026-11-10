@@ -1,0 +1,70 @@
+@font-face{font-family:"Font Awesome 6 Free";font-style:normal;font-weight:900;font-display:swap;src:url("/fonts/fa-solid-900.woff2") format("woff2")}
+@font-face{font-family:"Font Awesome 6 Brands";font-style:normal;font-weight:400;font-display:swap;src:url("/fonts/fa-brands-400.woff2") format("woff2")}
+.fa{font-family:var(--fa-style-family,"Font Awesome 6 Free");font-weight:var(--fa-style,900)}
+.fa,.fa-brands,.fa-regular,.fa-solid,.fab,.far,.fas{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:var(--fa-display,inline-block);font-style:normal;font-variant:normal;line-height:1;text-rendering:auto}
+.fa-brands:before,.fa-regular:before,.fa-solid:before,.fab:before,.far:before,.fas:before{content:var(--fa)}
+.fa-solid,.fas{font-family:"Font Awesome 6 Free";font-weight:900}
+.fa-brands,.fab{font-family:"Font Awesome 6 Brands";font-weight:400}
+@keyframes fa-spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.fa-spin{animation:fa-spin 2s linear infinite}
+.fa-arrow-right{--fa:"\f061"}
+.fa-arrow-up-right-from-square{--fa:"\f08e"}
+.fa-atom{--fa:"\f5d2"}
+.fa-barcode{--fa:"\f02a"}
+.fa-bars{--fa:"\f0c9"}
+.fa-bolt{--fa:"\f0e7"}
+.fa-box{--fa:"\f466"}
+.fa-box-open{--fa:"\f49e"}
+.fa-calendar-check{--fa:"\f274"}
+.fa-check{--fa:"\f00c"}
+.fa-check-circle{--fa:"\f058"}
+.fa-chevron-down{--fa:"\f078"}
+.fa-chevron-left{--fa:"\f053"}
+.fa-chevron-right{--fa:"\f054"}
+.fa-chevron-up{--fa:"\f077"}
+.fa-circle-check{--fa:"\f058"}
+.fa-circle-info{--fa:"\f05a"}
+.fa-circle-notch{--fa:"\f1ce"}
+.fa-clipboard-check{--fa:"\f46c"}
+.fa-clock{--fa:"\f017"}
+.fa-comments{--fa:"\f086"}
+.fa-earth-americas{--fa:"\f57d"}
+.fa-envelope{--fa:"\f0e0"}
+.fa-envelope-open-text{--fa:"\f658"}
+.fa-facebook-f{--fa:"\f39e"}
+.fa-file-invoice{--fa:"\f570"}
+.fa-file-invoice-dollar{--fa:"\f571"}
+.fa-file-lines{--fa:"\f15c"}
+.fa-fire-flame-curved{--fa:"\f7e4"}
+.fa-folder-open{--fa:"\f07c"}
+.fa-gears{--fa:"\f085"}
+.fa-globe{--fa:"\f0ac"}
+.fa-headset{--fa:"\f590"}
+.fa-house{--fa:"\f015"}
+.fa-industry{--fa:"\f275"}
+.fa-instagram{--fa:"\f16d"}
+.fa-layer-group{--fa:"\f5fd"}
+.fa-linkedin-in{--fa:"\f0e1"}
+.fa-location-dot{--fa:"\f3c5"}
+.fa-lock{--fa:"\f023"}
+.fa-magnifying-glass{--fa:"\f002"}
+.fa-message{--fa:"\f27a"}
+.fa-microchip{--fa:"\f2db"}
+.fa-paper-plane{--fa:"\f1d8"}
+.fa-phone{--fa:"\f095"}
+.fa-phone-volume{--fa:"\f2a0"}
+.fa-pinterest-p{--fa:"\f231"}
+.fa-plane{--fa:"\f072"}
+.fa-route{--fa:"\f4d7"}
+.fa-ruler-combined{--fa:"\f546"}
+.fa-shield-halved{--fa:"\f3ed"}
+.fa-ship{--fa:"\f21a"}
+.fa-tag{--fa:"\f02b"}
+.fa-temperature-high{--fa:"\f769"}
+.fa-tools{--fa:"\f7d9"}
+.fa-twitter{--fa:"\f099"}
+.fa-user{--fa:"\f007"}
+.fa-user-tie{--fa:"\f508"}
+.fa-whatsapp{--fa:"\f232"}
+.fa-x-twitter{--fa:"\e61b"}
+.fa-xmark{--fa:"\f00d"}

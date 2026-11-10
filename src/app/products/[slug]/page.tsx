@@ -38,6 +38,10 @@ export async function generateStaticParams() {
 
 export const dynamicParams = true;
 
+// ISR: a product page is cached for a day after its first render, so the long
+// tail of 52k URLs does not re-render on every crawler hit.
+export const revalidate = 86_400;
+
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
@@ -96,6 +100,8 @@ export default async function ProductPage({
   const showCatalogueTitle =
     catalogueTitle.trim().toLowerCase() !== pageTitle.toLowerCase();
 
+  const content = buildProductContent(product);
+
   const specifications = product.specifications
     ? Object.entries(product.specifications)
     : [
@@ -103,6 +109,12 @@ export default async function ProductPage({
         ['Brand', product.brand],
         ['Category', product.category],
         ['Type', product.type],
+        ...content.attributes.map(
+          (attribute) => [attribute.label, attribute.value] as [string, string]
+        ),
+        ...(content.recordLabel
+          ? ([['Catalogue description', content.recordLabel]] as [string, string][])
+          : []),
         ['Condition', 'New / Refurbished on request'],
         ['Availability', 'Quote on request'],
       ];
@@ -123,8 +135,6 @@ export default async function ProductPage({
 
   const productUrl = product.canonicalUrl;
 
-  const content = buildProductContent(product);
-
   const platformLinks = (
     BRAND_PLATFORMS[brandService.slugifyBrand(product.brand)] || []
   )
@@ -134,7 +144,7 @@ export default async function ProductPage({
   const faqs = [
     {
       question: `What is ${product.brand} ${product.partNumber}?`,
-      answer: `${product.brand} ${product.partNumber} is a ${product.type.toLowerCase()} listed under ${product.category} in the AGO Aviation catalogue. It is identified in our records as "${catalogueTitle}".`,
+      answer: `${product.brand} ${product.partNumber} is listed under ${product.category} in the AGO Aviation catalogue, within the ${product.type.toLowerCase()} range. It is identified in our records as "${catalogueTitle}".`,
     },
     {
       question: `Can I request a quote for ${product.partNumber}?`,
@@ -331,6 +341,26 @@ export default async function ProductPage({
                 ))}
               </div>
             </div>
+
+            {/* Source catalogue record */}
+            {content.recordDescription && (
+              <div className="border-t border-[#dfe7ed] pt-5">
+                <h2 className="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-[#183c59]">
+                  Catalogue Record
+                </h2>
+
+                <p className="text-sm leading-7 text-[#53697b]">
+                  The original catalogue entry for {product.partNumber} reads:
+                  “{content.recordDescription}”. This wording is reproduced from
+                  the source listing and is not a substitute for the drawing or
+                  nameplate on your unit.
+                </p>
+
+                <p className="mt-2 text-xs leading-6 text-[#718394]">
+                  {content.partProfile}
+                </p>
+              </div>
+            )}
 
             {/* Compatibility */}
             <div className="border-t border-[#dfe7ed] pt-5">

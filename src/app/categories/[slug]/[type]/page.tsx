@@ -20,6 +20,8 @@ interface TypePageProps {
   params: Promise<{ slug: string; type: string }>;
 }
 
+export const revalidate = 86_400;
+
 export async function generateStaticParams() {
   return categoryService.getAll().flatMap((category) =>
     productService

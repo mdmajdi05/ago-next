@@ -3,6 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Next.js needs libc6-compat on Alpine for its native binaries.
+RUN apk add --no-cache libc6-compat
+
 # Install dependencies first (better layer caching)
 COPY package.json package-lock.json* ./
 RUN npm ci
@@ -20,23 +23,27 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 
-# Create a non-root user
-RUN addgroup --system --gid 1001 nodejs && \
+RUN apk add --no-cache libc6-compat && \
+    addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copy only what is needed to run
-COPY --from=builder /app/next.config.ts ./
+# Standalone output already contains server.js, node_modules and traced data
+# files (including the legacy catalogue). Static assets and public files must
+# sit beside server.js, otherwise every /_next/static and /public request 404s.
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./.next/standalone
+COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+
+RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
 EXPOSE 3000
 
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1 || exit 1
 
-# Start the Next.js server
-CMD ["node", ".next/standalone/server.js"]
+CMD ["node", "server.js"]

@@ -15,6 +15,13 @@ import path from 'path';
 
 const baseUrl = siteConfig.url;
 
+/**
+ * Google accepts at most 50,000 URLs per sitemap file. The catalogue has more
+ * than that, so products are split into 10,000-URL chunks and the non-product
+ * routes live in chunk 0. `/sitemap-index.xml` lists every chunk.
+ */
+const PRODUCTS_PER_SITEMAP = 10_000;
+
 // Use file mtimes as genuine last-modified dates instead of "now".
 // This keeps crawlers from re-crawling every URL on every build.
 function mtime(rel: string, fallback: Date): Date {
@@ -38,8 +45,14 @@ const categoryLastmod = mtime('src/app/categories/[slug]/page.tsx', navLastmod);
 const blogLastmod = mtime('src/data/blog/posts.ts', staticLastmod);
 const platformsLastmod = mtime('src/data/platforms.ts', staticLastmod);
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes: MetadataRoute.Sitemap = [
+export async function generateSitemaps(): Promise<Array<{ id: number }>> {
+  const total = getAllProducts().length;
+  const chunks = Math.max(1, Math.ceil(total / PRODUCTS_PER_SITEMAP));
+  return Array.from({ length: chunks + 1 }, (_, id) => ({ id }));
+}
+
+function staticRoutes(): MetadataRoute.Sitemap {
+  return [
     { path: '', priority: 1, lastModified: staticLastmod },
     { path: '/products', priority: 0.9, lastModified: productsLastmod },
     { path: '/categories', priority: 0.8, lastModified: navLastmod },
@@ -59,7 +72,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: p === '' ? 'weekly' : 'monthly',
     priority,
   }));
+}
 
+function nonProductRoutes(): MetadataRoute.Sitemap {
   const categoryRoutes: MetadataRoute.Sitemap = getCategorySlugs().map(
     (slug) => ({
       url: `${baseUrl}/categories/${slug.toLowerCase()}`,
@@ -87,23 +102,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }))
   );
 
-  // Every genuine product page is canonical and indexable.
-  // Product routes use the newer of products.json / legacy-catalog.json mtime.
-  const productLastmod = new Date(
-    Math.max(productsLastmod.getTime(), legacyCatalogLastmod.getTime())
-  );
-  const productRoutes: MetadataRoute.Sitemap = getAllProducts().map(
-    (product) => ({
-      url: product.canonicalUrl,
-      lastModified: productLastmod,
-      changeFrequency: 'monthly',
-      priority: product.tier === 'A' ? 0.8 : 0.6,
-      ...(product.tier === 'A'
-        ? { images: [getProductImage(product)].filter(Boolean) as string[] }
-        : {}),
-    })
-  );
-
   const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.dateModified),
@@ -122,12 +120,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 
   return [
-    ...staticRoutes,
+    ...staticRoutes(),
     ...categoryRoutes,
     ...typeRoutes,
     ...brandRoutes,
     ...platformRoutes,
-    ...productRoutes,
     ...blogRoutes,
   ];
+}
+
+export default async function sitemap(props: {
+  id: string | number;
+}): Promise<MetadataRoute.Sitemap> {
+  const id = Number(await props.id);
+
+  if (id === 0) return nonProductRoutes();
+
+  const productLastmod = new Date(
+    Math.max(productsLastmod.getTime(), legacyCatalogLastmod.getTime())
+  );
+
+  const start = (id - 1) * PRODUCTS_PER_SITEMAP;
+  const products = getAllProducts().slice(start, start + PRODUCTS_PER_SITEMAP);
+
+  return products.map((product) => ({
+    url: product.canonicalUrl,
+    lastModified: productLastmod,
+    changeFrequency: 'monthly',
+    priority: product.tier === 'A' ? 0.8 : 0.6,
+    ...(product.tier === 'A'
+      ? { images: [getProductImage(product)].filter(Boolean) as string[] }
+      : {}),
+  }));
 }

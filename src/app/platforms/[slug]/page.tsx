@@ -347,7 +347,8 @@ export default async function PlatformPage({ params }: PlatformPageProps) {
               Explore the full catalogue or all platform guides
             </p>
             <p className="mt-1 text-xs text-[#718394]">
-              {getAllPlatforms().length} platform guides and 350+ part numbers.
+              {getAllPlatforms().length} platform guides and{' '}
+              {productService.getAll().length.toLocaleString('en-US')} part numbers.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

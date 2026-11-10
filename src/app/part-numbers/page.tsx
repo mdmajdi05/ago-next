@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { productService } from '@/services';
 import { breadcrumbSchema, buildPageMetadata, collectionPageSchema } from '@/lib/seo';
 
+const catalogueSize = productService.getAll().length.toLocaleString('en-US');
+
 export const metadata: Metadata = buildPageMetadata({
   title: 'A–Z Gas Turbine Part Number Index',
   description:
-    'Search 350+ gas turbine and industrial part numbers A–Z by brand and category. Find a part number and request availability, lead time and pricing from AGO Aviation.',
+    `Search ${catalogueSize} gas turbine and industrial part numbers A–Z by brand and category. Find a part number and request availability, lead time and pricing from AGO Aviation.`,
   path: '/part-numbers',
   keywords: [
     'gas turbine part number search',

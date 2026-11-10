@@ -1,5 +1,5 @@
-import legacyData from "@/data/static/products/legacy-catalog.json";
 import productsData from "@/data/static/products/products.json";
+import { getLegacyCatalog, type LegacyRawProduct } from "./legacyCatalog";
 import { Product, ProductFilters, ProductSearchResult, ProductTypeSummary } from "@/types/product";
 import { slugifyBrand } from "@/services/brandService";
 import CategoryService from "@/services/categoryService";
@@ -32,20 +32,39 @@ const rawProducts = productsData as RawProduct[];
 // Merge curated catalogue with imported legacy parts
 // ---------------------------------------------------------------------------
 
-interface LegacyRawProduct {
-  name: string;
-  title: string;
-  part: string;
-  brand: string;
-  category: string;
-  url: string;
-  keywords?: string;
-  description?: string;
-  image?: string;
-  specifications?: Record<string, string>;
-}
+const legacyRaw = getLegacyCatalog();
 
-const legacyRaw = legacyData as LegacyRawProduct[];
+/**
+ * Removes the boilerplate sentence added by the description enrichment pass.
+ * The original catalogue text is kept (it is often a real component label or
+ * an OEM one-liner), so page copy can be rebuilt from source data instead of
+ * repeating one template across tens of thousands of pages.
+ */
+function cleanLegacyDescription(
+  value: string | undefined,
+  brand: string,
+  part: string
+): string | undefined {
+  if (!value) return value;
+
+  let text = value.replace(/\s+/g, " ").trim();
+  text = text
+    .replace(
+      /\s+spare part for [^.]{1,140}\.\s*Request a quote for availability, condition and lead time(?: from AGO Aviation)?\.?\s*$/i,
+      ""
+    )
+    .trim();
+
+  const escape = (input: string) =>
+    input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const stub = new RegExp(
+    `^Genuine\\s+${escape(brand)}\\s+${escape(part)}\\s*$`,
+    "i"
+  );
+  text = text.replace(stub, "").trim();
+
+  return text || undefined;
+}
 
 // Count duplicate titles once so quality scoring is deterministic.
 const titleCounts = new Map<string, number>();
@@ -123,7 +142,9 @@ function normalizeRaw(raw: RawProduct | LegacyRawProduct, isLegacy: boolean): Pr
     aliases,
     canonicalUrl: `${siteConfig.url}/products/${slug}`,
     keywords: raw.keywords,
-    description: raw.description,
+    description: isLegacy
+      ? cleanLegacyDescription(raw.description, raw.brand, raw.part)
+      : raw.description,
     specifications: raw.specifications,
     image: raw.image,
     _legacy: isLegacy,
@@ -186,7 +207,35 @@ const categoryKeyMap = new Map<string, Product[]>();
 const typeKeyMap = new Map<string, Product[]>();
 const categoryTypeKeyMap = new Map<string, Product[]>();
 
+/**
+ * Lower-cased search text is computed once at boot and attached as a
+ * non-enumerable property, so filtering 52k rows does not rebuild a string
+ * per request and the value is never serialised to the client.
+ */
+interface SearchableProduct extends Product {
+  _search?: string;
+}
+
 for (const product of normalizedProducts) {
+  Object.defineProperty(product, "_search", {
+    value: [
+      product.title,
+      product.part,
+      product.partNumber,
+      product.brand,
+      product.category,
+      product.type,
+      product.keywords || "",
+      product.name,
+      product.description || "",
+    ]
+      .join(" ")
+      .toLowerCase(),
+    enumerable: false,
+    configurable: false,
+    writable: false,
+  });
+
   canonicalSlugMap.set(product.slug, product);
   partMap.set(product.partNumber.toLowerCase(), product);
 
@@ -213,19 +262,31 @@ for (const product of normalizedProducts) {
   categoryTypeKeyMap.set(categoryTypeKey, categoryTypeList);
 }
 
+// Precomputed once: these lists are requested by every sitemap, listing and
+// pagination render, and allocating a new 52k-element array each time is pure
+// overhead.
+const indexableProducts = normalizedProducts.filter((product) => product.indexable);
+const indexableSlugs = indexableProducts.map((product) => product.slug);
+const staticSlugs = normalizedProducts
+  .filter(
+    (product) =>
+      !product._legacy || product.tier === "A" || product.entityType === "listing"
+  )
+  .map((product) => product.slug);
+
 /** Returns every normalized product in the catalogue. */
 export function getAll(): Product[] {
-  return [...normalizedProducts];
+  return normalizedProducts;
 }
 
 /** Returns only products that are allowed to be indexed. */
 export function getIndexable(): Product[] {
-  return normalizedProducts.filter((product) => product.indexable);
+  return indexableProducts;
 }
 
 /** Returns canonical slugs for indexable products (used by sitemaps). */
 export function getIndexableSlugs(): string[] {
-  return getIndexable().map((product) => product.slug);
+  return indexableSlugs;
 }
 
 /**
@@ -236,12 +297,7 @@ export function getIndexableSlugs(): string[] {
  * build stays fast while every URL remains reachable.
  */
 export function getStaticSlugs(): string[] {
-  return normalizedProducts
-    .filter(
-      (product) =>
-        !product._legacy || product.tier === "A" || product.entityType === "listing"
-    )
-    .map((product) => product.slug);
+  return staticSlugs;
 }
 
 /** Retrieves a product by canonical slug, legacy URL, alias or part number. */
@@ -344,6 +400,10 @@ export function getTypeIndex(): Record<string, number> {
 
 /**
  * Searches and filters products with pagination.
+ *
+ * Indexed filters use the precomputed brand/category/type maps, and free-text
+ * search uses the per-product `_search` string, so a request no longer rebuilds
+ * a haystack for all 52k rows.
  */
 export function search(filters: ProductFilters): ProductSearchResult {
   const {
@@ -355,49 +415,69 @@ export function search(filters: ProductFilters): ProductSearchResult {
     limit = 12,
   } = filters;
 
-  let results = normalizedProducts;
+  const brandTarget = brand && brand.trim() !== "" ? slugifyBrand(brand) : "";
+  const categoryTarget = category && category.trim() !== ""
+    ? (CategoryService.getBySlug(category.trim().toLowerCase())?.slug ||
+        slugifyCatalogValue(category.trim()))
+    : "";
+  const typeTarget =
+    type && type.trim() !== "" ? slugifyCatalogValue(type.trim()) : "";
+  const tokens =
+    searchParam && searchParam.trim() !== ""
+      ? searchParam.trim().toLowerCase().split(/\s+/).filter(Boolean)
+      : [];
 
-  if (brand && brand.trim() !== "") {
-    const target = slugifyBrand(brand);
-    results = results.filter((product) => slugifyBrand(product.brand) === target);
+  // Pick the smallest index that applies, then filter only those rows.
+  let base: Product[];
+  if (categoryTarget && typeTarget) {
+    base = categoryTypeKeyMap.get(`${categoryTarget}|${typeTarget}`) || [];
+  } else if (categoryTarget) {
+    base = categoryKeyMap.get(categoryTarget) || [];
+  } else if (typeTarget) {
+    base = typeKeyMap.get(typeTarget) || [];
+  } else if (brandTarget) {
+    base = brandKeyMap.get(brandTarget) || [];
+  } else {
+    base = normalizedProducts;
   }
 
-  if (category && category.trim() !== "") {
-    const clean = category.trim().toLowerCase();
-    const matched = CategoryService.getBySlug(clean);
-    const targetSlug = matched?.slug || slugifyCatalogValue(clean);
-    results = results.filter((product) => product.categorySlug === targetSlug);
-  }
+  const needsScan =
+    tokens.length > 0 ||
+    (brandTarget && base !== brandKeyMap.get(brandTarget)) ||
+    (categoryTarget && base !== categoryKeyMap.get(categoryTarget)) ||
+    (typeTarget && base !== typeKeyMap.get(typeTarget) &&
+      base !== categoryTypeKeyMap.get(`${categoryTarget}|${typeTarget}`));
 
-  if (type && type.trim() !== "") {
-    const targetType = slugifyCatalogValue(type);
-    results = results.filter((product) => product.typeSlug === targetType);
-  }
+  let results: Product[];
 
-  if (searchParam && searchParam.trim() !== "") {
-    const tokens = searchParam
-      .trim()
-      .toLowerCase()
-      .split(/\s+/)
-      .filter(Boolean);
+  if (!needsScan) {
+    results = base;
+  } else {
+    const matched: Product[] = [];
 
-    results = results.filter((product) => {
-      const haystack = [
-        product.title,
-        product.part,
-        product.partNumber,
-        product.brand,
-        product.category,
-        product.type,
-        product.keywords || "",
-        product.name,
-        product.description || "",
-      ]
-        .join(" ")
-        .toLowerCase();
+    for (let index = 0; index < base.length; index += 1) {
+      const product = base[index];
 
-      return tokens.every((token) => haystack.includes(token));
-    });
+      if (brandTarget && slugifyBrand(product.brand) !== brandTarget) continue;
+      if (categoryTarget && product.categorySlug !== categoryTarget) continue;
+      if (typeTarget && product.typeSlug !== typeTarget) continue;
+
+      if (tokens.length > 0) {
+        const haystack = (product as SearchableProduct)._search || "";
+        let matches = true;
+        for (const token of tokens) {
+          if (!haystack.includes(token)) {
+            matches = false;
+            break;
+          }
+        }
+        if (!matches) continue;
+      }
+
+      matched.push(product);
+    }
+
+    results = matched;
   }
 
   const total = results.length;
