@@ -18,7 +18,7 @@ const baseUrl = siteConfig.url;
 /**
  * Google accepts at most 50,000 URLs per sitemap file. The catalogue has more
  * than that, so products are split into 10,000-URL chunks and the non-product
- * routes live in chunk 0. `/sitemap-index.xml` lists every chunk.
+ * routes live in chunk 0. `/sitemap.xml` lists every chunk.
  */
 const PRODUCTS_PER_SITEMAP = 10_000;
 

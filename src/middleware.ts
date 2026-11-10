@@ -175,11 +175,13 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(url, 301);
     }
 
-    // Any other .html URL is an old page we no longer serve. Send it to the
-    // catalogue index instead of returning a soft 404.
+    // Unmapped legacy URLs (including the 52k imported part pages) are proxied
+    // to a route handler that resolves the old filename against product aliases
+    // and returns a real 301 to the canonical product URL.
     const url = request.nextUrl.clone();
-    url.pathname = '/products';
-    return NextResponse.redirect(url, 301);
+    url.pathname = '/legacy-redirect';
+    url.search = `?path=${encodeURIComponent(pathname)}`;
+    return NextResponse.rewrite(url);
   }
 
   return NextResponse.next();

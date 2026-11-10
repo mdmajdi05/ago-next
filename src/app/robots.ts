@@ -32,8 +32,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/api/',
           '/_next/',
-          '/products?',
-          '/products/*?*',
+          '/legacy-redirect',
           '/search',
           '/404',
           '/_not-found',
@@ -42,10 +41,10 @@ export default function robots(): MetadataRoute.Robots {
       ...AI_CRAWLERS.map((userAgent) => ({
         userAgent,
         allow: '/',
-        disallow: ['/api/', '/_next/', '/products?', '/products/*?*'],
+        disallow: ['/api/', '/_next/'],
       })),
     ],
-    sitemap: `${siteConfig.url}/sitemap-index.xml`,
+    sitemap: `${siteConfig.url}/sitemap.xml`,
     host: siteConfig.url,
   };
 }

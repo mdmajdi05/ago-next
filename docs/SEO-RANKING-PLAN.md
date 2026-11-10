@@ -29,7 +29,7 @@ What *does* work:
 |---|---|---|---|
 | 1 | 19 MB JSON imported as a JS module | Read the file from disk once at runtime, cache it, and include it in the standalone trace. It is no longer part of the webpack module graph. | `src/services/legacyCatalog.ts`, `next.config.ts` |
 | 2 | 404 sends the whole catalogue | Only 140 suggestion products are serialised; full search stays on `/products`. | `src/app/not-found.tsx` |
-| 3 | Sitemap above 50,000 URLs | `generateSitemaps()` writes seven chunks (routes + six product chunks of 10,000) and `/sitemap-index.xml` lists them. `/sitemap.xml` redirects to the index. | `src/app/sitemap.ts`, `src/app/sitemap-index.xml/route.ts`, `next.config.ts`, `src/app/robots.ts` |
+| 3 | Sitemap above 50,000 URLs | `generateSitemaps()` writes seven chunks (routes + six product chunks of 10,000). `/sitemap.xml` is the sitemap index and lists every chunk; `/sitemap-index.xml` redirects to it. | `src/app/sitemap.ts`, `src/app/sitemap.xml/route.ts`, `next.config.ts`, `src/app/robots.ts` |
 | 4 | 37k+ descriptions shared one appended template | The enrichment suffix is stripped at import and from the data file. Body copy is rebuilt from the original record plus real attributes, with 12 openers, 6 record leads, 6 context leads and 12 closers selected deterministically per part. | `src/services/productService.ts`, `src/lib/catalog/productContent.ts`, `scripts/clean-legacy-descriptions.mjs` |
 | 5 | `/products` scanned 52k rows per request | Search text is computed once and stored as a non-enumerable property; brand/category/type filters use precomputed maps and avoid scanning; unfiltered pages slice directly. | `src/services/productService.ts` |
 | 6 | Font Awesome CDN blocked rendering | Self-hosted WOFF2 files and a 2.7 KB icon subset generated from the classes actually used. No third-party CSS request. | `public/fonts/fa-subset.css`, `src/app/layout.tsx` |
@@ -37,6 +37,11 @@ What *does* work:
 
 Additional: ISR (`revalidate = 86400`) on product, category, type and brand
 pages so the long tail is cached after its first render.
+
+Legacy URLs: known legacy pages get a 301 in middleware; every other `.html`
+URL (including all 52k imported part pages) is proxied to
+`/legacy-redirect`, resolved against the product aliases and sent with a real
+301 to `/products/{slug}`. Unknown `.html` files 301 to `/products`.
 
 ### Measured result
 
@@ -101,6 +106,6 @@ find .next/standalone -name legacy-catalog.json  # traced data file
 du -h .next/server/app/page.js                   # should be far below 20 MB
 ```
 
-Google Search Console: submit `/sitemap-index.xml`, then monitor
+Google Search Console: submit `/sitemap.xml`, then monitor
 "Page indexing" for Crawled/Discovered-not-indexed. A falling duplicate count
 and rising indexed count is the signal that the content change worked.
