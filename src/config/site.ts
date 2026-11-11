@@ -67,7 +67,11 @@ export const siteConfig = {
   analytics: {
     gaId: process.env.NEXT_PUBLIC_GA_ID || "G-78KJF6NWPV",
     gtmId: process.env.NEXT_PUBLIC_GTM_ID || "GTM-W7CKR2ZB",
+    clarityId: process.env.NEXT_PUBLIC_CLARITY_ID || "zbusbk30cg",
   },
+
+  // Bing Webmaster Tools site verification.
+  bingVerification: "49F1D9786DD0EE7E989DEA3F617D7A53",
 
   businessHours: {
     days: "Monday - Saturday",
