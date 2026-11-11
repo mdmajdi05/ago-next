@@ -14,8 +14,9 @@ export const dynamic = 'force-dynamic';
  * without shipping a multi-megabyte redirect map to the edge runtime.
  */
 export async function GET(request: Request): Promise<Response> {
-  const url = new URL(request.url);
-  const raw = url.searchParams.get('path') || '';
+  // Middleware passes the original legacy path in a header, because a
+  // rewrite keeps the original request URL.
+  const raw = request.headers.get('x-legacy-path') || '';
 
   let clean = raw;
   try {

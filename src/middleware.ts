@@ -178,10 +178,14 @@ export function middleware(request: NextRequest) {
     // Unmapped legacy URLs (including the 52k imported part pages) are proxied
     // to a route handler that resolves the old filename against product aliases
     // and returns a real 301 to the canonical product URL.
+    // The original path travels in a header: a rewrite keeps the original
+    // request URL, so a query string would not reach the handler.
     const url = request.nextUrl.clone();
     url.pathname = '/legacy-redirect';
-    url.search = `?path=${encodeURIComponent(pathname)}`;
-    return NextResponse.rewrite(url);
+    url.search = '';
+    const headers = new Headers(request.headers);
+    headers.set('x-legacy-path', pathname);
+    return NextResponse.rewrite(url, { request: { headers } });
   }
 
   return NextResponse.next();
