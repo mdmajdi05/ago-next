@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
   output: 'standalone',
+  // Disable streamed metadata for every user agent. Next.js otherwise moves
+  // <title>, <meta> and the canonical link into the body for user agents that
+  // are not in its HTML-limited bot list; several crawlers then report the
+  // directives as "outside <head>" and may ignore them.
+  htmlLimitedBots: /.*/,
   outputFileTracingIncludes: {
     '/**': ['./src/data/static/products/legacy-catalog.json'],
   },

@@ -26,9 +26,9 @@ export default function PartNumbersPage() {
   const groups = productService.getPartIndex();
   const total = groups.reduce((sum, group) => sum + group.products.length, 0);
 
-  // Cap each letter group's display so the page stays fast; the full
-  // index stays reachable via /products?search=.
-  const PART_INDEX_CAP = 60;
+  // Cap each letter group's display so the page stays well under Google's
+  // 2 MB HTML crawl limit; the full index stays reachable via /products?search=.
+  const PART_INDEX_CAP = 20;
   const cappedGroups = groups.map((group) => ({
     ...group,
     products: group.products.slice(0, PART_INDEX_CAP),

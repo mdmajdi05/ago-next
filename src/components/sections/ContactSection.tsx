@@ -120,11 +120,11 @@ export default function ContactSection() {
 <span>support@agoaviation.com</span>
 <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
 </a>
-<a className="hpci-mail" href="mailto:sale@agoaviation.com ">
+<a className="hpci-mail" href="mailto:sale@agoaviation.com">
 <span>sale@agoaviation.com</span>
 <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
 </a>
-<a className="hpci-mail" href="mailto:sale@agoaviation.com ">
+<a className="hpci-mail" href="mailto:sale@agoaviation.com">
 <span>sale@agoaviation.com</span>
 <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
 </a>
