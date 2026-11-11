@@ -44,7 +44,7 @@ export function buildPageMetadata({
   const url = absoluteUrl(path);
   const imageUrl = image ? absoluteUrl(image) : siteConfig.ogImage;
   const alt = imageAlt || siteConfig.logoAlt;
-  const ogTitle = title.includes(siteConfig.name)
+  const ogTitle = /AGO Aviation/i.test(title)
     ? title
     : `${title} | ${siteConfig.name}`;
 
