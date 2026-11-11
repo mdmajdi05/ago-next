@@ -15,6 +15,9 @@ import path from 'path';
 
 const baseUrl = siteConfig.url;
 
+/** Fallback image used when a product has no image of its own. */
+const DEFAULT_IMAGE = '/ago-aviation/product-turbine-blade.jpg';
+
 /**
  * Google accepts at most 50,000 URLs per sitemap file. The catalogue has more
  * than that, so products are split into 10,000-URL chunks and the non-product
@@ -144,12 +147,75 @@ export function productRoutes(id: number): MetadataRoute.Sitemap {
     changeFrequency: 'monthly',
     priority: product.tier === 'A' ? 0.8 : 0.6,
     ...(product.tier === 'A'
-      ? { images: [getProductImage(product)].filter(Boolean) as string[] }
+      ? { images: [absoluteImage(getProductImage(product))] }
       : {}),
   }));
+}
+
+/**
+ * Sitemaps require absolute URLs inside `<image:loc>`. Product images are
+ * stored as root-relative paths, so they are expanded here.
+ */
+function absoluteImage(image?: string): string {
+  if (!image) return `${baseUrl}${DEFAULT_IMAGE}`;
+  if (/^https?:\/\//i.test(image)) return image;
+  return `${baseUrl}${image.startsWith('/') ? '' : '/'}${image}`;
+}
+
+/** Escapes the five XML entities so no value can break the document. */
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
 }
 
 /** Every URL for a given chunk id. */
 export function routesForChunk(id: number): MetadataRoute.Sitemap {
   return id === 0 ? nonProductRoutes() : productRoutes(id);
+}
+
+/**
+ * Renders the sitemap index.
+ *
+ * The index must contain `<sitemap>` entries only. Putting `<url>` entries in
+ * the same document makes it invalid XML and Google rejects it.
+ */
+export function renderSitemapIndex(ids: number[], lastmod: string): string {
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...ids.map(
+      (id) =>
+        `  <sitemap><loc>${escapeXml(`${baseUrl}/sitemap/${id}.xml`)}</loc><lastmod>${escapeXml(lastmod)}</lastmod></sitemap>`
+    ),
+    '</sitemapindex>',
+  ].join('\n');
+}
+
+/** Renders one `<urlset>` chunk, with absolute `<loc>` and `<image:loc>` values. */
+export function renderUrlset(entries: MetadataRoute.Sitemap): string {
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
+    ...entries.flatMap((entry) => {
+      const images = (entry.images ?? [])
+        .map((image) => absoluteImage(image))
+        .map(
+          (image) =>
+            `    <image:image><image:loc>${escapeXml(image)}</image:loc></image:image>`
+        );
+
+      return [
+        '  <url>',
+        `    <loc>${escapeXml(entry.url)}</loc>`,
+        `    <lastmod>${new Date(entry.lastModified ?? Date.now()).toISOString()}</lastmod>`,
+        ...images,
+        '  </url>',
+      ];
+    }),
+    '</urlset>',
+  ].join('\n');
 }
