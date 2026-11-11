@@ -2,6 +2,12 @@ import { generateSitemaps, routesForChunk } from '@/lib/sitemap';
 
 export const revalidate = 86_400;
 
+// Pre-render every chunk at build time so crawlers get a static file instead
+// of a server-rendered response.
+export async function generateStaticParams() {
+  return generateSitemaps().map(({ id }) => ({ id: `${id}.xml` }));
+}
+
 /**
  * Serves one sitemap chunk: `/sitemap/0.xml` holds the non-product routes,
  * `/sitemap/1.xml` … `/sitemap/6.xml` hold the product URLs (10,000 each).
