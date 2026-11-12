@@ -273,13 +273,11 @@ export function productSchema({
         value: 'Available on request',
       },
     ],
-    offers: {
-      '@type': 'Offer',
-      url: absoluteUrl(url),
-      availability: 'https://schema.org/InStock',
-      itemCondition: 'https://schema.org/NewCondition',
-      seller: { '@id': `${siteConfig.url}/#organization` },
-    },
+    // No offers block: Google requires `price` inside an Offer, and this
+    // catalogue is quote-based with no published prices. Emitting a price-less
+    // Offer produced "Product snippets: 1 invalid item" and "Merchant
+    // listings: 1 invalid item" in Search Console. Product markup without an
+    // offer stays valid for product snippets.
     ...(relatedUrls.length > 0
       ? { isSimilarTo: relatedUrls.map((related) => absoluteUrl(related)) }
       : {}),

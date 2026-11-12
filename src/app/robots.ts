@@ -33,7 +33,6 @@ export default function robots(): MetadataRoute.Robots {
           '/api/',
           '/_next/',
           '/legacy-redirect',
-          '/search',
           '/404',
           '/_not-found',
         ],

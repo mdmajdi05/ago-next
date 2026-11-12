@@ -172,6 +172,10 @@ export function middleware(request: NextRequest) {
     if (destination) {
       const url = request.nextUrl.clone();
       url.pathname = destination;
+      // Legacy query strings (for example /products.html?brand=GE) pointed at
+      // filtered pages that are noindex. Drop them so old URLs land on the
+      // canonical indexable page.
+      url.search = '';
       return NextResponse.redirect(url, 301);
     }
 
