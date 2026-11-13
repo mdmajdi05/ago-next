@@ -1,46 +1,67 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 import { categoryService, productService } from '@/services';
-import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { CatalogHero } from '@/components/catalog/catalog-hero';
+import {
+  ListingExplorer,
+  type ListingFacet,
+  type ListingProduct,
+} from '@/components/catalog/listing-explorer';
 import { MIN_PRODUCTS_PER_TYPE_PAGE } from '@/lib/catalog/taxonomy';
 import { getCategoryImage } from '@/lib/catalog/images';
+import { getPartCardImage } from '@/lib/catalog/category-visuals';
+import { slugifyBrand } from '@/services/brandService';
 import {
   breadcrumbSchema,
   buildPageMetadata,
   collectionPageSchema,
 } from '@/lib/seo';
 
-// Cap the number of products rendered on a type page so large types stay
-// fast to build; the full list stays reachable via /products filters.
-const TYPE_PAGE_CAP = 96;
+/** Products per paginated page. 24 = six full rows on the 4-column grid. */
+const PER_PAGE = 24;
 
 interface TypePageProps {
   params: Promise<{ slug: string; type: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export const revalidate = 86_400;
-
-export async function generateStaticParams() {
-  return categoryService.getAll().flatMap((category) =>
-    productService
-      .getTypes(category.slug)
-      .filter((type) => type.count >= MIN_PRODUCTS_PER_TYPE_PAGE)
-      .map((type) => ({ slug: category.slug, type: type.slug }))
-  );
+function toArray(value: string | string[] | undefined): string[] {
+  if (!value) return [];
+  return (Array.isArray(value) ? value : [value]).filter(Boolean);
 }
 
-export async function generateMetadata({
-  params,
-}: TypePageProps): Promise<Metadata> {
-  const { slug, type } = await params;
+function toInt(value: string | string[] | undefined): number {
+  const raw = Array.isArray(value) ? value[0] : value;
+  const parsed = parseInt(raw || '1', 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+}
+
+function getTypeSummary(slug: string, type: string) {
   const category = categoryService.getBySlug(slug);
   const typeSummary = category
     ? productService.getTypes(category.slug).find((item) => item.slug === type)
     : undefined;
+  if (
+    !category ||
+    !typeSummary ||
+    typeSummary.count < MIN_PRODUCTS_PER_TYPE_PAGE
+  ) {
+    return undefined;
+  }
+  return { category, typeSummary };
+}
 
-  if (!category || !typeSummary || typeSummary.count < MIN_PRODUCTS_PER_TYPE_PAGE) {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: TypePageProps): Promise<Metadata> {
+  const { slug, type } = await params;
+  const query = await searchParams;
+  const resolved = getTypeSummary(slug, type);
+
+  if (!resolved) {
     return buildPageMetadata({
       title: 'Page Not Found',
       description: 'The requested part type could not be found.',
@@ -49,49 +70,127 @@ export async function generateMetadata({
     });
   }
 
+  const { category, typeSummary } = resolved;
   const products = productService.getByType(category.slug, typeSummary.slug);
   const brands = Array.from(new Set(products.map((product) => product.brand)));
 
+  const isFiltered = Boolean(query.search || toArray(query.brand).length);
+  const pageCount = Math.max(1, Math.ceil(products.length / PER_PAGE));
+  const page = Math.min(toInt(query.page), pageCount);
+  const pageLabel = page > 1 ? ` – Page ${page} of ${pageCount}` : '';
+
   return buildPageMetadata({
-    title: `${typeSummary.name} – ${typeSummary.count} ${category.name} Part Numbers`,
-    description: `Browse ${typeSummary.count} ${typeSummary.name.toLowerCase()} in the ${category.name.toLowerCase()} range from ${brands.slice(0, 5).join(', ')}. AGO Aviation verifies part numbers, condition and availability, with worldwide quote-based supply.`,
-    path: `/categories/${category.slug}/${typeSummary.slug}`,
+    title:
+      page > 1
+        ? `${typeSummary.name} – ${category.name}${pageLabel}`
+        : `${typeSummary.name} – ${typeSummary.count.toLocaleString('en-US')} ${category.name} Part Numbers`,
+    description: `Browse ${typeSummary.count.toLocaleString('en-US')} ${typeSummary.name.toLowerCase()} in the ${category.name.toLowerCase()} range from ${brands.slice(0, 5).join(', ')}. AGO Aviation verifies part numbers, condition and availability, with worldwide quote-based supply.${pageLabel ? ` Page ${page} of ${pageCount}.` : ''}`,
+    path:
+      isFiltered || page <= 1
+        ? `/categories/${category.slug}/${typeSummary.slug}`
+        : `/categories/${category.slug}/${typeSummary.slug}?page=${page}`,
+    noIndex: isFiltered,
     keywords: [
       `${typeSummary.name} spare parts`,
       `${typeSummary.name.toLowerCase()} ${category.name.toLowerCase()}`,
       `buy ${typeSummary.name.toLowerCase()}`,
-      ...brands.slice(0, 6).map((brand) => `${brand} ${typeSummary.name.toLowerCase()}`),
+      ...brands
+        .slice(0, 6)
+        .map((brand) => `${brand} ${typeSummary.name.toLowerCase()}`),
     ],
     image: getCategoryImage(category.slug),
     imageAlt: `${typeSummary.name} supplied by AGO Aviation`,
   });
 }
 
-export default async function TypePage({ params }: TypePageProps) {
+export default async function TypePage({
+  params,
+  searchParams,
+}: TypePageProps) {
   const { slug, type } = await params;
-  const category = categoryService.getBySlug(slug);
+  const query = await searchParams;
+  const resolved = getTypeSummary(slug, type);
+  if (!resolved) notFound();
 
-  if (!category) notFound();
+  const { category, typeSummary } = resolved;
+  const allProducts = productService.getByType(
+    category.slug,
+    typeSummary.slug,
+  );
 
-  const typeSummary = productService
-    .getTypes(category.slug)
-    .find((item) => item.slug === type);
+  const brandCounts = new Map<string, number>();
+  for (const product of allProducts) {
+    brandCounts.set(product.brand, (brandCounts.get(product.brand) || 0) + 1);
+  }
+  const brands = [...brandCounts.entries()]
+    .map(([name, count]) => ({ name, slug: slugifyBrand(name), count }))
+    .sort((a, b) => b.count - a.count);
 
-  if (!typeSummary || typeSummary.count < MIN_PRODUCTS_PER_TYPE_PAGE) {
-    notFound();
+  const selectedBrands = toArray(query.brand).filter((name) =>
+    brandCounts.has(name),
+  );
+  const search = (
+    Array.isArray(query.search) ? query.search[0] : query.search || ''
+  ).trim();
+  const sort = ['az', 'za', 'brand'].includes(String(query.sort))
+    ? String(query.sort)
+    : 'default';
+
+  let filtered = allProducts;
+  if (selectedBrands.length) {
+    const wanted = new Set(selectedBrands);
+    filtered = filtered.filter((product) => wanted.has(product.brand));
+  }
+  if (search) {
+    const needle = search.toLowerCase();
+    filtered = filtered.filter((product) =>
+      `${product.displayTitle} ${product.partNumber} ${product.brand}`
+        .toLowerCase()
+        .includes(needle),
+    );
   }
 
-  const products = productService.getByType(category.slug, typeSummary.slug);
+  if (sort === 'az') {
+    filtered = [...filtered].sort((a, b) =>
+      a.displayTitle.localeCompare(b.displayTitle),
+    );
+  } else if (sort === 'za') {
+    filtered = [...filtered].sort((a, b) =>
+      b.displayTitle.localeCompare(a.displayTitle),
+    );
+  } else if (sort === 'brand') {
+    filtered = [...filtered].sort(
+      (a, b) =>
+        a.brand.localeCompare(b.brand) ||
+        a.partNumber.localeCompare(b.partNumber),
+    );
+  }
 
-  const displayProducts = products.slice(0, TYPE_PAGE_CAP);
-  const showViewMore = products.length > TYPE_PAGE_CAP;
+  const totalMatches = filtered.length;
+  const pageCount = Math.max(1, Math.ceil(totalMatches / PER_PAGE));
+  const page = Math.min(toInt(query.page), pageCount);
+  const pageItems = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
-  const breadcrumbs = [
-    { label: 'Products', href: '/products' },
-    { label: category.name, href: `/categories/${category.slug}` },
+  const products: ListingProduct[] = pageItems.map((product) => ({
+    slug: product.slug,
+    title: product.displayTitle,
+    partNumber: product.partNumber,
+    brand: product.brand,
+    type: product.type,
+    image: getPartCardImage(product.partNumber, product.typeSlug),
+  }));
+
+  const facets: ListingFacet[] = [
     {
-      label: typeSummary.name,
-      href: `/categories/${category.slug}/${typeSummary.slug}`,
+      label: 'Brands',
+      param: 'brand',
+      options: brands.map((brand) => ({
+        value: brand.name,
+        label: brand.name,
+        count: brand.count,
+      })),
+      selected: selectedBrands,
+      preview: 8,
     },
   ];
 
@@ -109,74 +208,115 @@ export default async function TypePage({ params }: TypePageProps) {
       name: `${typeSummary.name} – ${category.name}`,
       description: `${typeSummary.count} ${typeSummary.name.toLowerCase()} part numbers in the ${category.name} range.`,
       path: `/categories/${category.slug}/${typeSummary.slug}`,
-      items: products
-        .slice(0, 50)
-        .map((product) => ({
-          name: `${product.brand} ${product.partNumber}`,
-          url: `/products/${product.slug}`,
-        })),
+      items: pageItems.map((product) => ({
+        name: `${product.brand} ${product.partNumber}`,
+        url: `/products/${product.slug}`,
+      })),
     }),
   ];
 
+  const allCategories = categoryService.getAll();
+  const filtersActive = selectedBrands.length > 0 || search.length > 0;
+
   return (
-    <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#f5f8fb] text-[#09233b] leading-[normal]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(schema).replace(/</g, '\\u003c'),
         }}
       />
-      <Breadcrumbs items={breadcrumbs} />
 
-      <header className="mt-4 rounded-2xl border border-line bg-slate-50 p-6 sm:p-8">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-          {category.name}
-        </p>
-        <h1 className="mt-2 text-3xl font-bold text-primary">
-          {typeSummary.name}
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted">
-          Browse {typeSummary.count} {typeSummary.name.toLowerCase()} part
-          numbers supplied by AGO Aviation. Send your requirement for
-          availability, condition and quotation.
-        </p>
-        <Link
-          href={`/categories/${category.slug}`}
-          className="mt-4 inline-block text-sm font-bold text-[#b77b1c] hover:underline"
-        >
-          ← Back to {category.name}
-        </Link>
-      </header>
+      <CatalogHero
+        breadcrumbs={[
+          { label: 'Products', href: '/products' },
+          { label: category.name, href: `/categories/${category.slug}` },
+          { label: typeSummary.name },
+        ]}
+        title={typeSummary.name}
+        description={
+          <>
+            {typeSummary.count.toLocaleString('en-US')}{' '}
+            {typeSummary.name.toLowerCase()} part numbers in the {category.name}{' '}
+            range, supplied by {brands.length}{' '}
+            {brands.length === 1 ? 'brand' : 'brands'} worldwide on request.
+          </>
+        }
+        categories={allCategories}
+        searchDefault={search}
+        categoryDefault={category.name}
+        hiddenParams={{ type: typeSummary.slug }}
+        ribbonTitle={
+          <>
+            {category.name}
+            <br />
+            {typeSummary.name}
+          </>
+        }
+      />
 
-      <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {displayProducts.map((product) => (
-          <li key={product.slug}>
-            <Link
-              href={`/products/${product.slug}`}
-              className="block h-full rounded-xl border border-line bg-white p-4 transition-colors hover:border-primary"
-            >
-              <p className="line-clamp-2 text-sm font-semibold text-primary">
-                {product.displayTitle}
-              </p>
-              <p className="mt-1 font-mono text-xs text-muted">
-                {product.partNumber}
-              </p>
-              <p className="mt-1 text-xs text-muted">{product.brand}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {showViewMore && (
-        <p className="mt-4 text-sm text-muted">
-          Showing {TYPE_PAGE_CAP} of {products.length} products.{" "}
-          <Link
-            href={`/products?category=${slug}&type=${typeSummary.slug}`}
-            className="text-primary hover:underline"
-          >
-            View all {typeSummary.name} parts
-          </Link>
-        </p>
-      )}
+      <ListingExplorer
+        basePath={`/categories/${category.slug}/${typeSummary.slug}`}
+        entityName={typeSummary.name}
+        entityShort={typeSummary.name}
+        icon={category.icon || 'Package'}
+        overview={`${typeSummary.name} part numbers in the ${category.name} range, verified against your requirement and quoted on request.`}
+        overviewTitle="Type Overview"
+        totalCount={allProducts.length}
+        products={products}
+        totalMatches={totalMatches}
+        page={page}
+        pageCount={pageCount}
+        perPage={PER_PAGE}
+        facets={facets}
+        search={search}
+        sort={sort}
+        resultsTitle={`${filtersActive ? 'Matching' : 'Available'} ${typeSummary.name}`}
+        helpTitle={`Need Help Sourcing ${typeSummary.name}?`}
+        helpText={`Send us the part number and our ${category.short.toLowerCase()} team will verify availability and condition.`}
+      />
+
+      <section className="mx-auto max-w-[1440px] px-5 pb-14">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8">
+          <h2 className="text-xl font-extrabold text-[#102d50]">
+            Brands supplying {typeSummary.name}
+          </h2>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {brands.map((brand) => (
+              <li key={brand.slug}>
+                <Link
+                  href={`/brands/${brand.slug}`}
+                  className="inline-block rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-[#24455f] transition hover:border-blue-300 hover:bg-blue-50"
+                >
+                  {brand.name} ({brand.count.toLocaleString('en-US')})
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <h2 className="mt-8 text-xl font-extrabold text-[#102d50]">
+            Continue browsing
+          </h2>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            <li>
+              <Link
+                href={`/categories/${category.slug}`}
+                className="inline-block rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-[#24455f] transition hover:border-blue-300 hover:bg-blue-50"
+              >
+                All {category.name} →
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/products"
+                className="inline-block rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-[#24455f] transition hover:border-blue-300 hover:bg-blue-50"
+              >
+                Full catalogue →
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </section>
     </main>
   );
 }

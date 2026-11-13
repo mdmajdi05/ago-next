@@ -7,8 +7,8 @@ import {
   ArrowRight,
   CheckCircle2,
   ChevronDown,
-  ChevronUp,
   ChevronRight,
+  ChevronUp,
   Cog,
   Cpu,
   Filter,
@@ -34,7 +34,7 @@ import {
   Zap,
 } from 'lucide-react';
 
-export interface ExplorerProduct {
+export interface ListingProduct {
   slug: string;
   title: string;
   partNumber: string;
@@ -43,43 +43,58 @@ export interface ExplorerProduct {
   image?: string;
 }
 
-export interface ExplorerType {
+export interface ListingTile {
   slug: string;
   name: string;
   count: number;
   href: string;
   image?: string;
+  /** Lucide icon name to use when no illustration exists. */
+  icon?: string;
 }
 
-export interface ExplorerBrand {
-  slug: string;
-  name: string;
+export interface ListingFacetOption {
+  value: string;
+  label: string;
   count: number;
 }
 
-interface CategoryExplorerProps {
-  categoryName: string;
-  categoryShort: string;
-  categorySlug: string;
+export interface ListingFacet {
+  label: string;
+  /** Query-string key, e.g. `brand`, `type`, `category`. */
+  param: string;
+  options: ListingFacetOption[];
+  selected: string[];
+  /** Collapse long option lists behind "Show more" (default: 5). */
+  preview?: number;
+}
+
+interface ListingExplorerProps {
+  /** Base URL for filters/pagination, e.g. `/brands/ge`. */
+  basePath: string;
+  entityName: string;
+  entityShort: string;
   icon: string;
-  /** Total parts in the category (not just this page). */
+  overview: string;
+  overviewTitle?: string;
+  /** Total parts before filtering. */
   totalCount: number;
   /** Parts on the current page. */
-  products: ExplorerProduct[];
+  products: ListingProduct[];
   totalMatches: number;
   page: number;
   pageCount: number;
   perPage: number;
-  types: ExplorerType[];
-  tiles: ExplorerType[];
-  brands: ExplorerBrand[];
-  selectedBrands: string[];
-  selectedTypes: string[];
+  facets: ListingFacet[];
+  tiles?: ListingTile[];
   search: string;
   sort: string;
+  resultsTitle: string;
+  /** Show the brand badge/column (hidden on brand pages). */
+  showBrand?: boolean;
+  helpTitle?: string;
+  helpText?: string;
 }
-
-const BRAND_PREVIEW = 5;
 
 function slugify(value: string) {
   return value
@@ -134,10 +149,7 @@ function CategoryGlyph({
   }
 }
 
-/**
- * Picks a distinguishing icon for a part type so icon-only tiles do not all
- * look the same. Falls back to the category icon.
- */
+/** Picks a distinguishing icon so icon-only tiles do not all look the same. */
 function resolveTypeIcon(slug: string, fallback: string): string {
   if (/sensor|probe|detector|analyser|analyzer|flame/.test(slug)) return 'Radar';
   if (/transmitter/.test(slug)) return 'Radio';
@@ -154,43 +166,49 @@ function resolveTypeIcon(slug: string, fallback: string): string {
   return fallback;
 }
 
-interface HrefOverrides {
-  brands?: string[];
-  types?: string[];
+interface HrefOptions {
+  /** Facet param -> values. Unlisted facets keep their current selection. */
+  params?: Record<string, string[]>;
   search?: string;
   sort?: string;
   page?: number;
 }
 
-export function CategoryExplorer({
-  categoryName,
-  categoryShort,
-  categorySlug,
+export function ListingExplorer({
+  basePath,
+  entityName,
+  entityShort,
   icon,
+  overview,
+  overviewTitle = 'Category Overview',
   totalCount,
   products,
   totalMatches,
   page,
   pageCount,
   perPage,
-  types,
-  tiles,
-  brands,
-  selectedBrands,
-  selectedTypes,
+  facets,
+  tiles = [],
   search,
   sort,
-}: CategoryExplorerProps) {
+  resultsTitle,
+  showBrand = true,
+  helpTitle,
+  helpText,
+}: ListingExplorerProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const [searchInput, setSearchInput] = useState(search);
   const [view, setView] = useState<'grid' | 'table'>('grid');
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [showAllBrands, setShowAllBrands] = useState(false);
+  const [expandedFacets, setExpandedFacets] = useState<Record<string, boolean>>(
+    {},
+  );
+  const [collapsedFacets, setCollapsedFacets] = useState<Record<string, boolean>>(
+    {},
+  );
   const [mobileFilters, setMobileFilters] = useState(false);
-  const [brandOpen, setBrandOpen] = useState(true);
-  const [typeOpen, setTypeOpen] = useState(true);
 
   // Keep the input in sync when filters are cleared via a link.
   useEffect(() => {
@@ -198,27 +216,24 @@ export function CategoryExplorer({
   }, [search]);
 
   const filtersActive =
-    selectedBrands.length > 0 || selectedTypes.length > 0 || search.length > 0;
+    facets.some((facet) => facet.selected.length > 0) || search.length > 0;
 
-  /** Builds a category URL from the current filters plus any overrides. */
-  const buildHref = (overrides: HrefOverrides = {}) => {
-    const nextBrands = overrides.brands ?? selectedBrands;
-    const nextTypes = overrides.types ?? selectedTypes;
-    const nextSearch = overrides.search ?? search;
-    const nextSort = overrides.sort ?? sort;
-    const nextPage = overrides.page ?? page;
+  const buildHref = (options: HrefOptions = {}) => {
+    const nextSearch = options.search ?? search;
+    const nextSort = options.sort ?? sort;
+    const nextPage = options.page ?? page;
 
     const params = new URLSearchParams();
     if (nextSearch) params.set('search', nextSearch);
-    nextBrands.forEach((brand) => params.append('brand', brand));
-    nextTypes.forEach((type) => params.append('type', type));
+    for (const facet of facets) {
+      const values = options.params?.[facet.param] ?? facet.selected;
+      values.forEach((value) => params.append(facet.param, value));
+    }
     if (nextSort && nextSort !== 'default') params.set('sort', nextSort);
     if (nextPage > 1) params.set('page', String(nextPage));
 
     const queryString = params.toString();
-    return queryString
-      ? `/categories/${categorySlug}?${queryString}`
-      : `/categories/${categorySlug}`;
+    return queryString ? `${basePath}?${queryString}` : basePath;
   };
 
   const navigate = (href: string) => {
@@ -227,18 +242,11 @@ export function CategoryExplorer({
     });
   };
 
-  const toggleBrand = (name: string) => {
-    const next = selectedBrands.includes(name)
-      ? selectedBrands.filter((item) => item !== name)
-      : [...selectedBrands, name];
-    navigate(buildHref({ brands: next, page: 1 }));
-  };
-
-  const toggleType = (slug: string) => {
-    const next = selectedTypes.includes(slug)
-      ? selectedTypes.filter((item) => item !== slug)
-      : [...selectedTypes, slug];
-    navigate(buildHref({ types: next, page: 1 }));
+  const toggleFacet = (facet: ListingFacet, value: string) => {
+    const next = facet.selected.includes(value)
+      ? facet.selected.filter((item) => item !== value)
+      : [...facet.selected, value];
+    navigate(buildHref({ params: { [facet.param]: next }, page: 1 }));
   };
 
   const submitSearch = (value: string) => {
@@ -253,7 +261,6 @@ export function CategoryExplorer({
     );
   };
 
-  const brandOptions = showAllBrands ? brands : brands.slice(0, BRAND_PREVIEW);
   const rangeStart = totalMatches === 0 ? 0 : (page - 1) * perPage + 1;
   const rangeEnd = totalMatches === 0 ? 0 : rangeStart + products.length - 1;
 
@@ -298,11 +305,10 @@ export function CategoryExplorer({
           <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-center gap-3">
               <Settings size={25} className="text-[#12549a]" />
-              <h2 className="font-bold">Category Overview</h2>
+              <h2 className="font-bold">{overviewTitle}</h2>
             </div>
             <p className="mt-3 pl-9 text-xs leading-relaxed text-slate-600">
-              OEM, aftermarket and legacy {categoryShort.toLowerCase()} part
-              numbers, verified against your requirement and quoted on request.
+              {overview}
             </p>
             <div className="mt-4 flex items-center gap-3 rounded-xl bg-orange-50 px-4 py-3">
               <Layers size={25} className="text-[#13549a]" />
@@ -320,7 +326,7 @@ export function CategoryExplorer({
               </div>
               {filtersActive && (
                 <Link
-                  href={`/categories/${categorySlug}`}
+                  href={basePath}
                   className="text-xs font-semibold text-blue-600 underline"
                 >
                   Clear All
@@ -339,8 +345,8 @@ export function CategoryExplorer({
               <input
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}
-                placeholder={`Search within ${categoryShort}...`}
-                aria-label={`Search within ${categoryName}`}
+                placeholder={`Search within ${entityShort}...`}
+                aria-label={`Search within ${entityName}`}
                 className="ml-2 w-full bg-transparent text-xs outline-none"
               />
               {searchInput && (
@@ -358,90 +364,76 @@ export function CategoryExplorer({
               )}
             </form>
 
-            {brands.length > 0 && (
-              <div className="border-b border-slate-200 pb-4">
-                <button
-                  type="button"
-                  onClick={() => setBrandOpen(!brandOpen)}
-                  className="flex w-full items-center justify-between text-sm font-bold"
-                >
-                  Brands
-                  {brandOpen ? (
-                    <ChevronUp size={17} />
-                  ) : (
-                    <ChevronDown size={17} />
-                  )}
-                </button>
-                {brandOpen && (
-                  <div className="mt-3 space-y-2">
-                    {brandOptions.map((brand) => (
-                      <label
-                        key={brand.slug}
-                        className="flex cursor-pointer items-center gap-2 text-xs text-slate-700"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedBrands.includes(brand.name)}
-                          onChange={() => toggleBrand(brand.name)}
-                          className="h-4 w-4 accent-blue-700"
-                        />
-                        <span>{brand.name}</span>
-                        <span className="text-slate-400">
-                          ({brand.count.toLocaleString('en-US')})
-                        </span>
-                      </label>
-                    ))}
-                    {brands.length > BRAND_PREVIEW && (
-                      <button
-                        type="button"
-                        onClick={() => setShowAllBrands(!showAllBrands)}
-                        className="text-xs font-bold text-blue-600"
-                      >
-                        {showAllBrands ? '− Show Less' : '+ Show More'}
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+            {facets.map((facet) => {
+              const preview = facet.preview ?? 5;
+              const expanded = expandedFacets[facet.param];
+              const collapsed = collapsedFacets[facet.param];
+              const options = expanded
+                ? facet.options
+                : facet.options.slice(0, preview);
 
-            {types.length > 0 && (
-              <div className="pt-4">
-                <button
-                  type="button"
-                  onClick={() => setTypeOpen(!typeOpen)}
-                  className="flex w-full items-center justify-between text-sm font-bold"
+              return (
+                <div
+                  key={facet.param}
+                  className="border-t border-slate-200 pt-4 first:border-t-0 first:pt-0 [&+&]:mt-4"
                 >
-                  Part Types
-                  {typeOpen ? (
-                    <ChevronUp size={17} />
-                  ) : (
-                    <ChevronDown size={17} />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCollapsedFacets((current) => ({
+                        ...current,
+                        [facet.param]: !current[facet.param],
+                      }))
+                    }
+                    aria-expanded={!collapsed}
+                    className="flex w-full items-center justify-between text-sm font-bold"
+                  >
+                    {facet.label}
+                    {collapsed ? (
+                      <ChevronDown size={17} />
+                    ) : (
+                      <ChevronUp size={17} />
+                    )}
+                  </button>
+
+                  {!collapsed && (
+                    <div className="mt-3 space-y-2">
+                      {options.map((option) => (
+                        <label
+                          key={option.value}
+                          className="flex cursor-pointer items-start gap-2 text-xs text-slate-700"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={facet.selected.includes(option.value)}
+                            onChange={() => toggleFacet(facet, option.value)}
+                            className="mt-0.5 h-4 w-4 accent-blue-700"
+                          />
+                          <span>{option.label}</span>
+                          <span className="shrink-0 text-slate-400">
+                            ({option.count.toLocaleString('en-US')})
+                          </span>
+                        </label>
+                      ))}
+                      {facet.options.length > preview && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setExpandedFacets((current) => ({
+                              ...current,
+                              [facet.param]: !current[facet.param],
+                            }))
+                          }
+                          className="text-xs font-bold text-blue-600"
+                        >
+                          {expanded ? '− Show Less' : '+ Show More'}
+                        </button>
+                      )}
+                    </div>
                   )}
-                </button>
-                {typeOpen && (
-                  <div className="mt-3 space-y-2">
-                    {types.map((type) => (
-                      <label
-                        key={type.slug}
-                        className="flex cursor-pointer items-start gap-2 text-xs text-slate-700"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedTypes.includes(type.slug)}
-                          onChange={() => toggleType(type.slug)}
-                          className="mt-0.5 h-4 w-4 accent-blue-700"
-                        />
-                        <span>{type.name}</span>
-                        <span className="shrink-0 text-slate-400">
-                          ({type.count.toLocaleString('en-US')})
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+                </div>
+              );
+            })}
           </div>
 
           <div className="rounded-2xl bg-gradient-to-br from-[#07528b] to-[#082b4c] p-5 text-white shadow-md">
@@ -449,10 +441,11 @@ export function CategoryExplorer({
               <Headphones size={30} className="shrink-0" />
               <div>
                 <h3 className="text-lg font-bold leading-tight">
-                  Need Help Finding the Right Part?
+                  {helpTitle || 'Need Help Finding the Right Part?'}
                 </h3>
                 <p className="mt-2 text-xs text-blue-100">
-                  Our {categoryShort} specialists are here to assist you.
+                  {helpText ||
+                    `Our ${entityShort} specialists are here to assist you.`}
                 </p>
                 <Link
                   href="/contact"
@@ -469,7 +462,7 @@ export function CategoryExplorer({
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl font-extrabold tracking-tight md:text-[27px]">
-                Explore <span className="text-blue-700">{categoryName}</span>
+                Explore <span className="text-blue-700">{entityName}</span>
               </h2>
               <div className="mt-2 h-1 w-16 rounded-full bg-orange-400" />
             </div>
@@ -509,41 +502,45 @@ export function CategoryExplorer({
             </div>
           </div>
 
-          <div className="mb-7 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
-            {tiles.map((type) => (
-              <Link
-                key={type.slug}
-                href={type.href}
-                className="group flex min-h-[140px] flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-3 text-center transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-lg"
-              >
-                {type.image ? (
-                  <img
-                    src={type.image}
-                    alt=""
-                    loading="lazy"
-                    className="mb-2 h-[75px] w-full object-contain transition group-hover:scale-105"
-                  />
-                ) : (
-                  <span className="mb-2 flex h-[75px] w-full items-center justify-center text-[#12549a] opacity-80">
-                    <CategoryGlyph name={resolveTypeIcon(type.slug, icon)} />
+          {tiles.length > 0 && (
+            <div className="mb-7 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
+              {tiles.map((tile) => (
+                <Link
+                  key={tile.slug}
+                  href={tile.href}
+                  className="group flex min-h-[140px] flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-3 text-center transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-lg"
+                >
+                  {tile.image ? (
+                    <img
+                      src={tile.image}
+                      alt=""
+                      loading="lazy"
+                      className="mb-2 h-[75px] w-full object-contain transition group-hover:scale-105"
+                    />
+                  ) : (
+                    <span className="mb-2 flex h-[75px] w-full items-center justify-center text-[#12549a] opacity-80">
+                      <CategoryGlyph
+                        name={
+                          tile.icon || resolveTypeIcon(tile.slug, icon) || icon
+                        }
+                      />
+                    </span>
+                  )}
+                  <span className="text-xs font-bold leading-tight text-[#12365e]">
+                    {tile.name}
                   </span>
-                )}
-                <span className="text-xs font-bold leading-tight text-[#12365e]">
-                  {type.name}
-                </span>
-                <span className="mt-1 text-[10px] text-slate-500">
-                  {type.count.toLocaleString('en-US')}{' '}
-                  {type.count === 1 ? 'part' : 'parts'}
-                </span>
-              </Link>
-            ))}
-          </div>
+                  <span className="mt-1 text-[10px] text-slate-500">
+                    {tile.count.toLocaleString('en-US')}{' '}
+                    {tile.count === 1 ? 'part' : 'parts'}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
 
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 className="text-xl font-extrabold">
-                {filtersActive ? 'Matching' : 'Available'} {categoryName}
-              </h2>
+              <h2 className="text-xl font-extrabold">{resultsTitle}</h2>
               <div className="mt-2 h-1 w-16 rounded-full bg-orange-400" />
               <p className="mt-2 text-xs text-slate-500" aria-live="polite">
                 Showing{' '}
@@ -560,9 +557,7 @@ export function CategoryExplorer({
                 <select
                   value={sort}
                   onChange={(event) =>
-                    navigate(
-                      buildHref({ sort: event.target.value, page: 1 }),
-                    )
+                    navigate(buildHref({ sort: event.target.value, page: 1 }))
                   }
                   aria-label="Sort products"
                   className="ml-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-[#09233b]"
@@ -570,7 +565,7 @@ export function CategoryExplorer({
                   <option value="default">Default</option>
                   <option value="az">Name: A to Z</option>
                   <option value="za">Name: Z to A</option>
-                  <option value="brand">Brand: A to Z</option>
+                  {showBrand && <option value="brand">Brand: A to Z</option>}
                 </select>
               </label>
             </div>
@@ -578,33 +573,29 @@ export function CategoryExplorer({
 
           {filtersActive && (
             <div className="mb-4 flex flex-wrap items-center gap-2">
-              {selectedBrands.map((brand) => (
-                <Link
-                  key={`brand-${brand}`}
-                  href={buildHref({
-                    brands: selectedBrands.filter((item) => item !== brand),
-                    page: 1,
-                  })}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-xs text-blue-700 hover:bg-blue-100"
-                >
-                  {brand} <X size={12} />
-                </Link>
-              ))}
-              {selectedTypes.map((typeSlug) => {
-                const type = types.find((item) => item.slug === typeSlug);
-                return (
-                  <Link
-                    key={`type-${typeSlug}`}
-                    href={buildHref({
-                      types: selectedTypes.filter((item) => item !== typeSlug),
-                      page: 1,
-                    })}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-xs text-blue-700 hover:bg-blue-100"
-                  >
-                    {type?.name || typeSlug} <X size={12} />
-                  </Link>
-                );
-              })}
+              {facets.flatMap((facet) =>
+                facet.selected.map((value) => {
+                  const option = facet.options.find(
+                    (item) => item.value === value,
+                  );
+                  return (
+                    <Link
+                      key={`${facet.param}-${value}`}
+                      href={buildHref({
+                        params: {
+                          [facet.param]: facet.selected.filter(
+                            (item) => item !== value,
+                          ),
+                        },
+                        page: 1,
+                      })}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-xs text-blue-700 hover:bg-blue-100"
+                    >
+                      {option?.label || value} <X size={12} />
+                    </Link>
+                  );
+                }),
+              )}
               {search && (
                 <Link
                   href={buildHref({ search: '', page: 1 })}
@@ -614,7 +605,7 @@ export function CategoryExplorer({
                 </Link>
               )}
               <Link
-                href={`/categories/${categorySlug}`}
+                href={basePath}
                 className="text-xs font-bold text-red-500"
               >
                 Clear filters
@@ -637,14 +628,14 @@ export function CategoryExplorer({
                 </p>
                 <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
                   <Link
-                    href={`/categories/${categorySlug}`}
+                    href={basePath}
                     className="rounded-lg bg-blue-700 px-5 py-2 text-xs font-bold text-white"
                   >
                     Clear All Filters
                   </Link>
                   {search && (
                     <Link
-                      href={`/products?category=${categorySlug}&search=${encodeURIComponent(search)}`}
+                      href={`/products?search=${encodeURIComponent(search)}`}
                       className="rounded-lg border border-blue-700 px-5 py-2 text-xs font-bold text-blue-700"
                     >
                       Search full catalogue
@@ -711,14 +702,16 @@ export function CategoryExplorer({
                       <p className="mt-1 truncate text-[11px] text-slate-500">
                         {product.partNumber}
                       </p>
-                      <div className="mt-2">
-                        <Link
-                          href={`/brands/${slugify(product.brand)}`}
-                          className="inline-flex rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700 hover:border-blue-400"
-                        >
-                          {product.brand}
-                        </Link>
-                      </div>
+                      {showBrand && (
+                        <div className="mt-2">
+                          <Link
+                            href={`/brands/${slugify(product.brand)}`}
+                            className="inline-flex rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700 hover:border-blue-400"
+                          >
+                            {product.brand}
+                          </Link>
+                        </div>
+                      )}
                       <div className="mt-2 flex items-center gap-1 text-[11px] font-semibold text-slate-500">
                         <CheckCircle2 size={13} className="text-green-600" />
                         Available on request
@@ -737,8 +730,8 @@ export function CategoryExplorer({
               <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
                 <table className="w-full min-w-[860px] border-collapse text-left text-xs">
                   <caption className="sr-only">
-                    {categoryName} part numbers with brand, type, availability
-                    and links to request a quote.
+                    {entityName} part numbers with part type, availability and
+                    links to request a quote.
                   </caption>
                   <thead className="bg-[#f1f6fa] text-[11px] uppercase tracking-[0.4px] text-[#40576b]">
                     <tr>
@@ -751,9 +744,11 @@ export function CategoryExplorer({
                       <th scope="col" className="px-4 py-3 font-bold">
                         Description
                       </th>
-                      <th scope="col" className="px-4 py-3 font-bold">
-                        Brand
-                      </th>
+                      {showBrand && (
+                        <th scope="col" className="px-4 py-3 font-bold">
+                          Brand
+                        </th>
+                      )}
                       <th scope="col" className="px-4 py-3 font-bold">
                         Type
                       </th>
@@ -787,14 +782,16 @@ export function CategoryExplorer({
                             {product.title}
                           </Link>
                         </td>
-                        <td className="whitespace-nowrap px-4 py-3">
-                          <Link
-                            href={`/brands/${slugify(product.brand)}`}
-                            className="inline-flex rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700 hover:border-blue-400"
-                          >
-                            {product.brand}
-                          </Link>
-                        </td>
+                        {showBrand && (
+                          <td className="whitespace-nowrap px-4 py-3">
+                            <Link
+                              href={`/brands/${slugify(product.brand)}`}
+                              className="inline-flex rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700 hover:border-blue-400"
+                            >
+                              {product.brand}
+                            </Link>
+                          </td>
+                        )}
                         <td className="px-4 py-3 text-slate-600">
                           {product.type}
                         </td>
@@ -859,7 +856,7 @@ export function CategoryExplorer({
           {pageCount > 1 && (
             <nav
               className="mt-6 flex flex-wrap items-center justify-center gap-1.5"
-              aria-label={`${categoryName} pagination`}
+              aria-label={`${entityName} pagination`}
             >
               {page > 1 && (
                 <Link
@@ -910,7 +907,7 @@ export function CategoryExplorer({
           {pageCount > 1 && (
             <p className="mt-3 text-center text-xs text-slate-500">
               Page {page} of {pageCount.toLocaleString('en-US')} ·{' '}
-              {totalMatches.toLocaleString('en-US')} parts in {categoryName}
+              {totalMatches.toLocaleString('en-US')} parts in {entityName}
             </p>
           )}
 
@@ -936,4 +933,4 @@ export function CategoryExplorer({
   );
 }
 
-export default CategoryExplorer;
+export default ListingExplorer;
