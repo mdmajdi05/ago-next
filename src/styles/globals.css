@@ -895,6 +895,11 @@
   justify-content: flex-end;
 }
 
+/* Mobile-only search row inside the collapsible nav drawer. */
+.nav-search {
+  display: none;
+}
+
 .search-bar {
   width: 250px;
 }
@@ -1181,6 +1186,10 @@
 
   .header-search {
     display: none;
+  }
+
+  .nav-search {
+    display: block;
   }
 }
 

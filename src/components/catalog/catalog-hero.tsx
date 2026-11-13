@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { LiveSearch } from '@/components/search/live-search';
 
 export interface CatalogHeroCrumb {
   label: string;
@@ -55,7 +56,7 @@ export function CatalogHero({
   image = DEFAULT_IMAGE,
 }: CatalogHeroProps) {
   return (
-    <section className="relative h-[500px] min-h-[500px] overflow-hidden bg-[#06263b] text-white md:h-[350px] md:min-h-[350px]">
+    <section className="relative h-[500px] min-h-[500px] overflow-visible bg-[#06263b] text-white md:h-[350px] md:min-h-[350px]">
       <div
         className="absolute inset-0 bg-cover bg-center md:hidden"
         style={{
@@ -103,48 +104,13 @@ export function CatalogHero({
           {description}
         </p>
 
-        <form
-          action="/products"
-          method="GET"
-          role="search"
-          className="mt-4 flex min-h-12 w-full flex-wrap overflow-hidden rounded-[10px] bg-white text-[#09233b] md:h-12 md:w-[min(690px,65vw)] md:flex-nowrap"
-        >
-          {hiddenParams &&
-            Object.entries(hiddenParams).map(([name, value]) => (
-              <input key={name} type="hidden" name={name} value={value} />
-            ))}
-
-          <select
-            name="category"
-            defaultValue={categoryDefault}
-            aria-label="Product category"
-            className="h-11 max-w-[125px] border-r border-[#dce4eb] bg-white px-2 text-[11px] font-bold outline-none md:h-full md:max-w-none md:px-4 md:text-[13px]"
-          >
-            <option value="">All Products</option>
-            {categories.map((item) => (
-              <option key={item.slug} value={item.name}>
-                {item.short}
-              </option>
-            ))}
-          </select>
-
-          <input
-            type="search"
-            name="search"
-            defaultValue={searchDefault}
-            placeholder="Search by Part Number, Product Name or OEM..."
-            aria-label="Search products"
-            className="h-11 min-w-0 flex-1 px-2.5 text-[11px] outline-none md:h-full md:px-4 md:text-[13px]"
-          />
-
-          <button
-            type="submit"
-            aria-label="Search"
-            className="h-11 w-12 bg-[#ffc45b] text-[30px] leading-none md:h-full md:w-[66px]"
-          >
-            ⌕
-          </button>
-        </form>
+        <LiveSearch
+          variant="hero"
+          defaultValue={searchDefault}
+          categories={categories}
+          categoryDefault={categoryDefault}
+          hiddenParams={hiddenParams}
+        />
 
         <div className="mt-5 flex flex-wrap gap-x-3 gap-y-3 md:gap-x-8">
           <div className="flex items-center gap-1.5 border-r border-white/30 pr-2.5 last:border-0 md:gap-3 md:pr-[30px]">

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { TopBar } from './topBar';
+import { LiveSearch } from '@/components/search/live-search';
 import type { CatalogMenuData, CatalogMenuSection } from '@/lib/catalog/menu';
 
 const navLinks = [
@@ -129,6 +130,11 @@ export function Header({ catalogMenu }: { catalogMenu: CatalogMenuData }) {
                 className={`site-nav relative max-[1024px]:max-h-[calc(100vh-110px)] max-[1024px]:overflow-y-auto ${menuOpen ? 'site-nav--open' : 'site-nav--closed'}`}
               >
                 <ul className="nav-list">
+                  <li className="nav-item">
+                    <div className="nav-search">
+                      <LiveSearch placeholder="Search part number or brand" />
+                    </div>
+                  </li>
                   {navLinks.map((link) => {
                     const active = isActivePath(pathname, link.href);
                     const mega: MegaKey | null =
@@ -289,18 +295,7 @@ export function Header({ catalogMenu }: { catalogMenu: CatalogMenuData }) {
 
             <div className="header-search">
               <div className="search-bar">
-                <form className="search-form" action="/products" method="get" role="search">
-                  <input
-                    type="search"
-                    placeholder="Search here"
-                    name="search"
-                    className="search-input"
-                    aria-label="Search spare parts"
-                  />
-                  <button type="submit" className="search-btn" aria-label="Search">
-                    <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-                  </button>
-                </form>
+                <LiveSearch placeholder="Search here" />
               </div>
             </div>
           </div>

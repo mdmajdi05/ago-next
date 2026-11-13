@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { siteConfig } from '@/config/site';
 import { getAll as getAllCategories } from '@/services/categoryService';
+import { LiveSearch } from '@/components/search/live-search';
 
 export interface NavLink {
   title: string;
@@ -80,6 +81,10 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
               >
                 <i className="fa-solid fa-xmark"></i>
               </button>
+            </div>
+
+            <div className="px-6 pt-5">
+              <LiveSearch placeholder="Search part number or brand" />
             </div>
 
             <nav className="flex-1 space-y-0" aria-label="Mobile navigation">

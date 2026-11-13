@@ -200,6 +200,7 @@ export function ListingExplorer({
   const [isPending, startTransition] = useTransition();
 
   const [searchInput, setSearchInput] = useState(search);
+  const [typedSearch, setTypedSearch] = useState(false);
   const [view, setView] = useState<'grid' | 'table'>('grid');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [expandedFacets, setExpandedFacets] = useState<Record<string, boolean>>(
@@ -252,6 +253,35 @@ export function ListingExplorer({
   const submitSearch = (value: string) => {
     navigate(buildHref({ search: value.trim(), page: 1 }));
   };
+
+  // Live-filter the listing as the visitor types: debounce, then replace the
+  // URL so the server re-renders the results without a full page reload.
+  useEffect(() => {
+    if (!typedSearch) return;
+
+    const value = searchInput.trim();
+    if (value === search) return;
+
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams();
+      if (value) params.set('search', value);
+      for (const facet of facets) {
+        facet.selected.forEach((item) => params.append(facet.param, item));
+      }
+      if (sort && sort !== 'default') params.set('sort', sort);
+      const queryString = params.toString();
+      startTransition(() => {
+        router.replace(queryString ? `${basePath}?${queryString}` : basePath, {
+          scroll: false,
+        });
+      });
+    }, 350);
+
+    return () => clearTimeout(timer);
+    // Intentionally keyed on the typed value only: `facets`, `sort` and
+    // `search` update after the navigation this effect itself triggers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchInput, typedSearch]);
 
   const toggleFavorite = (slug: string) => {
     setFavorites((current) =>
@@ -344,7 +374,10 @@ export function ListingExplorer({
               <Search size={17} className="shrink-0 text-slate-400" />
               <input
                 value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}
+                onChange={(event) => {
+                  setSearchInput(event.target.value);
+                  setTypedSearch(true);
+                }}
                 placeholder={`Search within ${entityShort}...`}
                 aria-label={`Search within ${entityName}`}
                 className="ml-2 w-full bg-transparent text-xs outline-none"
@@ -354,6 +387,7 @@ export function ListingExplorer({
                   type="button"
                   onClick={() => {
                     setSearchInput('');
+                    setTypedSearch(false);
                     if (search) navigate(buildHref({ search: '', page: 1 }));
                   }}
                   aria-label="Clear search"
