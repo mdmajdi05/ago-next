@@ -761,7 +761,7 @@ export function ListingExplorer({
                 ))}
               </div>
             ) : (
-              <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div className="relative overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
                 <table className="w-full min-w-[860px] border-collapse text-left text-xs">
                   <caption className="sr-only">
                     {entityName} part numbers with part type, availability and
