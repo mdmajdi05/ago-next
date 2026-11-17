@@ -12,7 +12,6 @@ import {
   breadcrumbSchema as buildBreadcrumbSchema,
   buildPageMetadata,
   faqSchema as buildFaqSchema,
-  productSchema as buildProductSchema,
 } from '@/lib/seo';
 import EnquiryForm from './EnquiryForm';
 
@@ -133,8 +132,6 @@ export default async function ProductPage({
     { label: product.partNumber, href: `/products/${product.slug}` },
   ];
 
-  const productUrl = product.canonicalUrl;
-
   const platformLinks = (
     BRAND_PLATFORMS[brandService.slugifyBrand(product.brand)] || []
   )
@@ -156,18 +153,6 @@ export default async function ProductPage({
     },
   ];
 
-  const productSchema = buildProductSchema({
-    name: pageTitle,
-    description: content.overview.join(' '),
-    url: productUrl,
-    image: imageUrl,
-    brand: product.brand,
-    sku: product.partNumber,
-    category: product.category,
-    type: product.type,
-    relatedUrls: related.map((item) => item.canonicalUrl),
-  });
-
   const breadcrumbSchema = buildBreadcrumbSchema(
     breadcrumbs.map((item) => ({ name: item.label, path: item.href }))
   );
@@ -178,11 +163,14 @@ export default async function ProductPage({
   return (
     <main className="min-h-screen bg-[#f5f8fb] text-[#102b43]">
 
-      {/* Product structured data */}
+      {/* Breadcrumb and FAQ structured data. No Product markup: product
+          snippets require offers (with a price), review or aggregateRating,
+          and this catalogue is quote-based with no published prices or
+          reviews. Inventing either would be inaccurate. */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([productSchema, breadcrumbSchema, faqSchema]).replace(
+          __html: JSON.stringify([breadcrumbSchema, faqSchema]).replace(
             /</g,
             '\\u003c'
           ),

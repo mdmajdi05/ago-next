@@ -19,15 +19,22 @@ import CTABanner from "@/components/home/CTABanner";
 import ContactSection from "@/components/home/ContactSection";
 import HomePageEffects from "@/components/home/HomePageEffects";
 
-export const metadata: Metadata = buildPageMetadata({
-  title: 'Turbine Spare Parts Manufacturer & Supplier Worldwide | Ago Aviation',
-  description:
-    'Ago Aviation is a trusted Turbine spare parts manufacturer and supplier Worldwide, delivering high-quality components for reliable performance. Request a quote today!',
-  path: '/',
-  keywords: siteConfig.keywords as unknown as string[],
-  image: siteConfig.ogImage,
-  imageAlt: siteConfig.logoAlt,
-});
+export const metadata: Metadata = {
+  ...buildPageMetadata({
+    title: 'Gas Turbine Parts Manufacturer & Supplier Worldwide | Ago Aviation',
+    description:
+      'Ago Aviation is a trusted Gas Turbine Parts Manufacturer and Supplier Worldwide, delivering high-quality components for reliable performance. Request a quote today!',
+    path: '/',
+    keywords: siteConfig.keywords as unknown as string[],
+    image: siteConfig.ogImage,
+    imageAlt: siteConfig.logoAlt,
+  }),
+  // Absolute title so the layout's "%s | AGO Aviation" template does not
+  // append a second brand suffix on the homepage.
+  title: {
+    absolute: 'Gas Turbine Parts Manufacturer & Supplier Worldwide | Ago Aviation',
+  },
+};
 
 const homeFaqs = [
   {
