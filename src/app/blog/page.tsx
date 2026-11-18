@@ -23,16 +23,19 @@ const sectionTitle = (eyebrow: string, title: string, description: string) => (
   </div>
 );
 
-const posts: BlogPostItem[] = blogPosts.map((post) => ({
-  title: post.title,
-  excerpt: post.excerpt,
-  date: post.date,
-  href: `/blog/${post.slug}`,
-  image: post.image,
-  imageAlt: post.imageAlt,
-  category: post.category,
-  type: post.type,
-}));
+const posts: BlogPostItem[] = blogPosts
+  .slice()
+  .sort((a, b) => b.datePublished.localeCompare(a.datePublished))
+  .map((post) => ({
+    title: post.title,
+    excerpt: post.excerpt,
+    date: post.date,
+    href: `/blog/${post.slug}`,
+    image: post.image,
+    imageAlt: post.imageAlt,
+    category: post.category,
+    type: post.type,
+  }));
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Gas Turbine Parts Blog, Guides & Case Studies',

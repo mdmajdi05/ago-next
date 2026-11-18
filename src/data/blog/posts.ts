@@ -35,6 +35,129 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: 'gas-turbine-bucket-vs-blade',
+    title: 'Gas Turbine Bucket vs. Blade: Same Part, Different Name?',
+    seoTitle: 'Gas Turbine Bucket vs. Blade: Same Part, Different Name?',
+    description:
+      'Gas turbine buckets and blades are the exact same rotating airfoil—the name depends on industrial vs. aviation heritage. Compare design, metallurgy & OEM specs.',
+    excerpt:
+      'Buckets and blades are the same rotating airfoil. The difference is nomenclature inherited from steam and aviation engineering — and it still matters when you raise a purchase order.',
+    date: '18 Nov 2026',
+    datePublished: '2026-11-18',
+    dateModified: '2026-11-18',
+    category: 'Component guide',
+    type: 'Blog',
+    image: '/images/lm-2500-turbine.webp',
+    imageAlt:
+      'Gas turbine rotor with buckets or blades mounted on the turbine wheel',
+    keywords: [
+      'gas turbine bucket vs blade',
+      'turbine bucket',
+      'turbine blade',
+      'gas turbine airfoil',
+      'industrial gas turbine nomenclature',
+      'aero-derivative turbine blade',
+      'dovetail root',
+      'single-crystal nickel superalloy',
+      'thermal barrier coating',
+    ],
+    readingTime: '7 min read',
+    intro:
+      'Gas turbine buckets and turbine blades are the exact same aerodynamic component: a rotating airfoil designed to extract kinetic and thermal energy from high-velocity, high-temperature combustion gases. The distinction is primarily industry terminology and manufacturer legacy. "Bucket" is used mainly in heavy-duty industrial gas turbines, notably GE frame designs and steam-derived units, while "blade" is used universally in aviation, aero-derivative gas turbines and general turbomachinery. For procurement managers, maintenance engineers and technical writers, that overlap can cause costly confusion when cross-referencing datasheets, searching supplier databases or managing parts inventory. Understanding the historical context, engineering parallels and supply-chain realities keeps communication clean across the power generation and aerospace sectors.',
+    sections: [
+      {
+        heading: 'Why do we call them buckets in some turbines and blades in others?',
+        paragraphs: [
+          'The terminology split comes from the evolutionary history of power generation equipment. Heavy industrial turbines adopted terms from steam turbine engineering, where early rotating airfoils visually and functionally resembled buckets catching fluid streams. Aviation gas turbines inherited aerodynamic blade nomenclature from aircraft propellers and wings.',
+          'The divergence dates back to the late 19th and early 20th centuries. Early steam turbine designers viewed the rotating element as a mechanical container catching high-energy fluid packets, hence the term bucket. When heavy-duty industrial gas turbines emerged in the mid-20th century, pioneered heavily by manufacturers such as General Electric, engineers applied existing heavy-frame steam turbine conventions and retained bucket for the rotating rows.',
+          'Conversely, aviation gas turbines such as turbojets and turbofans evolved from aerospace engineering traditions. Designers treated the rotating airfoils as scaled-down wings or propeller components, embedding blade into the lexicon. Mounting structures reinforced the split.',
+        ],
+        bullets: [
+          'Industrial heavy frames: heavy, robust dovetail or multi-lobe fir-tree roots anchor the component into massive turbine wheels, reinforcing the heavy bucket image.',
+          'Aero-derivatives and compact turbines: precision-slotted pins or integral blisk assemblies align closely with traditional aerodynamic blade design philosophy.',
+          'Mixed fleets: a plant running both heavy frames and aero-derivative packages may use both terms for parts that do the same thermodynamic job.',
+        ],
+      },
+      {
+        heading: 'Are buckets and blades structurally identical?',
+        paragraphs: [
+          'Mechanically and thermodynamically, turbine buckets and blades perform the same core function: converting the enthalpy and momentum of hot expanding gas into rotational mechanical work. Root fastenings and physical scale differ by application, but the aerodynamic profiles and internal cooling geometries follow identical physics.',
+          'Whether it is called a bucket or a blade, every unit is an intricate piece of thermal-fluid engineering. Each has a leading edge where combustion gases strike, a trailing edge where gases exit cleanly, a pressure side and a suction side. Tip caps and squealers minimise tip leakage losses as high-pressure gas tries to bypass the airfoil tip and casing wall.',
+          'Modern gas turbines fire at temperatures above the melting point of standard metals, so both buckets and blades rely on serpentine cooling channels, pin fins and laser-drilled film-cooling holes. Many also carry a thermal barrier coating to protect the base alloy from oxidation, hot corrosion and creep.',
+        ],
+      },
+      {
+        heading: 'Engineering comparison: industrial bucket vs aero blade',
+        bullets: [
+          'Primary industry context: industrial buckets serve heavy-duty baseload power generation and oil and gas; aero blades serve aviation propulsion, marine power and peaking plants.',
+          'Fastening mechanism: industrial parts typically use heavy dovetail or multi-lobe fir-tree roots; aero parts use single-pin, specialised shank or integral blisk designs.',
+          'Scale and mass: industrial buckets are large, heavy components built for continuous baseload operation; aviation blades are lightweight and optimised for high centrifugal acceleration and rapid transients.',
+          'Operating environment: industrial parts see long-duration steady-state thermal loads with cyclical baseload ramping; aero blades see high-frequency thermal and mechanical cycling with rapid thrust adjustments.',
+          'Material composition: both families use directionally solidified or single-crystal nickel-base superalloys, with aero blades often carrying advanced proprietary ceramic coatings.',
+          'Procurement impact: the name changes the language of the datasheet, but the part number, revision, alloy heat code and inspection record decide whether the component fits.',
+        ],
+      },
+      {
+        heading: 'Does the name affect procurement and replacement?',
+        paragraphs: [
+          'Direct answer: terminology does not dictate functionality, but it does dictate procurement compliance. Ordering replacement components requires strict adherence to OEM part numbers, serial tracking and material certifications rather than generic catalogue descriptions. Mixing up terminology can trigger administrative delays, and ordering errors carry catastrophic financial and operational risk.',
+        ],
+        bullets: [
+          'OEM part numbering: manufacturers designate parts by rigid alphanumeric cataloguing. A GE Frame 7FA first-stage bucket has a specific drawing number. Calling it a blade on a purchase order can stall processing when the ERP system relies on legacy nomenclature.',
+          'Metallurgical traceability: high-temperature components rely on advanced alloys such as René N5 or CMSX-4. Documentation must match alloy heat codes, non-destructive testing reports and dimensional inspection sheets.',
+          'Coatings and lifecycle management: both buckets and blades need thermal barrier coatings, typically yttria-stabilised zirconia, to guard against oxidation, hot corrosion and creep. Maintenance engineers monitor thermal fatigue and foreign object damage regardless of the term used in the maintenance log.',
+          'Inventory and RFQ language: mirror the customer nomenclature in the RFQ, but include the OEM part number and unit details so the supplier can cross-reference both naming conventions.',
+        ],
+      },
+      {
+        heading: 'What to put on a bucket or blade RFQ',
+        bullets: [
+          'The OEM part number exactly as it appears on the drawing, nameplate or maintenance record, including all suffixes and revision letters.',
+          'The unit make, model or frame, serial number and package type, so aero-derivative and heavy-frame parts are not confused.',
+          'The stage and row position, because first-stage rotating parts see the highest thermal and mechanical stress.',
+          'Required condition: new, refurbished or as-removed, plus the acceptable inspection and documentation scope.',
+          'Quantity, delivery deadline and destination, especially when the part is needed for a fixed outage window.',
+        ],
+      },
+      {
+        heading: 'The bottom line',
+        paragraphs: [
+          'Bucket and blade describe the same rotating airfoil. Use whichever term your OEM, site or maintenance manual uses, but never let the label replace the part number. When a datasheet, ERP record or supplier listing uses the other term, cross-reference the OEM number, unit model and revision before you commit the order.',
+          'If a description is ambiguous, send AGO Aviation the part number, nameplate photo or drawing. Our team will confirm the component, check supersessions and come back with availability, lead time and pricing.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Can you use the terms bucket and blade interchangeably?',
+        answer:
+          'Yes, in general industry conversation engineers understand they refer to the same aerodynamic component. In technical specifications, maintenance manuals and purchasing requisitions, follow the OEM nomenclature strictly.',
+      },
+      {
+        question: 'Which parts of a gas turbine experience the highest thermal stress?',
+        answer:
+          'The first-stage rotating components, called first-stage buckets in heavy frames or first-stage blades in aero-engines, experience the highest thermal and mechanical stress because they directly intercept the raw gases leaving the combustion chamber.',
+      },
+      {
+        question: 'Are turbine buckets heavier than turbine blades?',
+        answer:
+          'Generally yes. Industrial gas turbine buckets are engineered for heavy-duty baseload power plants where physical mass supports structural durability under continuous operation, while aviation blades are aggressively lightweight to minimise centrifugal stress on rotating discs.',
+      },
+      {
+        question: 'What is the difference between a turbine bucket or blade and a turbine nozzle or vane?',
+        answer:
+          'Buckets and blades rotate with the turbine rotor and extract energy from hot gases to spin the shaft. Nozzles, also called stator vanes or nozzle guide vanes, are stationary components fixed to the casing that direct, accelerate and set the entry angle of combustion gases onto the rotating rows.',
+      },
+      {
+        question: 'Can worn gas turbine buckets and blades be refurbished instead of replaced?',
+        answer:
+          'Yes. Most industrial gas turbine buckets and blades can be refurbished several times during scheduled hot gas path inspections. Repair typically involves stripping degraded thermal barrier coatings, weld restoration of worn airfoil tips, rejuvenation heat treatment and re-coating at a fraction of new OEM cost.',
+      },
+    ],
+    relatedCategories: ['turbine-parts'],
+    relatedBrands: ['ge', 'siemens'],
+  },
+  {
     slug: 'case-study-pre-staging-hot-gas-path-parts-frame-6',
     title:
       'Case study: pre-staging hot gas path parts for a Frame 6 outage',
