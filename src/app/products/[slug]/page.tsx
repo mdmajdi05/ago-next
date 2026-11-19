@@ -3,8 +3,9 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { productService, brandService } from '@/services';
+import { productService, brandService, internalLinkService } from '@/services';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { PriorityLinks } from '@/components/catalog/priority-links';
 import { getProductImage } from '@/lib/catalog/images';
 import { buildProductContent } from '@/lib/catalog/productContent';
 import { getPlatform, type Platform } from '@/data/platforms';
@@ -86,6 +87,10 @@ export default async function ProductPage({
   if (!product) notFound();
 
   const related = productService.getRelated(product, 4);
+  const relatedSlugs = new Set(related.map((item) => item.slug));
+  const priorityLinks = internalLinkService
+    .getProductLinks(product.slug)
+    .filter((item) => !relatedSlugs.has(item.slug));
   const imageUrl = getProductImage(product);
   const typeCount = productService.getCountByType(
     product.categorySlug,
@@ -751,6 +756,16 @@ export default async function ProductPage({
 
             </div>
           </section>
+        )}
+
+        {priorityLinks.length > 0 && (
+          <PriorityLinks
+            eyebrow="More from this range"
+            title={`Other ${product.brand} part numbers`}
+            description={`Related ${product.category.toLowerCase()} references from the same range, supplied on request with condition and lead-time options.`}
+            products={priorityLinks}
+            variant="cards"
+          />
         )}
 
       </section>

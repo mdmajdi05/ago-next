@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { brandService, categoryService, productService } from '@/services';
+import { brandService, categoryService, productService, internalLinkService } from '@/services';
 import { CatalogHero } from '@/components/catalog/catalog-hero';
+import { PriorityLinks } from '@/components/catalog/priority-links';
 import {
   ListingExplorer,
   type ListingFacet,
@@ -249,6 +250,11 @@ export default async function BrandPage({
   const filtersActive =
     selectedCategories.length > 0 || selectedTypes.length > 0 || search.length > 0;
 
+  const priorityBrandLinks =
+    !filtersActive && page === 1
+      ? internalLinkService.getBrandLinks(brand.slug)
+      : [];
+
   return (
     <main className="min-h-screen bg-[#f5f8fb] text-[#09233b] leading-[normal]">
       <script
@@ -326,6 +332,17 @@ export default async function BrandPage({
               </li>
             ))}
           </ul>
+
+          {priorityBrandLinks.length > 0 && (
+            <div className="mt-8 border-t border-slate-100 pt-6">
+              <PriorityLinks
+                title={`More ${brand.name} part numbers`}
+                description={`Other ${brand.name} references our sourcing desk is quoting right now. Send a part number for availability, condition and lead time.`}
+                products={priorityBrandLinks}
+                variant="pills"
+              />
+            </div>
+          )}
 
           {otherBrands.length > 0 && (
             <>

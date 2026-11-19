@@ -1,0 +1,2059 @@
+{
+  "generatedAt": "2026-11-19",
+  "sources": {
+    "drilldown": "https___www.agoaviation.com_-Coverage-Drilldown-2026-11-19.xlsx",
+    "indexed": "https___www.agoaviation.com_-Coverage-Valid-indexed-page2026-11-19.xlsx"
+  },
+  "counts": {
+    "drilldown": 1000,
+    "indexedProductPages": 954,
+    "assigned": 1000,
+    "unassigned": 0
+  },
+  "productLinks": {
+    "abb-1mrs050240": [
+      "abb-1sam160000r1003"
+    ],
+    "abb-1saj231000r0001": [
+      "abb-1sam350005r1002"
+    ],
+    "abb-1saj510003r0002": [
+      "abb-1sam350005r1014"
+    ],
+    "abb-1saj530000r1100": [
+      "abb-1saz201108r0002"
+    ],
+    "abb-1saj530000r1200": [
+      "abb-1saz721201r1017"
+    ],
+    "abb-1saj611000r0101": [
+      "abb-1saz721201r1023"
+    ],
+    "abb-1saj613000r0101": [
+      "abb-1sbh101001m2662"
+    ],
+    "abb-1saj650000r0100": [
+      "abb-1sbh136001r2071"
+    ],
+    "abb-1saj655000r0100": [
+      "abb-1sbh136004r2140"
+    ],
+    "abb-1saj692000r0001": [
+      "abb-1sbh136061r2262"
+    ],
+    "abb-1saj923001r0050": [
+      "abb-1sbh137004r1153"
+    ],
+    "abb-1saj923003r0005": [
+      "abb-1sbl103004m8132"
+    ],
+    "abb-1saj924001r0010": [
+      "abb-1sbl123001m8632"
+    ],
+    "abb-1saj929180r0015": [
+      "abb-1sbl137001r1422"
+    ],
+    "abb-1saj929300r0001": [
+      "abb-1sbl141201r9009"
+    ],
+    "abb-1saj929501r0500": [
+      "abb-1sbl143001r8310"
+    ],
+    "abb-1saj929610r0001": [
+      "abb-1sbl157001r1210"
+    ],
+    "abb-1saj929620r0001": [
+      "abb-3bht300057r1"
+    ],
+    "abb-1sam101902r0400": [
+      "abb-b9033800-010l008bm"
+    ],
+    "abb-1sam101903r0048": [
+      "abb-gce8003854r0102"
+    ],
+    "allen-bradley-1336f-brf-200-ae-en": [
+      "allen-bradley-150-c30nbr",
+      "allen-bradley-440l-t4k0320yd"
+    ],
+    "allen-bradley-140m-c-dry66": [
+      "allen-bradley-161s-aa04npk",
+      "allen-bradley-855t-b24tl4"
+    ],
+    "allen-bradley-1746-ob8": [
+      "allen-bradley-1746-nt4"
+    ],
+    "allen-bradley-1756-a17": [
+      "allen-bradley-1746-p1"
+    ],
+    "allen-bradley-1771-p6s": [
+      "allen-bradley-1747-l20c"
+    ],
+    "allen-bradley-turbomar": [
+      "allen-bradley-1791-oa16"
+    ],
+    "atlas-copco-1606800100": [
+      "atlas-copco-066660052",
+      "atlas-copco-1621225400"
+    ],
+    "atlas-copco-1615726400": [
+      "atlas-copco-1089943926",
+      "atlas-copco-1901008556"
+    ],
+    "atlas-copco-1616585187": [
+      "atlas-copco-1614-8747-99",
+      "atlas-copco-2900-0687-00"
+    ],
+    "bently-nevada-103t9609p707": [
+      "bently-nevada-9902-458"
+    ],
+    "bently-nevada-1900-65a-o1-o1-o3-000": [
+      "bently-nevada-3500-32-01-01"
+    ],
+    "flender-0302": [
+      "flender-02178j91p0001",
+      "flender-heh25088",
+      "flender-smp-52058"
+    ],
+    "flender-0351": [
+      "flender-05b584",
+      "flender-hm-3044-hsp",
+      "flender-smp-54884"
+    ],
+    "flender-0402": [
+      "flender-06915956p0002",
+      "flender-irr185950060-73d442a2",
+      "flender-smp-62333"
+    ],
+    "flender-0431b502p0078": [
+      "flender-0930b934p0001",
+      "flender-jkg-000060504",
+      "flender-smp-64175"
+    ],
+    "flender-04804854p0005": [
+      "flender-100t6933p002",
+      "flender-l400ap12",
+      "flender-smp-68301"
+    ],
+    "flender-04804854p0014": [
+      "flender-111t2780p0001",
+      "flender-n14ap35080",
+      "flender-smq48313"
+    ],
+    "flender-100413980": [
+      "flender-f6-shroud-1st-sta"
+    ],
+    "flender-112t2719p0001": [
+      "flender-156a1591p041",
+      "flender-n14ap37068",
+      "flender-smq48l64"
+    ],
+    "flender-114a8793p073": [
+      "flender-158a5457p080",
+      "flender-n14dp29044",
+      "flender-smr-66417"
+    ],
+    "flender-1184j49p0001": [
+      "flender-193d2432p013",
+      "flender-n14dp33072",
+      "flender-smr-7955346"
+    ],
+    "flender-119e5110p016": [
+      "flender-215a3082p006",
+      "flender-n14dp39080",
+      "flender-smr-7955369"
+    ],
+    "flender-119e5132p001": [
+      "flender-232b8669p003",
+      "flender-n14dp41152",
+      "flender-u605p222l3262"
+    ],
+    "flender-158a5636p076": [
+      "flender-239b5953p001",
+      "flender-n14dp41336",
+      "flender-u606p312l1038"
+    ],
+    "flender-324b7449p014": [
+      "flender-248a5728p010",
+      "flender-n14dp44144",
+      "flender-u607p319l1431"
+    ],
+    "flender-324b7456p004": [
+      "flender-258a4480p001",
+      "flender-n14p44084",
+      "flender-u607p322l2362"
+    ],
+    "flender-332b6835p001": [
+      "flender-287a7894p001",
+      "flender-n14p59040",
+      "flender-u609p212l0850"
+    ],
+    "flender-358a7451p059": [
+      "flender-293a0911p005",
+      "flender-n14tp44076",
+      "flender-u623p216l0750"
+    ],
+    "flender-362a3536p010": [
+      "flender-302a1620p014",
+      "flender-n203p39",
+      "flender-u623p310l0500"
+    ],
+    "flender-75a048-1": [
+      "flender-314a4084p0003",
+      "flender-n22bp33032b",
+      "flender-u624p216l1750"
+    ],
+    "flender-f6-lockplate-trans-piece": [
+      "flender-314b3065p001",
+      "flender-n271qp52",
+      "flender-u624p303l0212"
+    ],
+    "flender-f7-pin-straight-headless": [
+      "flender-320b5251p0011",
+      "flender-n272wp35"
+    ],
+    "flender-fpn00034": [
+      "flender-323b7846p0004",
+      "flender-n278p54"
+    ],
+    "flender-jle-000003021": [
+      "flender-324b7449p008",
+      "flender-n400ap18"
+    ],
+    "flender-ms7001ea": [
+      "flender-332b8265p001",
+      "flender-n432p14"
+    ],
+    "flender-n14ap33044": [
+      "flender-355b8301p005",
+      "flender-n511p1910"
+    ],
+    "flender-n272sp50": [
+      "flender-358a7451p092",
+      "flender-n60dp35048"
+    ],
+    "flender-n60qp33024": [
+      "flender-358a7451p694",
+      "flender-n72p3580"
+    ],
+    "flender-n733ap23016": [
+      "flender-9675a002d3",
+      "flender-n733ap33036"
+    ],
+    "flender-n733ap29028": [
+      "flender-aa51aa",
+      "flender-n733ap35060"
+    ],
+    "flender-rpq01913": [
+      "flender-cku-009200160",
+      "flender-n733ap50102"
+    ],
+    "flender-smp-54203": [
+      "flender-fge425",
+      "flender-n733ap50208"
+    ],
+    "flender-smp21786": [
+      "flender-flc-019010016",
+      "flender-n733ep33048"
+    ],
+    "flender-smr-62259": [
+      "flender-gfu006044",
+      "flender-n733p29024"
+    ],
+    "flender-u607p215l1175": [
+      "flender-gtg-15050",
+      "flender-n926ap325"
+    ],
+    "flender-u615x000p0316": [
+      "flender-heh-19050",
+      "flender-rmq-19529"
+    ],
+    "flender-u7410p2319l2006": [
+      "flender-heh06025",
+      "flender-ryu-20634"
+    ],
+    "ge-0-631-007-000": [
+      "ge-0-725-002-000",
+      "ge-21054s",
+      "ge-530750-8001",
+      "ge-9670m59p01",
+      "ge-k289p14",
+      "ge-l44096g01",
+      "ge-ms35842-11"
+    ],
+    "ge-0000231605000": [
+      "ge-015313050000-m",
+      "ge-2129450-304",
+      "ge-530893-110",
+      "ge-9673m66g14",
+      "ge-k326p03",
+      "ge-l44351p01",
+      "ge-ms51830ca202l"
+    ],
+    "ge-0000531027000": [
+      "ge-0391-00-809-t",
+      "ge-390a3808p0001",
+      "ge-9127m42g05-ar",
+      "ge-drr-s-0188-h-ss-upg-ad",
+      "ge-l41125g13"
+    ],
+    "ge-002381-868-000": [
+      "ge-1088553",
+      "ge-393a5737p0001",
+      "ge-918b0980g001",
+      "ge-hz3142j04knxwptyn95",
+      "ge-l44699p02"
+    ],
+    "ge-002382-868-000": [
+      "ge-1292m17g01",
+      "ge-399a1585p0001",
+      "ge-9601m72p08",
+      "ge-i375m50p20",
+      "ge-l44713p02"
+    ],
+    "ge-01018et3e215t-w22": [
+      "ge-18l9wh",
+      "ge-390a1043p0001",
+      "ge-399a1800p0001",
+      "ge-5115005",
+      "ge-5ks145ste204",
+      "ge-sela36aio150"
+    ],
+    "ge-03561166-000": [
+      "ge-03560985-000",
+      "ge-2006-4012",
+      "ge-314a5945p002",
+      "ge-75271560001",
+      "ge-ic660bba023"
+    ],
+    "ge-0391-00-038": [
+      "ge-155-700401-450",
+      "ge-4012t16p02",
+      "ge-9607m05p05",
+      "ge-inrs1000upgv",
+      "ge-l44765g01"
+    ],
+    "ge-10093": [
+      "ge-02560391-000",
+      "ge-2168m79g01",
+      "ge-542627",
+      "ge-9688m15p05",
+      "ge-k412p30",
+      "ge-l44503p04",
+      "ge-ms9321-11"
+    ],
+    "ge-101t6089p0001": [
+      "ge-035306-86",
+      "ge-233913",
+      "ge-584683",
+      "ge-9693m59p03",
+      "ge-k658p13",
+      "ge-l44551p14",
+      "ge-ms9490-06"
+    ],
+    "ge-1020100000": [
+      "ge-249a4202p0001"
+    ],
+    "ge-102a436p01": [
+      "ge-05282947-036",
+      "ge-24040",
+      "ge-5m3160-001",
+      "ge-9696m24p39",
+      "ge-k722p01",
+      "ge-l44595p02",
+      "ge-ms9490-17"
+    ],
+    "ge-10530ins1-14": [
+      "ge-070101-007",
+      "ge-25200-014-075-t36",
+      "ge-6049t87p03",
+      "ge-9ha",
+      "ge-k723p05",
+      "ge-l44630p01",
+      "ge-ms9491-20"
+    ],
+    "ge-10530lk-9": [
+      "ge-07302-25150",
+      "ge-25600-012-025-v36",
+      "ge-6054t31g01",
+      "ge-a3482-4",
+      "ge-l16733g23",
+      "ge-l44746p01",
+      "ge-ms9501-20"
+    ],
+    "ge-10530sg2-42": [
+      "ge-1005-1-11",
+      "ge-258a4784p014",
+      "ge-6072t13p08",
+      "ge-apa016",
+      "ge-l21040p02",
+      "ge-l44868g01",
+      "ge-ms9566-36"
+    ],
+    "ge-10530ss14-132": [
+      "ge-1005114-2",
+      "ge-261a1812p007",
+      "ge-6072t51p02",
+      "ge-as3078-12",
+      "ge-l21287g24",
+      "ge-l45607p001a",
+      "ge-ms9592-013"
+    ],
+    "ge-10620bx8-464": [
+      "ge-10167-1001bt",
+      "ge-261a1812p013",
+      "ge-6072t63p05",
+      "ge-as3486-10",
+      "ge-l21391g06",
+      "ge-l45768p01",
+      "ge-n173p2510"
+    ],
+    "ge-10620bx9-2": [
+      "ge-1032",
+      "ge-267b6699p0016",
+      "ge-632036",
+      "ge-as3580-5-22",
+      "ge-l21393p03",
+      "ge-l45875g01",
+      "ge-n272qp00039"
+    ],
+    "ge-10620co11-9": [
+      "ge-0751c749p0001",
+      "ge-216a3160p0001",
+      "ge-318a9247p007",
+      "ge-78r25n00a025t38e1",
+      "ge-is220prtdh1a"
+    ],
+    "ge-10620sk5-3": [
+      "ge-10410as1-103",
+      "ge-287783",
+      "ge-661804",
+      "ge-as3580-6-22",
+      "ge-l21402g01",
+      "ge-l46048g05",
+      "ge-n5606p02501g11"
+    ],
+    "ge-10648bac20-1": [
+      "ge-10410ld3-101",
+      "ge-288056",
+      "ge-674708",
+      "ge-atc-601",
+      "ge-l21435g01",
+      "ge-l46051g01",
+      "ge-n733ap39058"
+    ],
+    "ge-10648bg4-2187": [
+      "ge-10410sy-10",
+      "ge-2907446-7",
+      "ge-674721",
+      "ge-av2014595",
+      "ge-l21454p04",
+      "ge-l46197p20",
+      "ge-nas1149c0363r"
+    ],
+    "ge-10648glj-52": [
+      "ge-10620aas-2",
+      "ge-235a5029p005",
+      "ge-318a9427p001",
+      "ge-8-405-34",
+      "ge-kav6842"
+    ],
+    "ge-10800cae3-171": [
+      "ge-10620ay9-15",
+      "ge-24118-2",
+      "ge-361a2289p247",
+      "ge-868c963pt001",
+      "ge-l44822p03"
+    ],
+    "ge-1087mks-1gmedium": [
+      "ge-10530lk-24",
+      "ge-294a0150p004",
+      "ge-674735",
+      "ge-bac29pps36225",
+      "ge-l21454p05",
+      "ge-l46471g01",
+      "ge-nas3106c-16-14"
+    ],
+    "ge-125768-01": [
+      "ge-264bs101-1"
+    ],
+    "ge-125768-1": [
+      "ge-30-314-132-000"
+    ],
+    "ge-125792-01": [
+      "ge-336a4937edg060"
+    ],
+    "ge-125800-01": [
+      "ge-390a4269p0001"
+    ],
+    "ge-125808-01f": [
+      "ge-399a1730p0001"
+    ],
+    "ge-1509m62p01": [
+      "ge-10530sy1-403",
+      "ge-2c14699",
+      "ge-674736",
+      "ge-bc15780f",
+      "ge-l21504p01",
+      "ge-l47046p19",
+      "ge-nas3106c24-18"
+    ],
+    "ge-151x1236ltsa01": [
+      "ge-530750-3001"
+    ],
+    "ge-158a3479p030": [
+      "ge-530750-7501"
+    ],
+    "ge-169086": [
+      "ge-10581-196",
+      "ge-2c6063g01",
+      "ge-674742",
+      "ge-bdax62-170ertobs",
+      "ge-l21507p01",
+      "ge-l47124p01",
+      "ge-nbr-75"
+    ],
+    "ge-169134": [
+      "ge-10620be-317",
+      "ge-3-3127r",
+      "ge-674744",
+      "ge-cg61nb20",
+      "ge-l21658p01",
+      "ge-l47258g03",
+      "ge-r199p23"
+    ],
+    "ge-1800m58p01": [
+      "ge-1336m28p02",
+      "ge-1962m42p01",
+      "ge-302a4537p001",
+      "ge-5016t27p01",
+      "ge-5071t20p01",
+      "ge-9600m76p09",
+      "ge-as1895-1e400",
+      "ge-l62629p01"
+    ],
+    "ge-1825m83g01": [
+      "ge-10620bx-1",
+      "ge-3010t92p03",
+      "ge-6964m51p05",
+      "ge-ct450a-11",
+      "ge-l21856p02",
+      "ge-l47291p03",
+      "ge-r584p04sl"
+    ],
+    "ge-1991m70g01": [
+      "ge-3020t43p01",
+      "ge-9006m24g01",
+      "ge-j1348p06",
+      "ge-l22418g01",
+      "ge-l31775g01",
+      "ge-l35176g01",
+      "ge-l42229g01",
+      "ge-l45849g01"
+    ],
+    "ge-1u1527-12": [
+      "ge-10620bx15-76",
+      "ge-3011t71p03",
+      "ge-7003m86g02",
+      "ge-ded023a01",
+      "ge-l21858p01",
+      "ge-l47292p01",
+      "ge-rco43949"
+    ],
+    "ge-2-459201-01": [
+      "ge-5437-523"
+    ],
+    "ge-3020t09p02": [
+      "ge-362a3960p002",
+      "ge-9065m46g01",
+      "ge-l21031g01",
+      "ge-l24418p12",
+      "ge-l32010g02",
+      "ge-l35320g01",
+      "ge-l42713g01",
+      "ge-l46431g01"
+    ],
+    "ge-306a4368p095": [
+      "ge-10620co11-12",
+      "ge-255a4308p003",
+      "ge-361a2289p326",
+      "ge-8tj142aab1",
+      "ge-lg1093aa45honeywell"
+    ],
+    "ge-318611059c": [
+      "ge-1301f",
+      "ge-382a6400p0001",
+      "ge-l34427p05"
+    ],
+    "ge-361a2289p340": [
+      "ge-10648bh14-35",
+      "ge-255a4309p001",
+      "ge-361a2289p336",
+      "ge-8tr4acw1",
+      "ge-p988-0002-3-0mpavg"
+    ],
+    "ge-369-hi-r-m-0-0-0-e": [
+      "ge-5464-658-oh"
+    ],
+    "ge-381a7099p001": [
+      "ge-1333m62p01",
+      "ge-382a7186p0001",
+      "ge-l43419p06"
+    ],
+    "ge-80-0027-054": [
+      "ge-10620bx8-327",
+      "ge-3016t88p01",
+      "ge-702248",
+      "ge-dmc043a01rev2",
+      "ge-l22098g01",
+      "ge-l47316g13",
+      "ge-rco47447"
+    ],
+    "ge-90acn": [
+      "ge-30-314-104-000",
+      "ge-399a1928p0001",
+      "ge-l47328p02ar"
+    ],
+    "ge-9117m17p05": [
+      "ge-10620bx8-585",
+      "ge-3020t52p04",
+      "ge-713227",
+      "ge-el31631-1",
+      "ge-l22103p01",
+      "ge-l47319p17",
+      "ge-s317978711"
+    ],
+    "ge-9193m83p01": [
+      "ge-10620bx8-75",
+      "ge-3020t63p06",
+      "ge-716740-5",
+      "ge-el32667",
+      "ge-l22292p01",
+      "ge-l47351g01",
+      "ge-si-a00240-03"
+    ],
+    "ge-98798": [
+      "ge-10620bx9-6",
+      "ge-3024t42p01",
+      "ge-724380",
+      "ge-el33625-3",
+      "ge-l22345p08",
+      "ge-l47483g01",
+      "ge-sp-05290361514"
+    ],
+    "ge-98d71203001001": [
+      "ge-10620ok11-8",
+      "ge-3024t92p01",
+      "ge-752486-qc",
+      "ge-el33630-102-1",
+      "ge-l22380p01",
+      "ge-l47490g03",
+      "ge-st5m1373-005"
+    ],
+    "ge-a11410p002": [
+      "ge-314a5051p1",
+      "ge-6221342000",
+      "ge-l50661p04"
+    ],
+    "ge-a11410p004": [
+      "ge-37-231",
+      "ge-752586",
+      "ge-l62541p01"
+    ],
+    "ge-c423115-4-ar": [
+      "ge-382a4497p0001",
+      "ge-l21674p06",
+      "ge-rvo410840000"
+    ],
+    "ge-cla3240a-x01": [
+      "ge-10620pkn1-1",
+      "ge-30288ah-3",
+      "ge-752983",
+      "ge-en1-801t-1inx-8ftb",
+      "ge-l22516p01",
+      "ge-l47825p01",
+      "ge-t60-k01-hch-f8m-h6p-m8r-p6p-uxx-wxx"
+    ],
+    "ge-d717-02-001": [
+      "ge-10620ti-228",
+      "ge-30288dc2-23",
+      "ge-757811hamilton",
+      "ge-ep102ucc50",
+      "ge-l22537p08",
+      "ge-l48033g03",
+      "ge-t6308-811"
+    ],
+    "ge-ds200aahah2aed": [
+      "ge-9319500106"
+    ],
+    "ge-ds200acnag1ads200acnag1add": [
+      "ge-aip490-0010-10"
+    ],
+    "ge-ds200ctbag1acc": [
+      "ge-ds200panah1a"
+    ],
+    "ge-ds200ctbag1add": [
+      "ge-ds200qtbag1arem"
+    ],
+    "ge-ds200dacag1a": [
+      "ge-he670rly168c"
+    ],
+    "ge-ds200dacag1acd": [
+      "ge-ic200chs002"
+    ],
+    "ge-ds200dspch1aea": [
+      "ge-ic3600stdc1"
+    ],
+    "ge-ds200dtbbg1a": [
+      "ge-ic670mdl740"
+    ],
+    "ge-ds200dtbbg1a-ds200dtbbg1abb": [
+      "ge-ic754vgl12ctd"
+    ],
+    "ge-ds200expsg1acb": [
+      "ge-is200jpdsg1a"
+    ],
+    "ge-ds200fcgdh1baa": [
+      "ge-is200tdbsh6abc"
+    ],
+    "ge-ds200fcgdh1bca": [
+      "ge-is210aebih1bed"
+    ],
+    "ge-ds200fcsag1acb": [
+      "ge-is210dtrth1aa"
+    ],
+    "ge-ds200fsaag2a": [
+      "ge-is220pturh1b"
+    ],
+    "ge-ds200iibdg1ada": [
+      "ge-is230jpdmg1b"
+    ],
+    "ge-ds200iibdg1aga": [
+      "ge-is230tntrh1c-is200tturh1cfd"
+    ],
+    "ge-ds200tbcag1a": [
+      "ge-l51374g10"
+    ],
+    "ge-gser501375p0027": [
+      "ge-10648lwn1-202",
+      "ge-26490-000",
+      "ge-381a7143-p023",
+      "ge-gm1027-2",
+      "ge-swr107"
+    ],
+    "ge-hc9601fcp16z": [
+      "ge-1665m80p03",
+      "ge-4028t59g01",
+      "ge-9607m05p41",
+      "ge-j219p09",
+      "ge-l51317g01"
+    ],
+    "ge-hhp360-b": [
+      "ge-10620ti-26",
+      "ge-302a1617p001",
+      "ge-758928p0001",
+      "ge-g61nc63",
+      "ge-l22553g04",
+      "ge-l48108p01",
+      "ge-tb21073z-01"
+    ],
+    "ge-hpk0300b0802nx": [
+      "ge-1804m63p19",
+      "ge-4074t90p01",
+      "ge-9608m08g43",
+      "ge-j221p034",
+      "ge-ms28774-112"
+    ],
+    "ge-i333m60p02": [
+      "ge-10648ah6-1",
+      "ge-30367ha-4",
+      "ge-774416-16",
+      "ge-g62b16",
+      "ge-l24006p02",
+      "ge-l48228p01",
+      "ge-td1982-1002"
+    ],
+    "ge-ic690acc901": [
+      "ge-2-010v747-75",
+      "ge-4138t09p01",
+      "ge-9608m08g45",
+      "ge-j221p977",
+      "ge-ms9375-071"
+    ],
+    "ge-ic690rbt001a": [
+      "ge-l51587g01"
+    ],
+    "ge-ic693alg221": [
+      "ge-l51633g01"
+    ],
+    "ge-ic693mdl241": [
+      "ge-10648bg5-24",
+      "ge-311608101",
+      "ge-803535",
+      "ge-g62c06",
+      "ge-l24068p002a-sv",
+      "ge-l49136p03",
+      "ge-ultra-electronics-200915233"
+    ],
+    "ge-ic693pwr321": [
+      "ge-l54371g01"
+    ],
+    "ge-ic694alg221": [
+      "ge-l63531g01"
+    ],
+    "ge-ic694mdl645": [
+      "ge-m4st-p3-24v"
+    ],
+    "ge-ic694pwr321": [
+      "ge-vps-231"
+    ],
+    "ge-ic697hsc700": [
+      "ge-10648co6-116",
+      "ge-330450-a60-330450",
+      "ge-806114g0002",
+      "ge-g62d63",
+      "ge-l24288g48",
+      "ge-l49301g01",
+      "ge-ultra-electronics-201159008"
+    ],
+    "ge-is200dtcih1abb": [
+      "ge-10648sf5-1",
+      "ge-297a0580p001",
+      "ge-382a5412p0001",
+      "ge-gm10709"
+    ],
+    "ge-is200edexg1b": [
+      "ge-10648co6-121",
+      "ge-336a4940dtp12bl",
+      "ge-81000-37602",
+      "ge-g63b06",
+      "ge-l24457p001a-sv",
+      "ge-l49438p12",
+      "ge-va568-908-70-v"
+    ],
+    "ge-is200egdmh1a": [
+      "ge-120-00018",
+      "ge-297a581p002",
+      "ge-389a4510p0001",
+      "ge-gm6400"
+    ],
+    "ge-is200staih2aaa": [
+      "ge-10648dc20-28",
+      "ge-354a1513p041",
+      "ge-84084360p0001",
+      "ge-g63c02",
+      "ge-l24519p001a",
+      "ge-l49533g01"
+    ],
+    "ge-is200staih2aba": [
+      "ge-10648fo-89",
+      "ge-354a1513p101",
+      "ge-84d704427aeg3",
+      "ge-gmiwrp-oim-2",
+      "ge-l24530g02",
+      "ge-l49711g01"
+    ],
+    "ge-is200tambh1a": [
+      "ge-132p41c6bnr",
+      "ge-306a4368p001",
+      "ge-4596d16g01",
+      "ge-gm6453-2"
+    ],
+    "ge-is200tbtch1b": [
+      "ge-10648gn2-111",
+      "ge-361a2327p025",
+      "ge-851950tc17b35p0001",
+      "ge-gps2bhal",
+      "ge-l24614g03",
+      "ge-l50004g04"
+    ],
+    "ge-is200ticih2a": [
+      "ge-10648gr-12",
+      "ge-362a1998p040",
+      "ge-852132p0001",
+      "ge-hga11s52",
+      "ge-l24979p01",
+      "ge-l50556g02"
+    ],
+    "ge-is200tproh1b": [
+      "ge-10648np2-15",
+      "ge-368887",
+      "ge-852531",
+      "ge-hu39037-1",
+      "ge-l25005p08",
+      "ge-l51128g01"
+    ],
+    "ge-is200treah1a": [
+      "ge-10648ok1-5",
+      "ge-37c75ksb",
+      "ge-852552p0001",
+      "ge-iae1j12183",
+      "ge-l25111p11",
+      "ge-l51413p01"
+    ],
+    "ge-is200trtdh1c": [
+      "ge-132p49c6bnr",
+      "ge-306a4368p102",
+      "ge-509fx-a-sc",
+      "ge-gm7448-2"
+    ],
+    "ge-is200trtdh1c-is200trtdh1ccc": [
+      "ge-132p4s408-007",
+      "ge-311a5178-p022",
+      "ge-5315",
+      "ge-gm7897-2"
+    ],
+    "ge-is200ttpwh1a": [
+      "ge-10648ra10-44",
+      "ge-382a5509p0002",
+      "ge-878-2-14rolls",
+      "ge-ic3600stkk1",
+      "ge-l25513g11",
+      "ge-l51451g01"
+    ],
+    "ge-is2020jpdcg02": [
+      "ge-10648sp23-116",
+      "ge-386a3462p0001",
+      "ge-8eh2ael1",
+      "ge-is215vcmih1c",
+      "ge-l25690g06",
+      "ge-l52049p01"
+    ],
+    "ge-is220pdiah1a-oh": [
+      "ge-10648ss11-8",
+      "ge-389a5064p0001",
+      "ge-90-42603-1",
+      "ge-is230jpds1ag01-c",
+      "ge-l28303p001a",
+      "ge-l54084g01"
+    ],
+    "ge-j221p035": [
+      "ge-215a4218p006",
+      "ge-530675-3",
+      "ge-9608m12p01",
+      "ge-kfz316890604",
+      "ge-ms9966-06"
+    ],
+    "ge-j643p27a": [
+      "ge-10648ss2-2",
+      "ge-39-77745",
+      "ge-9012m99g05",
+      "ge-is230snprh1a",
+      "ge-l28361p22",
+      "ge-l56712g03"
+    ],
+    "ge-j645p23a": [
+      "ge-10648vt-205a",
+      "ge-390a1427p0001",
+      "ge-9013m75p01",
+      "ge-is230tnsvh4a",
+      "ge-l28424g01",
+      "ge-l56727p04"
+    ],
+    "ge-l13057g01": [
+      "ge-712b784p12",
+      "ge-9352m41p14",
+      "ge-l21431p01",
+      "ge-l24628g01",
+      "ge-l34178g01",
+      "ge-l41614g02",
+      "ge-l44690p01",
+      "ge-l47214g01"
+    ],
+    "ge-l25158g01": [
+      "ge-10706bg-2",
+      "ge-398070",
+      "ge-9021m63p12",
+      "ge-is230trly3eg01-c",
+      "ge-l31003p05",
+      "ge-l56789p01"
+    ],
+    "ge-l38570p03": [
+      "ge-10732fti3-6",
+      "ge-398074",
+      "ge-9051m50g04",
+      "ge-j01659",
+      "ge-l31172p01",
+      "ge-l57090g04"
+    ],
+    "ge-l38758p01": [
+      "ge-10732lr4-16",
+      "ge-398090",
+      "ge-9068m16p01",
+      "ge-j05562082-000",
+      "ge-l31395g05",
+      "ge-l57263p01"
+    ],
+    "ge-l41504p04": [
+      "ge-10732sk4-9",
+      "ge-398106",
+      "ge-9073m82p07",
+      "ge-j1092p04a",
+      "ge-l31476p68",
+      "ge-l57327p01"
+    ],
+    "ge-l41699g02": [
+      "ge-10732sm1-105",
+      "ge-40-58730",
+      "ge-9079m28g10",
+      "ge-j1176e0104-135ab",
+      "ge-l31953p04",
+      "ge-l57365p01"
+    ],
+    "ge-l42640g01": [
+      "ge-10800ra14-1121",
+      "ge-4019t47g01",
+      "ge-9079m49g02",
+      "ge-j1220g17",
+      "ge-l32019g01",
+      "ge-l57790g01"
+    ],
+    "ge-l43360p06": [
+      "ge-10820amc1-1",
+      "ge-4059t29p04",
+      "ge-9107m24p01",
+      "ge-j1221g08",
+      "ge-l34217p06",
+      "ge-l58293g01"
+    ],
+    "ge-l43364p09": [
+      "ge-1084936",
+      "ge-4064t52p01",
+      "ge-9109m91p02",
+      "ge-j1276g1250dab",
+      "ge-l34246p02",
+      "ge-l59023g22"
+    ],
+    "ge-l44022g03": [
+      "ge-1099633",
+      "ge-4070t54p02",
+      "ge-9115m26p07",
+      "ge-j200p02c",
+      "ge-l34562g01",
+      "ge-l60357g01"
+    ],
+    "ge-l44643p05": [
+      "ge-113a9208-1",
+      "ge-4071t02p01",
+      "ge-9115m69p43",
+      "ge-j209p05",
+      "ge-l34976p055",
+      "ge-l61036g01"
+    ],
+    "ge-l44745p02": [
+      "ge-137a4662p005",
+      "ge-311a5178-p024",
+      "ge-64-60001125-1",
+      "ge-gm9153-3"
+    ],
+    "ge-l44827g04": [
+      "ge-302a4594p036",
+      "ge-530943",
+      "ge-9634m44p06",
+      "ge-l22166p09",
+      "ge-mul536434"
+    ],
+    "ge-l44874p01": [
+      "ge-114a6734p018",
+      "ge-4072t75g03",
+      "ge-9130m15p01",
+      "ge-j241f0204ca",
+      "ge-l35061p001b",
+      "ge-l61188p01"
+    ],
+    "ge-l45657g01": [
+      "ge-83-107-01",
+      "ge-gh663-6",
+      "ge-l21452g01",
+      "ge-l24699g04",
+      "ge-l34815g02",
+      "ge-l41712g01",
+      "ge-l45529g01",
+      "ge-l49636g01"
+    ],
+    "ge-l45818p08": [
+      "ge-1153154-4",
+      "ge-411n1131-7",
+      "ge-9132m23p25",
+      "ge-j304p17b",
+      "ge-l35445p001a",
+      "ge-l61191p01"
+    ],
+    "ge-l46474g01": [
+      "ge-126957-01f",
+      "ge-415u9010-20b",
+      "ge-9146m83p01",
+      "ge-j443p121a",
+      "ge-l35457p001a",
+      "ge-l61282g01"
+    ],
+    "ge-l47280g01": [
+      "ge-133a1624p67",
+      "ge-500-196-20",
+      "ge-9155m50p01",
+      "ge-j643p04b",
+      "ge-l35541g02",
+      "ge-l61671p01"
+    ],
+    "ge-l47740g01": [
+      "ge-137a3516p001",
+      "ge-5019t38p02",
+      "ge-9173m38p02",
+      "ge-j643p23a",
+      "ge-l38544g01",
+      "ge-l62122p01"
+    ],
+    "ge-l50309g05": [
+      "ge-141a6004-1",
+      "ge-5023t45p04",
+      "ge-9193m20p01",
+      "ge-j644p10e",
+      "ge-l38609g04",
+      "ge-l62508g01"
+    ],
+    "ge-l50517p02": [
+      "ge-151x1207bd01wk09a",
+      "ge-503-07",
+      "ge-9193m69p48",
+      "ge-j644p16b",
+      "ge-l41001g01",
+      "ge-l62642g01"
+    ],
+    "ge-l50596p01": [
+      "ge-1536m22p03",
+      "ge-5032m60p01",
+      "ge-9198m37g04",
+      "ge-j644p19a",
+      "ge-l41045p01",
+      "ge-l63299g01"
+    ],
+    "ge-l51063g01": [
+      "ge-1622m24p01",
+      "ge-5033t02p06",
+      "ge-9206m79p16",
+      "ge-j644p27a",
+      "ge-l41527p03",
+      "ge-l63541g01"
+    ],
+    "ge-l56727p05": [
+      "ge-1696m81p13",
+      "ge-50472-2",
+      "ge-9207m53p16",
+      "ge-j644p41a",
+      "ge-l41622p01",
+      "ge-lcc002-001"
+    ],
+    "ge-m127524": [
+      "ge-302a4597p102",
+      "ge-800826-6752",
+      "ge-9634m85p06",
+      "ge-l22392p10",
+      "ge-r1309p041"
+    ],
+    "ge-ms9201-03": [
+      "ge-1862m13g02",
+      "ge-50782-2",
+      "ge-9218m44p04",
+      "ge-j646p09a",
+      "ge-l41736p03",
+      "ge-llu024-003rev0"
+    ],
+    "ge-ms9556-09": [
+      "ge-18639-03",
+      "ge-50880-8",
+      "ge-9232m47p02",
+      "ge-j646p10a",
+      "ge-l42081p01",
+      "ge-lm2500-base-dle"
+    ],
+    "ge-ms9751-18": [
+      "ge-1864m83g01",
+      "ge-5126t10g02",
+      "ge-9299m76p05",
+      "ge-j648p28a",
+      "ge-l42806g01",
+      "ge-lsbc1"
+    ],
+    "ge-n926bp00244": [
+      "ge-192b3817p001",
+      "ge-5126t60p22",
+      "ge-9367m84p38",
+      "ge-j815p058a",
+      "ge-l43021p02",
+      "ge-lw17919rolls"
+    ],
+    "ge-nexus-1250-4": [
+      "ge-1957m61p01",
+      "ge-5126t60p23",
+      "ge-9392m82p31",
+      "ge-j815p082a",
+      "ge-l43022p14",
+      "ge-m82600025a40000"
+    ],
+    "ge-p-703-0001-250psia-1764": [
+      "ge-1csa20707-1",
+      "ge-51431",
+      "ge-9392m95p04shim",
+      "ge-j864p018a",
+      "ge-l43362p06",
+      "ge-mars-100"
+    ],
+    "ge-p15-6442": [
+      "ge-318a9701p004",
+      "ge-845m95p07",
+      "ge-9686m18p55",
+      "ge-l28004p01",
+      "ge-s9413-562"
+    ],
+    "ge-p199345-016-002": [
+      "ge-351a3445p002",
+      "ge-9013m27p04",
+      "ge-9688m17p04",
+      "ge-l28361p20",
+      "ge-sor-86"
+    ],
+    "ge-pv212-22-p": [
+      "ge-382a7409p0004",
+      "ge-9349m73p02",
+      "ge-cpp-40",
+      "ge-l57395p01",
+      "ge-rcn1970b"
+    ],
+    "ge-r1832e120": [
+      "ge-1862m69p01",
+      "ge-1c6361g01",
+      "ge-40-91115",
+      "ge-5050t89p01",
+      "ge-835900",
+      "ge-9634m72p05",
+      "ge-as1895-4-250",
+      "ge-s317947301-element"
+    ],
+    "ge-rco39729": [
+      "ge-1n3051b",
+      "ge-52315-2",
+      "ge-9609m75p03",
+      "ge-j903p32c",
+      "ge-l43362p09",
+      "ge-mmii-pd-1-2-120"
+    ],
+    "ge-rto72645": [
+      "ge-185a1328-p004",
+      "ge-311a5178p025",
+      "ge-6900gzem18-7066",
+      "ge-gm9713-1"
+    ],
+    "ge-s840013210": [
+      "ge-185a1328p06",
+      "ge-311a5178pt01",
+      "ge-749999",
+      "ge-gm9730"
+    ],
+    "ge-sp-05290361847": [
+      "ge-2005t33p01",
+      "ge-52483",
+      "ge-9610m50p20",
+      "ge-j952p07c",
+      "ge-l43365p12",
+      "ge-mn2600000a20000"
+    ],
+    "ge-va568-011-70-v": [
+      "ge-20103-315",
+      "ge-5267t486",
+      "ge-9628m21p10",
+      "ge-j979p06",
+      "ge-l43367p10",
+      "ge-ms20426ad3-5"
+    ],
+    "ge-vbr-1056369-9": [
+      "ge-372a1159p003",
+      "ge-9049m38g04",
+      "ge-9864m56p04",
+      "ge-l31951g01",
+      "ge-sp-08210357688"
+    ],
+    "ge-vbr-2500-009": [
+      "ge-2032m95g01",
+      "ge-5282946-004",
+      "ge-9636m51p03",
+      "ge-k156p19",
+      "ge-l43371p12",
+      "ge-ms21043-06"
+    ],
+    "ge-vl1073ge13-24": [
+      "ge-38-18604-2026-3",
+      "ge-9083m15p03",
+      "ge-acb244f2440",
+      "ge-l35246p02",
+      "ge-vl1073ge13-28"
+    ],
+    "ge-vl1175ge25-05": [
+      "ge-382a4891p0001",
+      "ge-9107m23p02",
+      "ge-as1895-7-300-1",
+      "ge-l38238p01sr",
+      "ge-vl1074ge14"
+    ],
+    "ge-x30288zc-4": [
+      "ge-2038m94p01",
+      "ge-530291",
+      "ge-9658m69p44",
+      "ge-k182p45",
+      "ge-l43763p03",
+      "ge-ms24665-1012"
+    ],
+    "ge-x30295zc-25": [
+      "ge-2039m71g01",
+      "ge-530697-110",
+      "ge-9668m95p24",
+      "ge-k190p05",
+      "ge-l44027p01",
+      "ge-ms35649-2254"
+    ],
+    "gutor-0m-8190": [
+      "gutor-pd300-041"
+    ],
+    "honeywell-2106b1402": [
+      "honeywell-ff6-20-ac-06",
+      "honeywell-lsa9a"
+    ],
+    "honeywell-af2ab54-n": [
+      "honeywell-ff6-21-ac-qd05",
+      "honeywell-lse1a4"
+    ],
+    "honeywell-afiqb54": [
+      "honeywell-gkba1l6",
+      "honeywell-lsf7l3"
+    ],
+    "honeywell-c7080a1100": [
+      "honeywell-gkba2k1c",
+      "honeywell-lsl6c"
+    ],
+    "honeywell-c7q60a": [
+      "honeywell-gkca14l7",
+      "honeywell-lsw1e"
+    ],
+    "honeywell-c8000d001": [
+      "honeywell-gkca14l9",
+      "honeywell-lsw3k"
+    ],
+    "honeywell-cn4620a1001": [
+      "honeywell-gkcc1l6",
+      "honeywell-lsyab3k"
+    ],
+    "honeywell-cn4620q2310": [
+      "honeywell-gkle44p7t4",
+      "honeywell-lsyab4lx-fp"
+    ],
+    "honeywell-cn4634a1001": [
+      "honeywell-gkmb13",
+      "honeywell-lsyac1add-1b"
+    ],
+    "honeywell-cn6110a": [
+      "honeywell-gkra40m6a2-f05-c",
+      "honeywell-lsybc3kp-fp"
+    ],
+    "honeywell-cn6134a1003s": [
+      "honeywell-gkz41",
+      "honeywell-p7620c0042b"
+    ],
+    "honeywell-cn7220a2007": [
+      "honeywell-glaa20b",
+      "honeywell-pub4024s"
+    ],
+    "honeywell-cn7220a2007s": [
+      "honeywell-glab20a2a",
+      "honeywell-pub6438s"
+    ],
+    "honeywell-cn7234a2008": [
+      "honeywell-glcb35a1b-5",
+      "honeywell-t6861v2wg"
+    ],
+    "honeywell-cn7234a2008s": [
+      "honeywell-glcc06d",
+      "honeywell-vc6983nf6111t"
+    ],
+    "honeywell-cn7510a2209": [
+      "honeywell-glda01a1a"
+    ],
+    "honeywell-cs7505a1002": [
+      "honeywell-gleb24k8a"
+    ],
+    "honeywell-cs7510a2008": [
+      "honeywell-glec01a2b"
+    ],
+    "honeywell-cs7520a2007": [
+      "honeywell-glfb01b"
+    ],
+    "honeywell-cs7520a2205": [
+      "honeywell-glla03a2y"
+    ],
+    "honeywell-cs8105a1008": [
+      "honeywell-glz304"
+    ],
+    "honeywell-cs8110a1008": [
+      "honeywell-glz324-f047"
+    ],
+    "honeywell-cs8110a1206": [
+      "honeywell-gsxc46d"
+    ],
+    "honeywell-cs8120a1007": [
+      "honeywell-h7090b4263"
+    ],
+    "honeywell-cs8120a1205": [
+      "honeywell-lm491-s"
+    ],
+    "honeywell-dps2500a": [
+      "honeywell-lm532-swh"
+    ],
+    "honeywell-dpte250": [
+      "honeywell-lm971-djm"
+    ],
+    "honeywell-dpte500s": [
+      "honeywell-lm971-sc26"
+    ],
+    "honeywell-gkmc09": [
+      "honeywell-ls-10050"
+    ],
+    "honeywell-glba02a2b": [
+      "honeywell-ls2a4lx-fp"
+    ],
+    "honeywell-v5013n1071": [
+      "honeywell-lsa3k-2b"
+    ],
+    "honeywell-xd50-fcs": [
+      "honeywell-lsa7l-1b"
+    ],
+    "metso-250515": [
+      "metso-nd9103hut-ka3"
+    ],
+    "metso-250517": [
+      "metso-vpvl300sr4"
+    ],
+    "milton-roy-141921": [
+      "milton-roy-4050020144",
+      "milton-roy-sp-35hv"
+    ],
+    "milton-roy-181967s": [
+      "milton-roy-402-0001-045"
+    ],
+    "milton-roy-182326": [
+      "milton-roy-4070122020"
+    ],
+    "milton-roy-404-0124-096": [
+      "milton-roy-902179n"
+    ],
+    "milton-roy-4050018115": [
+      "milton-roy-rpm-813"
+    ],
+    "panametrics-223-012": [
+      "panametrics-panametrics"
+    ],
+    "pratt-whitney-1058701-501": [
+      "pratt-whitney-1081112",
+      "pratt-whitney-428169",
+      "pratt-whitney-646123",
+      "pratt-whitney-ct112780-0800",
+      "pratt-whitney-ct118132-1000",
+      "pratt-whitney-ipd24165gr1",
+      "pratt-whitney-ipd24724-2-1281a",
+      "pratt-whitney-vq424362"
+    ],
+    "pratt-whitney-368691": [
+      "pratt-whitney-1088011",
+      "pratt-whitney-474769",
+      "pratt-whitney-651664",
+      "pratt-whitney-ct112856-0800",
+      "pratt-whitney-ct118137-1",
+      "pratt-whitney-ipd24532-1-a",
+      "pratt-whitney-j00408"
+    ],
+    "pratt-whitney-628000": [
+      "pratt-whitney-116288",
+      "pratt-whitney-475668",
+      "pratt-whitney-678750",
+      "pratt-whitney-ct112919-0160",
+      "pratt-whitney-ct118161-1",
+      "pratt-whitney-ipd24542-3",
+      "pratt-whitney-ms21250-10014"
+    ],
+    "pratt-whitney-710202": [
+      "pratt-whitney-191662",
+      "pratt-whitney-525764",
+      "pratt-whitney-699834",
+      "pratt-whitney-ct117101-7",
+      "pratt-whitney-ct118489-1101",
+      "pratt-whitney-ipd24663-3",
+      "pratt-whitney-ms9035-14"
+    ],
+    "pratt-whitney-711003": [
+      "pratt-whitney-471456",
+      "pratt-whitney-597050",
+      "pratt-whitney-718006",
+      "pratt-whitney-ct117925-2",
+      "pratt-whitney-ct118032-11",
+      "pratt-whitney-ipd27566gr3",
+      "pratt-whitney-st1141-40"
+    ],
+    "pratt-whitney-bb3100-55gl": [
+      "pratt-whitney-494379",
+      "pratt-whitney-715033",
+      "pratt-whitney-ct112668-0490",
+      "pratt-whitney-ct118032-45",
+      "pratt-whitney-ct118682-0600",
+      "pratt-whitney-m83248-1-920"
+    ],
+    "pratt-whitney-ct117796-51": [
+      "pratt-whitney-639215",
+      "pratt-whitney-811-fmg",
+      "pratt-whitney-ct112670-0650",
+      "pratt-whitney-ct118117-8-1",
+      "pratt-whitney-ipd21306-24-2",
+      "pratt-whitney-ms9387-04"
+    ],
+    "pratt-whitney-ipd24696-3": [
+      "pratt-whitney-327835",
+      "pratt-whitney-558670",
+      "pratt-whitney-755512",
+      "pratt-whitney-ct117591",
+      "pratt-whitney-ct119168-1",
+      "pratt-whitney-ipd24688-1",
+      "pratt-whitney-ms9062-07"
+    ],
+    "pratt-whitney-pwa33308": [
+      "pratt-whitney-333013",
+      "pratt-whitney-564487",
+      "pratt-whitney-aa73s",
+      "pratt-whitney-ct117903-12",
+      "pratt-whitney-ipd21308-28",
+      "pratt-whitney-ipd24695-1",
+      "pratt-whitney-ms9581-12"
+    ],
+    "qualitrol-104-673-03": [
+      "qualitrol-208-023-01"
+    ],
+    "siemens-1le1001-1ca63-4aa4-z": [
+      "siemens-6gk7-443-1ex30-0xe0"
+    ],
+    "siemens-1md5253-0bd60-4ba1-za11": [
+      "siemens-6xv1840-2ah10"
+    ],
+    "swagelok-ss-300-1-4": [
+      "swagelok-ss-4bk-1c"
+    ],
+    "swagelok-ss-400-1-6": [
+      "swagelok-ss-5pdf8"
+    ],
+    "swagelok-ss-600-1-1-8": [
+      "swagelok-ss-83kf4"
+    ],
+    "woodward-2541115": [
+      "woodward-191960",
+      "woodward-8260-099"
+    ],
+    "woodward-30019": [
+      "woodward-5416-334",
+      "woodward-8272663"
+    ],
+    "woodward-3081-273": [
+      "woodward-5416350",
+      "woodward-8405307"
+    ],
+    "woodward-31902-02": [
+      "woodward-5439210",
+      "woodward-9905-440"
+    ],
+    "woodward-3522-091": [
+      "woodward-5441661"
+    ],
+    "woodward-3640-035": [
+      "woodward-5460-838"
+    ],
+    "woodward-377a62602p0001": [
+      "woodward-5462-578"
+    ],
+    "woodward-5500-159c": [
+      "woodward-5462-892"
+    ],
+    "woodward-8272702": [
+      "woodward-5464-210"
+    ],
+    "woodward-9905034k": [
+      "woodward-5464-303"
+    ],
+    "woodward-governor": [
+      "woodward-5464444"
+    ]
+  },
+  "brandLinks": {
+    "abb": [
+      "abb-1sam160000r1003",
+      "abb-1sam350005r1002",
+      "abb-1sam350005r1014",
+      "abb-1saz201108r0002",
+      "abb-1saz721201r1017",
+      "abb-1saz721201r1023",
+      "abb-1sbh101001m2662",
+      "abb-1sbh136001r2071",
+      "abb-1sbh136004r2140",
+      "abb-1sbh136061r2262",
+      "abb-1sbh137004r1153",
+      "abb-1sbl103004m8132",
+      "abb-1sbl123001m8632",
+      "abb-1sbl137001r1422",
+      "abb-1sbl141201r9009",
+      "abb-1sbl143001r8310",
+      "abb-1sbl157001r1210",
+      "abb-3bht300057r1",
+      "abb-b9033800-010l008bm",
+      "abb-gce8003854r0102"
+    ],
+    "allen-bradley": [
+      "allen-bradley-150-c30nbr",
+      "allen-bradley-161s-aa04npk",
+      "allen-bradley-1746-nt4",
+      "allen-bradley-1746-p1",
+      "allen-bradley-1747-l20c",
+      "allen-bradley-1791-oa16",
+      "allen-bradley-440l-t4k0320yd",
+      "allen-bradley-855t-b24tl4"
+    ],
+    "atlas-copco": [
+      "atlas-copco-066660052",
+      "atlas-copco-1089943926",
+      "atlas-copco-1614-8747-99",
+      "atlas-copco-1621225400",
+      "atlas-copco-1901008556",
+      "atlas-copco-2900-0687-00"
+    ],
+    "bently-nevada": [
+      "bently-nevada-3500-32-01-01",
+      "bently-nevada-9902-458"
+    ],
+    "flender": [
+      "flender-02178j91p0001",
+      "flender-05b584",
+      "flender-06915956p0002",
+      "flender-0930b934p0001",
+      "flender-100t6933p002",
+      "flender-111t2780p0001",
+      "flender-156a1591p041",
+      "flender-158a5457p080",
+      "flender-193d2432p013",
+      "flender-215a3082p006",
+      "flender-232b8669p003",
+      "flender-239b5953p001",
+      "flender-248a5728p010",
+      "flender-258a4480p001",
+      "flender-287a7894p001",
+      "flender-293a0911p005",
+      "flender-302a1620p014",
+      "flender-314a4084p0003",
+      "flender-314b3065p001",
+      "flender-320b5251p0011",
+      "flender-323b7846p0004",
+      "flender-324b7449p008",
+      "flender-332b8265p001",
+      "flender-355b8301p005",
+      "flender-358a7451p092",
+      "flender-358a7451p694",
+      "flender-9675a002d3",
+      "flender-aa51aa",
+      "flender-cku-009200160",
+      "flender-f6-shroud-1st-sta"
+    ],
+    "ge": [
+      "ge-0-725-002-000",
+      "ge-015313050000-m",
+      "ge-02560391-000",
+      "ge-035306-86",
+      "ge-03560985-000",
+      "ge-0391-00-809-t",
+      "ge-05282947-036",
+      "ge-070101-007",
+      "ge-07302-25150",
+      "ge-0751c749p0001",
+      "ge-1005-1-11",
+      "ge-1005114-2",
+      "ge-10167-1001bt",
+      "ge-1032",
+      "ge-10410as1-103",
+      "ge-10410ld3-101",
+      "ge-10410sy-10",
+      "ge-10530lk-24",
+      "ge-10530sy1-403",
+      "ge-10581-196",
+      "ge-10620aas-2",
+      "ge-10620ay9-15",
+      "ge-10620be-317",
+      "ge-10620bx-1",
+      "ge-10620bx15-76",
+      "ge-10620bx8-327",
+      "ge-10620bx8-585",
+      "ge-10620bx8-75",
+      "ge-10620bx9-6",
+      "ge-10620co11-12"
+    ],
+    "gutor": [
+      "gutor-pd300-041"
+    ],
+    "honeywell": [
+      "honeywell-ff6-20-ac-06",
+      "honeywell-ff6-21-ac-qd05",
+      "honeywell-gkba1l6",
+      "honeywell-gkba2k1c",
+      "honeywell-gkca14l7",
+      "honeywell-gkca14l9",
+      "honeywell-gkcc1l6",
+      "honeywell-gkle44p7t4",
+      "honeywell-gkmb13",
+      "honeywell-gkra40m6a2-f05-c",
+      "honeywell-gkz41",
+      "honeywell-glaa20b",
+      "honeywell-glab20a2a",
+      "honeywell-glcb35a1b-5",
+      "honeywell-glcc06d",
+      "honeywell-glda01a1a",
+      "honeywell-gleb24k8a",
+      "honeywell-glec01a2b",
+      "honeywell-glfb01b",
+      "honeywell-glla03a2y",
+      "honeywell-glz304",
+      "honeywell-glz324-f047",
+      "honeywell-gsxc46d",
+      "honeywell-h7090b4263",
+      "honeywell-lm491-s",
+      "honeywell-lm532-swh",
+      "honeywell-lm971-djm",
+      "honeywell-lm971-sc26",
+      "honeywell-ls-10050",
+      "honeywell-ls2a4lx-fp"
+    ],
+    "metso": [
+      "metso-nd9103hut-ka3",
+      "metso-vpvl300sr4"
+    ],
+    "milton-roy": [
+      "milton-roy-402-0001-045",
+      "milton-roy-4050020144",
+      "milton-roy-4070122020",
+      "milton-roy-902179n",
+      "milton-roy-rpm-813",
+      "milton-roy-sp-35hv"
+    ],
+    "panametrics": [
+      "panametrics-panametrics"
+    ],
+    "pratt-whitney": [
+      "pratt-whitney-1081112",
+      "pratt-whitney-1088011",
+      "pratt-whitney-116288",
+      "pratt-whitney-191662",
+      "pratt-whitney-327835",
+      "pratt-whitney-333013",
+      "pratt-whitney-428169",
+      "pratt-whitney-471456",
+      "pratt-whitney-474769",
+      "pratt-whitney-475668",
+      "pratt-whitney-494379",
+      "pratt-whitney-525764",
+      "pratt-whitney-558670",
+      "pratt-whitney-564487",
+      "pratt-whitney-597050",
+      "pratt-whitney-639215",
+      "pratt-whitney-646123",
+      "pratt-whitney-651664",
+      "pratt-whitney-678750",
+      "pratt-whitney-699834",
+      "pratt-whitney-715033",
+      "pratt-whitney-718006",
+      "pratt-whitney-755512",
+      "pratt-whitney-811-fmg",
+      "pratt-whitney-aa73s",
+      "pratt-whitney-ct112668-0490",
+      "pratt-whitney-ct112670-0650",
+      "pratt-whitney-ct112780-0800",
+      "pratt-whitney-ct112856-0800",
+      "pratt-whitney-ct112919-0160"
+    ],
+    "qualitrol": [
+      "qualitrol-208-023-01"
+    ],
+    "siemens": [
+      "siemens-6gk7-443-1ex30-0xe0",
+      "siemens-6xv1840-2ah10"
+    ],
+    "swagelok": [
+      "swagelok-ss-4bk-1c",
+      "swagelok-ss-5pdf8",
+      "swagelok-ss-83kf4"
+    ],
+    "woodward": [
+      "woodward-191960",
+      "woodward-5416-334",
+      "woodward-5416350",
+      "woodward-5439210",
+      "woodward-5441661",
+      "woodward-5460-838",
+      "woodward-5462-578",
+      "woodward-5462-892",
+      "woodward-5464-210",
+      "woodward-5464-303",
+      "woodward-5464444",
+      "woodward-8260-099",
+      "woodward-8272663",
+      "woodward-8405307",
+      "woodward-9905-440"
+    ]
+  },
+  "categoryLinks": {
+    "automation-controls": [
+      "allen-bradley-150-c30nbr",
+      "allen-bradley-161s-aa04npk",
+      "allen-bradley-1746-nt4",
+      "allen-bradley-1746-p1",
+      "allen-bradley-1747-l20c",
+      "allen-bradley-1791-oa16",
+      "woodward-191960",
+      "abb-1sam160000r1003",
+      "abb-1sam350005r1002",
+      "abb-1sam350005r1014",
+      "abb-1saz201108r0002",
+      "abb-1saz721201r1017",
+      "abb-1saz721201r1023",
+      "abb-1sbh101001m2662",
+      "abb-1sbh136001r2071",
+      "abb-1sbh136004r2140",
+      "abb-1sbh136061r2262",
+      "abb-1sbh137004r1153",
+      "abb-1sbl103004m8132",
+      "abb-1sbl123001m8632",
+      "abb-1sbl137001r1422",
+      "abb-1sbl141201r9009",
+      "abb-1sbl143001r8310",
+      "abb-1sbl157001r1210",
+      "ge-249a4202p0001",
+      "ge-264bs101-1",
+      "ge-30-314-132-000",
+      "ge-336a4937edg060",
+      "bently-nevada-3500-32-01-01",
+      "ge-390a4269p0001"
+    ],
+    "compressors-pumps": [
+      "atlas-copco-066660052",
+      "atlas-copco-1089943926",
+      "atlas-copco-1614-8747-99",
+      "atlas-copco-1621225400",
+      "atlas-copco-1901008556",
+      "atlas-copco-2900-0687-00",
+      "ge-382a7409p0004",
+      "milton-roy-4050020144",
+      "ge-9349m73p02",
+      "bently-nevada-9902-458",
+      "ge-cpp-40",
+      "ge-l57395p01",
+      "ge-rcn1970b",
+      "milton-roy-rpm-813",
+      "milton-roy-sp-35hv"
+    ],
+    "electrical-motors": [
+      "pratt-whitney-116288",
+      "ge-18l9wh",
+      "ge-390a1043p0001",
+      "ge-399a1800p0001",
+      "ge-5115005",
+      "ge-5ks145ste204",
+      "pratt-whitney-ct117925-2",
+      "gutor-pd300-041",
+      "ge-sela36aio150"
+    ],
+    "instrumentation": [
+      "ge-03560985-000",
+      "ge-0751c749p0001",
+      "ge-10620aas-2",
+      "ge-10620ay9-15",
+      "ge-10620co11-12",
+      "ge-10648bh14-35",
+      "ge-10648lwn1-202",
+      "ge-10648sf5-1",
+      "ge-120-00018",
+      "ge-132p41c6bnr",
+      "ge-132p49c6bnr",
+      "ge-132p4s408-007",
+      "ge-137a4662p005",
+      "ge-185a1328-p004",
+      "ge-185a1328p06",
+      "ge-2006-4012",
+      "ge-216a3160p0001",
+      "ge-235a5029p005",
+      "ge-24118-2",
+      "ge-255a4308p003",
+      "ge-255a4309p001",
+      "ge-26490-000",
+      "ge-297a0580p001",
+      "ge-297a581p002",
+      "ge-306a4368p001",
+      "ge-306a4368p102",
+      "ge-311a5178-p022",
+      "ge-311a5178-p024",
+      "ge-311a5178p025",
+      "ge-311a5178pt01"
+    ],
+    "mechanical-power-transmission": [
+      "flender-02178j91p0001",
+      "flender-05b584",
+      "flender-06915956p0002",
+      "flender-0930b934p0001",
+      "flender-100t6933p002",
+      "flender-111t2780p0001",
+      "ge-1336m28p02",
+      "flender-156a1591p041",
+      "flender-158a5457p080",
+      "ge-1862m69p01",
+      "flender-193d2432p013",
+      "ge-1962m42p01",
+      "ge-1c6361g01",
+      "flender-215a3082p006",
+      "flender-232b8669p003",
+      "flender-239b5953p001",
+      "flender-248a5728p010",
+      "flender-258a4480p001",
+      "flender-287a7894p001",
+      "flender-293a0911p005",
+      "flender-302a1620p014",
+      "ge-302a4537p001",
+      "flender-314a4084p0003",
+      "flender-314b3065p001",
+      "flender-320b5251p0011",
+      "flender-323b7846p0004",
+      "flender-324b7449p008",
+      "flender-332b8265p001",
+      "flender-355b8301p005",
+      "flender-358a7451p092"
+    ],
+    "piping-fittings": [
+      "ge-3020t43p01",
+      "ge-362a3960p002",
+      "ge-712b784p12",
+      "ge-83-107-01",
+      "ge-9006m24g01",
+      "ge-9065m46g01",
+      "ge-9352m41p14",
+      "pratt-whitney-ct112668-0490",
+      "pratt-whitney-ct112670-0650",
+      "ge-gh663-6",
+      "pratt-whitney-ipd21306-24-2",
+      "pratt-whitney-ipd21308-28",
+      "ge-j1348p06",
+      "ge-l21031g01",
+      "ge-l21431p01",
+      "ge-l21452g01",
+      "ge-l22418g01",
+      "ge-l24418p12",
+      "ge-l24628g01",
+      "ge-l24699g04",
+      "ge-l31775g01",
+      "ge-l32010g02",
+      "ge-l34178g01",
+      "ge-l34815g02",
+      "ge-l35176g01",
+      "ge-l35320g01",
+      "ge-l41614g02",
+      "ge-l41712g01",
+      "ge-l42229g01",
+      "ge-l42713g01"
+    ],
+    "seals-filters-consumables": [
+      "ge-0391-00-809-t",
+      "ge-1088553",
+      "ge-1292m17g01",
+      "ge-155-700401-450",
+      "ge-1665m80p03",
+      "ge-1804m63p19",
+      "ge-2-010v747-75",
+      "ge-215a4218p006",
+      "ge-302a4594p036",
+      "ge-302a4597p102",
+      "ge-318a9701p004",
+      "ge-351a3445p002",
+      "ge-372a1159p003",
+      "ge-38-18604-2026-3",
+      "ge-382a4891p0001",
+      "ge-390a3808p0001",
+      "ge-393a5737p0001",
+      "ge-399a1585p0001",
+      "ge-4012t16p02",
+      "ge-4028t59g01",
+      "ge-4074t90p01",
+      "ge-4138t09p01",
+      "pratt-whitney-471456",
+      "pratt-whitney-494379",
+      "ge-530675-3",
+      "ge-530943",
+      "pratt-whitney-639215",
+      "pratt-whitney-715033",
+      "ge-800826-6752",
+      "ge-845m95p07"
+    ],
+    "turbine-parts": [
+      "ge-0-725-002-000",
+      "ge-015313050000-m",
+      "ge-02560391-000",
+      "ge-035306-86",
+      "ge-05282947-036",
+      "ge-070101-007",
+      "ge-07302-25150",
+      "ge-1005-1-11",
+      "ge-1005114-2",
+      "ge-10167-1001bt",
+      "ge-1032",
+      "ge-10410as1-103",
+      "ge-10410ld3-101",
+      "ge-10410sy-10",
+      "ge-10530lk-24",
+      "ge-10530sy1-403",
+      "ge-10581-196",
+      "ge-10620be-317",
+      "ge-10620bx-1",
+      "ge-10620bx15-76",
+      "ge-10620bx8-327",
+      "ge-10620bx8-585",
+      "ge-10620bx8-75",
+      "ge-10620bx9-6",
+      "ge-10620ok11-8",
+      "ge-10620pkn1-1",
+      "ge-10620ti-228",
+      "ge-10620ti-26",
+      "ge-10648ah6-1",
+      "ge-10648bg5-24"
+    ],
+    "valves-actuators": [
+      "pratt-whitney-1081112",
+      "ge-1301f",
+      "ge-1333m62p01",
+      "qualitrol-208-023-01",
+      "ge-30-314-104-000",
+      "ge-314a5051p1",
+      "ge-37-231",
+      "ge-382a4497p0001",
+      "ge-382a6400p0001",
+      "ge-382a7186p0001",
+      "ge-399a1928p0001",
+      "milton-roy-402-0001-045",
+      "ge-6221342000",
+      "ge-752586",
+      "pratt-whitney-ct118161-1",
+      "ge-l21674p06",
+      "ge-l34427p05",
+      "ge-l43419p06",
+      "ge-l47328p02ar",
+      "ge-l50661p04",
+      "ge-l62541p01",
+      "metso-nd9103hut-ka3",
+      "ge-rvo410840000",
+      "swagelok-ss-4bk-1c",
+      "swagelok-ss-5pdf8",
+      "swagelok-ss-83kf4",
+      "metso-vpvl300sr4"
+    ]
+  }
+}
