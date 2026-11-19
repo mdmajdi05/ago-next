@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -102,6 +103,12 @@ export function ContactForm({ brands }: ContactFormProps) {
           >
             <i className="fa-solid fa-paper-plane"></i> Send another message
           </button>
+          <Link
+            href="/thank-you"
+            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 hover:underline"
+          >
+            What happens next <i className="fa-solid fa-arrow-right"></i>
+          </Link>
         </div>
       </div>
     );
