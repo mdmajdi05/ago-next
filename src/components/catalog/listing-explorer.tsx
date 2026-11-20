@@ -34,6 +34,8 @@ import {
   Zap,
 } from 'lucide-react';
 
+import { SourcingFallback } from '@/components/products/sourcing-fallback';
+
 export interface ListingProduct {
   slug: string;
   title: string;
@@ -94,6 +96,8 @@ interface ListingExplorerProps {
   showBrand?: boolean;
   helpTitle?: string;
   helpText?: string;
+  /** Brand badge to show when a search has no catalogue match. */
+  fallbackBrand?: string;
 }
 
 function slugify(value: string) {
@@ -195,6 +199,7 @@ export function ListingExplorer({
   showBrand = true,
   helpTitle,
   helpText,
+  fallbackBrand,
 }: ListingExplorerProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -653,30 +658,44 @@ export function ListingExplorer({
             }
           >
             {products.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-14 text-center">
-                <Search size={36} className="mx-auto text-slate-300" />
-                <h3 className="mt-4 font-bold">No Products Found</h3>
-                <p className="mt-2 text-sm text-slate-500">
-                  Try changing your search or filters, or search the full
-                  catalogue.
-                </p>
-                <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                  <Link
-                    href={basePath}
-                    className="rounded-lg bg-blue-700 px-5 py-2 text-xs font-bold text-white"
-                  >
-                    Clear All Filters
-                  </Link>
-                  {search && (
+              search ? (
+                <div>
+                  <SourcingFallback query={search} brand={fallbackBrand} />
+                  <div className="mt-4 text-center">
                     <Link
-                      href={`/products?search=${encodeURIComponent(search)}`}
-                      className="rounded-lg border border-blue-700 px-5 py-2 text-xs font-bold text-blue-700"
+                      href={basePath}
+                      className="text-xs font-bold text-blue-700 hover:underline"
                     >
-                      Search full catalogue
+                      Clear filters and browse {entityShort}
                     </Link>
-                  )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-14 text-center">
+                  <Search size={36} className="mx-auto text-slate-300" />
+                  <h3 className="mt-4 font-bold">No Products Found</h3>
+                  <p className="mt-2 text-sm text-slate-500">
+                    Try changing your search or filters, or search the full
+                    catalogue.
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                    <Link
+                      href={basePath}
+                      className="rounded-lg bg-blue-700 px-5 py-2 text-xs font-bold text-white"
+                    >
+                      Clear All Filters
+                    </Link>
+                    {search && (
+                      <Link
+                        href={`/products?search=${encodeURIComponent(search)}`}
+                        className="rounded-lg border border-blue-700 px-5 py-2 text-xs font-bold text-blue-700"
+                      >
+                        Search full catalogue
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )
             ) : view === 'grid' ? (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {products.map((product) => (

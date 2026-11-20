@@ -308,6 +308,7 @@ export default async function BrandPage({
         showBrand={false}
         helpTitle={`Need Help Sourcing ${brand.name} Parts?`}
         helpText={`Send us the part number and our ${brand.name} sourcing team will verify availability.`}
+        fallbackBrand={brand.name}
       />
 
       {/* Internal links: categories and other brands */}

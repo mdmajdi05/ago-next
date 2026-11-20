@@ -8,6 +8,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Product, ProductFilters } from '@/types/product';
 import { CatalogFilters } from '@/components/products/catalog-filters';
+import { SourcingFallback } from '@/components/products/sourcing-fallback';
 import {
   breadcrumbSchema,
   buildPageMetadata,
@@ -121,6 +122,28 @@ function quoteHref(part: string) {
   )}`;
 }
 
+/** Word-boundary normalisation so "GE 123" matches GE but "gearbox" does not. */
+function normalizeText(value: string) {
+  return ` ${value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()} `;
+}
+
+/** Uses a brand name inside the query when the catalogue has no exact match. */
+function inferBrandFromQuery(
+  query: string,
+  brands: { name: string; slug: string }[]
+) {
+  const haystack = normalizeText(query);
+  const match = brands
+    .filter(
+      (brand) =>
+        haystack.includes(normalizeText(brand.name)) ||
+        haystack.includes(normalizeText(brand.slug))
+    )
+    .sort((a, b) => b.name.length - a.name.length)[0];
+
+  return match?.name || 'AGO Sourcing';
+}
+
 export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
@@ -154,6 +177,13 @@ export default async function ProductsPage({
   const allBrands = brandService.getAll();
   const allCategories = categoryService.getAll();
   const featuredCategories = allCategories.slice(0, 6);
+
+  // No catalogue hit + a real search query => show the query as a sourcing card
+  // instead of a dead-end "No Products Found" screen.
+  const sourcingFallback =
+    products.length === 0 && search
+      ? { query: search, brand: inferBrandFromQuery(search, allBrands) }
+      : null;
 
   const rangeStart = total === 0 ? 0 : (currentPage - 1) * limit + 1;
   const rangeEnd = total === 0 ? 0 : rangeStart + products.length - 1;
@@ -399,15 +429,21 @@ export default async function ProductsPage({
           <div className="mb-[18px] mt-1 flex items-start justify-between gap-2 md:items-center">
             <div>
               <h2 className="text-[21px] font-bold leading-[1.2] md:text-[23px]">
-                All Products
+                {sourcingFallback ? 'Sourcing Results' : 'All Products'}
               </h2>
-              <p className="my-[5px] text-[11px] text-[#40576b]">
-                Showing{' '}
-                <b>
-                  {rangeStart} – {rangeEnd}
-                </b>{' '}
-                of {total} products
-              </p>
+              {sourcingFallback ? (
+                <p className="my-[5px] text-[11px] text-[#40576b]">
+                  Sourcing option for <b>“{search}”</b>
+                </p>
+              ) : (
+                <p className="my-[5px] text-[11px] text-[#40576b]">
+                  Showing{' '}
+                  <b>
+                    {rangeStart} – {rangeEnd}
+                  </b>{' '}
+                  of {total} products
+                </p>
+              )}
               <Link
                 href="/part-numbers"
                 className="text-[10px] font-bold text-[#b77b1c] hover:underline md:text-[11px]"
@@ -430,19 +466,26 @@ export default async function ProductsPage({
           </div>
 
           {products.length === 0 ? (
-            <div className="rounded-[14px] border border-[#e7edf2] bg-white p-10 text-center">
-              <h3 className="text-xl font-extrabold">No Products Found</h3>
-              <p className="mx-auto mt-2 max-w-md text-[13px] text-[#40576b]">
-                We couldn&apos;t find products matching your current search
-                or filters. Try different keywords or reset your filters.
-              </p>
-              <Link
-                href="/products"
-                className="mt-5 inline-block rounded-[8px] bg-[#062a43] px-5 py-2.5 text-xs font-bold text-white"
-              >
-                View All Products →
-              </Link>
-            </div>
+            sourcingFallback ? (
+              <SourcingFallback
+                query={sourcingFallback.query}
+                brand={sourcingFallback.brand}
+              />
+            ) : (
+              <div className="rounded-[14px] border border-[#e7edf2] bg-white p-10 text-center">
+                <h3 className="text-xl font-extrabold">No Products Found</h3>
+                <p className="mx-auto mt-2 max-w-md text-[13px] text-[#40576b]">
+                  We couldn&apos;t find products matching your current search
+                  or filters. Try different keywords or reset your filters.
+                </p>
+                <Link
+                  href="/products"
+                  className="mt-5 inline-block rounded-[8px] bg-[#062a43] px-5 py-2.5 text-xs font-bold text-white"
+                >
+                  View All Products →
+                </Link>
+              </div>
+            )
           ) : (
             <div className="grid grid-cols-2 gap-2.5 md:grid-cols-3 md:gap-3 max-[390px]:grid-cols-1">
               {products.map((product) => (
