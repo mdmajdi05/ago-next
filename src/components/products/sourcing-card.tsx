@@ -57,8 +57,8 @@ export function SourcingCard({ query, brand = 'AGO Sourcing' }: SourcingCardProp
         </p>
 
         <p className="my-[5px] line-clamp-2 text-[9px] leading-[1.35] text-[#20394f] md:text-[10px]">
-          This reference is not listed in our online catalogue. Our sourcing
-          team will confirm availability, condition and lead time.
+          Our sourcing team will confirm availability, condition and lead time
+          for this reference.
         </p>
 
         <span className="mb-2.5 mt-1 inline-block rounded-full bg-[#e6f7ee] px-2.5 py-1 text-[10px] font-bold text-[#0b7a4b]">
